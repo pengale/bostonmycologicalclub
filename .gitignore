@@ -1,0 +1,7 @@
+# Pete's big file of git ignore stuff
+
+# Ignore emacs' temp files
+*~
+
+# Ignore compiled python stuff
+*.pyc
