@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+    {% block style %}
+    {{ block.super }}
+    {% endblock style %}
+
+            {% block text %}
+<h2>Membership #{{ membership.id }}</h2>
+
+    <form action="." method="POST" id="edit_user">
+        {% include "includes/edit_user.html" %}
+    </form>
+            {% endblock text %}
+
+
+

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}BMC Walks{% endblock %}
+
+        {% block h1 %}
+        <h1>Boston Mycological Club Walks</h1>
+        {% endblock h1 %}
+
+	{% block content %}
+	{% for walk in walks %}
+	<h2>{{ walk.title }}</h2>
+	<p>{{ walk.description }}</p>
+	<p>{{ walk.location }}</p>
+	{# etc #}
+	{% endfor %}
+	{% endblock content %}
+

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+    {% block style %}
+    {{ block.super }}
+<style type="text/css">
+<!--
+    #walk_form div { margin-bottom: 1em; }
+-->
+</style>
+    {% endblock style %}
+
+            {% block text %}
+<h2>{{ walk.purpose }} {{ walk.date }}</h2>
+
+<form action="." method="POST" id="walk_form">
+    <fieldset>
+        {% for field in form %}
+	<div id="{{ field.label }}_wrap">
+            {{ field.errors }}
+	    {{ field.label_tag }} {{ field }}
+            <span class="help_text">{{ field.help_text }}</span>
+	</div>
+	{% endfor %}
+	<p><input type="submit" value="Submit" id="id_submit"></p>
+    </fieldset>
+</form>
+            {% endblock text %}
+
+
+

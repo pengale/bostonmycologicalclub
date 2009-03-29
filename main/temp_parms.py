@@ -1,0 +1,7 @@
+NEWS_TITLE = "News"
+
+NEWS = """
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nullam lacus ipsum, lacinia eu, rhoncus at, mollis vel, arcu. Sed sed quam. Nam ipsum turpis, egestas et, egestas id, egestas id, urna. Vestibulum porta pharetra ipsum. Sed in ante. Cras enim. Vivamus aliquet risus nec ligula. Morbi quis lectus id libero interdum placerat. Aliquam congue justo tincidunt arcu. Integer quis elit sed eros sagittis porttitor. Vivamus pede. Cras elit mauris, volutpat vitae, semper at, varius a, odio. Aliquam accumsan.
+
+Aliquam arcu. Sed eu quam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus nibh diam, cursus molestie, pharetra consectetuer, imperdiet quis, turpis. Vestibulum non sapien cursus enim vestibulum ullamcorper. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec hendrerit. Aliquam lectus nunc, ullamcorper id, consectetuer at, fermentum id, nisl. Etiam ornare dolor quis enim. In et tellus quis neque euismod cursus. Ut leo erat, imperdiet vitae, sollicitudin ut, viverra id, diam. Integer elementum, nisl ut scelerisque blandit, nunc felis condimentum felis, tempor vulputate leo enim sed mauris. Integer ut mi. In mattis, augue in tempus luctus, nulla lacus adipiscing risus, a porttitor lectus orci ac elit. Mauris lacus purus, ullamcorper a, tincidunt sed, commodo at, arcu. Nulla lobortis lorem eu pede. Aenean sed massa nec eros lobortis scelerisque.
+"""

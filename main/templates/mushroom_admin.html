@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+    {% block style %}
+    {{ block.super }}
+    <style type="text/css">
+<!--
+#membership_search { border: none; padding: 0; margin: 1em 0 0 0; }
+#membership_search div, #membership_search p { 
+        float: left; 
+        margin-right: 1em; 
+}
+#membership_search input { margin-left: 0; }
+#membership_search label { 
+        position: relative; 
+        width: auto; 
+        padding: 0; 
+        margin: 0 1em 0 0; 
+}
+-->
+    </style>
+    {% endblock style %}
+
+            {% block text %}
+<div id="mushroom_admin">
+    <h2>Welcome, {{ request.user.first_name }} {{ request.user.last_name }}</h2>
+    {% include "includes/mushroom_admin.html" %}   
+    
+
+</div>
+            {% endblock text %}
+
+
+

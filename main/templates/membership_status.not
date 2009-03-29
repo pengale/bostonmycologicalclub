@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+    {% block style %}
+    {{ block.super }}
+    {% endblock style %}
+
+            {% block text %}
+{% if suspend %}
+<h2>Suspend This Membership?</h2>
+<p>Clicking the suspend button below will suspend this account by deactivating all users attached to this membership.</p>
+<p>This won't delete any information from the database, but it will prevent users from logging in.</p>
+<form method="post" action="." id="membership_status">
+    <fieldset>
+        <input type="hidden" value="{{ suspend }}" />
+        <input type="submit" value="Suspend" />
+    </fieldset>
+</form>
+{% else %}
+<h2>Restore This Membership?</h2>
+<p>Clicking the restore button below will restore this account by activating all users attached to the membership.</p>
+<form method="post" action="." id="membership_status">
+    <fieldset>
+        <input type="hidden" value="{{ suspend }}" />
+        <input type="submit" value="Restore" />
+    </fieldset>
+</form>
+{% endif %}
+            {% endblock %}
+
+
+

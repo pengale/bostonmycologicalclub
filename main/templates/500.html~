@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+            {% block text %}
+<h2>Page Not Found</h2>
+<p>We're sorry.  {% if error %}{{ error }}{% else %}We could not find that page.{% endif %}</p>
+<p>Right now, there is a good chance that this is because the page is still being ported over from the old site. If you really miss the old page, please feel free to email info@bostonmycologicalclub.org, and tell them to bug their web monkey to get this page back up pronto!</p>
+            {% endblock text %}

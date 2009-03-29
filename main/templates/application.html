@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+    {% block style %}
+    {{ block.super }}
+    <style type="text/css">
+    <!--
+address { 
+        margin-left: 2em;
+}
+input, textarea, select { margin-left: 0; }
+    -->
+    </style>
+    {% endblock style %}
+
+	    {% block text %}
+<h2>Application for Membership</h2>
+
+<p>Fill out this form and then print it and post-mail it with your check (payable to "Boston Mycological Club"). The address to send to is at the bottom of this page.</p>
+
+<form id="application" method="post" action="">
+    <fieldset>
+
+        <p>I/We hereby apply for membership in The Boston Mycological Club.</p>
+
+        <p>Name (names of family if applying for Family membership) <br>
+	<input name="name" size="75" ></p>
+
+        <p>Address (street address, city, state and zipcode, country) <br>
+        <textarea name="address" rows="4" cols="50"></textarea></p>
+
+        <p>Primary Telephone: (include area code) <br>
+        <input name="Telephone1" ></p>
+
+        <p>E-mail address: <br>
+        <input name="email" size="50" ></p>
+
+        <p>Amount of Dues enclosed (make check payable to "Boston Mycological Club") <br>
+        <input type="radio" name="dues" value="Individual"> $20.00 (Individual member) <br>
+        <input type="radio" name="dues" value="Family"> $25.00 (Family membership) <br>
+        <input type="radio" name="dues" value="Minor"> $10.00 (Junior - age under 21 years)</p>
+    </fieldset>
+</form>
+
+<p>Send to:</p>
+<address>Boston Mycological Club <br />
+Membership Secretary <br />
+35 Red Acre Road <br />
+Stow, MA&nbsp; 01775-1108</address>
+
+            {% endblock text %}

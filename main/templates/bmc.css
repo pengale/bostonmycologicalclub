@@ -1,0 +1,183 @@
+/*
+***************************************************************************
+**  {% block sheet_name %}bmc.css{% endblock sheet_name %}
+**  
+**  Written by Pete Vander Giessen (http://www.petevg.com/)
+**    for the Boston Mycological Club
+**    Summer, 2008
+**
+***************************************************************************
+** 
+**  Style Guide
+**  
+**  
+***************************************************************************
+*/
+
+
+@media screen {
+{% block screen %}
+
+/* Ground Rules */
+body { 
+        background-color: #ffffc2;
+	color: black;
+	margin: 0; padding: 5px;  
+	background-image: url('{{ media_url }}/img/BMC_Logo2.png'); 
+	background-repeat: no-repeat; 
+	background-position: 14px 10px; 
+	min-width: 768px;
+}
+
+#container {
+        position: relative;
+        width: 100%;
+    	margin: 0 auto;
+	background-image: url('{{ media_url }}/img/BMC_Russula2.png');
+	background-repeat: no-repeat; 
+	background-position: right 6px;
+	font: 0.8em Arial, "Courier New", sans-serif;
+}
+
+a { color: #cc0000; }
+a:active { color: #ff0000;  }
+a:visited { color: #cc6666; }
+
+h1, h2, h3, h4 { 
+        color: rgb(102,51,0); 
+	margin-top: 0; 
+	padding-top: 0; 
+	font-family: "Courier New", sans-serif;
+}
+
+h2 { font-size: 1.4em; }
+h3 { font-size: 1.3em; margin: 0 0 1em 0; padding: 0; }
+h4 { font-size: 1.1em; margin: 0; padding: 0; }
+
+.blurb { font-style: italic; }
+.fine-print { font-size: 0.8em; font-style: italic; }
+
+ul { margin: 0 0 1em 0; padding: 0; list-style: none; }
+li { margin: 0; padding: 0; }
+
+/* Main Heading */
+h1 { 
+        text-align: center; margin-top: 3px;       
+	font-size: 1.7em;
+}
+h1 a { text-decoration: none; color: rgb(102,51,0); } 
+h1 a:hover { text-decoration: underline; }
+h1 a:visited { color: rgb(102,51,0); }
+
+#subh1 { 
+        text-align: center;
+	border-bottom: 1px solid rgb(102,51,0);
+	padding-bottom: 1em; 
+	width: 100%;
+}
+#subh1 p { margin: 0 240px; padding: 0; }
+#subh1 .phone { 
+        margin-top: 0.9em; 
+	font-weight: bold; 
+	font-size: 1.1em;
+}
+/* Temp style while phone number is commented out */
+
+#subh1 .founded { margin-bottom: 1em; }
+#subh1 .email { margin-bottom: 0.4em; }
+/* End temp style */
+
+/* Content */
+#content { 
+        margin: 1em 12em 2em 1em;
+	border-right: 1px solid black; 
+	padding: 0 5px 0;
+	position: relative;
+	min-height: 40em;
+	min-width: 62em;
+}
+
+#content img { float: left; }
+
+
+/* Sidebar */
+#sidebar {
+        position: absolute;
+	top: 0;
+    	right: -12em; 
+    	width: 12em; 
+}
+#nav { 
+        list-style: none; 
+	padding: 0; 
+	margin: 0 5px 0; 
+	font-size: 1em; 
+	font-weight: bold; 
+	text-align: center;
+}
+#nav li { font: 1.2em "Courier new"; margin-bottom: 5px; }
+
+#account {
+        list-style: none;
+	padding: 0;
+        font-size: 0.8em;
+        border: 1px black solid;
+        margin: 10px;
+        padding: 5px;
+	text-align: center;
+}
+#account fieldset { 
+        border: none;
+}
+
+#footer { text-align: center; }
+
+/* General Form Style */
+form { 
+        position: relative; 
+	padding: 1em; 
+	border: 1px dotted black; 
+        position: relative; 
+}
+
+fieldset {
+        padding: 0; border: 0; margin: 0; 
+        position: relative;
+}
+
+.errorlist, .non_field_error { color: red;  }
+.errorlist { 
+        position: absolute; 
+	top: 1.5em; 
+        left: 0;
+	list-style: none;
+}
+form ul { position: relative; min-height: 2.9em; }
+form div, form p { 
+        position: relative; 
+	margin: 0 0 0 0;   
+	min-height: 2.9em; 
+}
+form p { margin-top: 1em; }
+label { position: absolute; top: 0.3em; width: 10em; }
+input, textarea, select { margin-left: 10em; }
+
+.help_text { 
+        position: absolute; 
+        top: 0; 
+        width: 12em;
+        margin-left: 0.5em; 
+        font-size: 0.85em;
+        line-height: 1em; 
+        color: gray; 
+} 
+#id_date { width: 5em; }
+#id_time { width: 5em; }
+
+/* Walk List */
+
+.walk { margin: 1em; }
+.walk p { margin: 0em; }
+
+{% endblock screen %}
+} /* end rules for screen */

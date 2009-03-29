@@ -1,0 +1,6 @@
+2009-02-12  Pete Vander Giessen  <petevg@greta>
+
+	* main/templates/view_membership.html, main/templates/walk.html,
+	main/templates/walks.css, main/views.py, main/views.pyc,
+	main/walk_tools.py, settings.bak, urls.py: Catch-up commit
+

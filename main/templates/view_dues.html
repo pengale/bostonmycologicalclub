@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+    {% block style %}
+    {{ block.super }}
+    <style type="text/css">
+<!--
+.due { 
+        position: relative; 
+        margin-top: 2em; 
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+}
+.due h3 { 
+        float: left; 
+        width: 8em; 
+        margin: 0; 
+        padding: 0; 
+        color: black;
+        font-size: 1.2em; 
+}
+.due p { margin-left: 10em; }
+
+-->
+    </style>
+    {% endblock style %}
+
+
+            {% block text %}
+
+<h2>Payment History</h2>
+{% for due in dues %}
+<div class="due">
+    <h3>{{ due.payment_date|date:"d/m/Y" }}</h3>
+    <p><strong>Amount: </strong>${{ due.payment_amount }}</p>
+    <p><strong>Pays Through: </strong>{{ due.paid_thru }}</p>
+    <p><strong>Notes:</strong> {{ due.notes }}</p>
+<p>
+</div>
+{% endfor %}
+            {% endblock text %}

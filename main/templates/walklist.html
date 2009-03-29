@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+            {% block text %}
+<h2>View All Walks</h2>
+    {% for walk in walk_list %}
+{% include "includes/walk.html" %}
+    {% endfor %}
+            {% endblock text %}
+
+
+
