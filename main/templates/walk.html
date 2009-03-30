@@ -39,7 +39,7 @@
     <div id="mushrooms">
         <h3>Mushrooms Found</h3>
         {% if walk.mushrooms_found %}
-        <p>{{ walk.mushrooms_found }}</p>
+        <p>{{ walk.mushrooms_found|linebreaks }}</p>
         <p><a href="/walks/mushrooms/{{ walk.id }}/">Edit This List</a></p>
         {% else %}
         <p><a href="/walks/mushrooms/{{ walk.id }}/">Add Mushrooms</a></p>

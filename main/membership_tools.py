@@ -74,13 +74,15 @@ def edit_membership(request, membership=None):
                     'request' : request, 
                     'membership' : membership 
                     }
+                return render_to_response(template, ctxt)
+
         else:
             # save a new membership
             form = MembershipForm(request.POST)
             if form.is_valid():
                 membership = form.save()
                 return HttpResponseRedirect(
-                    '/members/' + str(membership_id) + '/view/'
+                    '/members/' + str(membership.id) + '/view/'
                     )
 
             else:

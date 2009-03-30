@@ -118,7 +118,7 @@ def mushrooms(request, walk):
         if form.is_valid():
             walk = form.save()
             return HttpResponseRedirect(
-                '/walks/view/' + walk.id + '/'
+                '/walks/view/' + str(walk.id) + '/'
                 )
 
         else:
