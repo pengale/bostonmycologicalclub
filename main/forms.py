@@ -79,3 +79,10 @@ class UserEditsMembership(ModelForm):
         model = Membership
         fields = ('address', 'address2', 'city', 'state',
             'zip', 'country')
+
+# Email Forms
+
+class EmailForm(Form):
+    subject = CharField(max_length=200)
+    message = CharField(widget=(Textarea))
+    

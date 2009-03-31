@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+            {% block text %}
+<h2>Send an Email to Club Members</h2>
+    <p>Send an email</p>
+    <form action="." method="POST">
+        <fieldset>
+        {% for field in form %}
+{% include "includes/field.html" %}
+        {% endfor %}
+        <p><input type="submit" name="Submit" value="Send" /></p>
+        </fieldset>
+    </form>
+            {% endblock text %}

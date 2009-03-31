@@ -1,8 +1,10 @@
-    <h3>Manage Memberships</h3>
-    <ul>
+    <ul id="manage_memberships">
+        <li><h3>Manage Memberships</h3></li>
         <li><a href="/members/edit/">Add a New Membership</a></li>
         <li>List all late memberships (under construction)</li>
         <li><a href="/members/list/">List all Memberships</a></li>
+	<li><a href="/email/list/">List Email Addresses</a></li>
+	<li><a href="/email/send/">Send an Email to Club Members</a></li>
         <form method="GET" id="membership_search" action="/members/search/">
             <fieldset>
                 {% for field in membership_search %}
@@ -12,16 +14,17 @@
             </fieldset>
         </form>
     </ul>
-    <h3>Manage Walks</h3>
-    <ul>
+    <ul id="manage_walks">
+        <li><h3>Manage Walks</h3></li>
         <li><a href="/walks/list/">List All Walks</a></li>
         <li><a href="/walks/create/">Add A Walk</a></li>
 	<li><a href="/admin/main/publicwalk/add/">Add a Public Walk</a></li>
     </ul>
-    <h3>Manage the Site</h3>
-    <ul>
+    <ul id="manage_site">
+        <li><h3>Manage the Site</h3></li>
         <li><a href="/admin/main/newsbit/add/">Add a "NewsBit"</a></li>
         <li><a href="/admin/main/announcement/add/">Add an Announcement</a></li>
         <li><a href="/admin/main/page/add/">Add a Page</a></li>
         <li><a href="/admin/">Advanced Administration</a></li>
     </ul>
+    <p id="mischief_managed"><a href="/accounts/logout/">Mischief Managed (Logout)</a></p>

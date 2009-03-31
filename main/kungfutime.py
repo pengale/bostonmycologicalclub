@@ -13,7 +13,7 @@ class KungfuTimeField(forms.Field):
 
     # Matches any string with a 24-hourish format (sans AM/PM) but puts no
     # limits on the size of the numbers (e.g. 64:99 is OK.)
-    _24_HOUR_PATTERN_STRING = r'^\s*(?P<hour>\d\d?)\s*:?\s*(?P<minute>\d\d)?\s*'
+    _24_HOUR_PATTERN_STRING = r'^\s*(?P<hour>\d\d?)\s*:?\s*(?P<minute>\d\d)?\s*(:?\s*(?P<second>\d\d)\s*)?'
 
     # Matches any string with a 12-hourish format (with AM/PM) but puts no
     # limits on the size of the numbers (e.g. 64:99pm is OK.)
@@ -60,31 +60,40 @@ class KungfuTimeField(forms.Field):
 
         # Hour has to be there because it's required in the regexp. Set the
         # minute to 0 for now. We dunno if there's AM/PM or not.
-        (hour, minute, ampm) = (int(match.group('hour')), 0, match.group('ampm'))
+        (hour, minute, second, ampm) = (int(match.group('hour')), 
+                                        0, 0, match.group('ampm'))
 
-        # Let's see if the user typed a minute.
+        # Let's see if the user typed a minute ...
         try:
             # Raises TypeError if group fetch returns None.
             minute = int(match.group('minute'))
         except TypeError:
             pass  
 
+        # ... or a second.
+        try:
+            # Raises TypeError if group fetch returns None.
+            second = int(match.group('second'))
+        except TypeError:
+            pass  
+
         if ampm:
-            hour = self._handle_twelve_hour_time(hour, minute, ampm)
+            hour = self._handle_twelve_hour_time(hour, minute, second, ampm)
 
         # If the numbers are out of range, we'll find out here.
         try:
-            return datetime.time(hour, minute)
+            return datetime.time(hour, minute, second)
         except ValueError:
             raise ValidationError(self._ERROR_MESSAGES['invalid'])
 
         # I don't expect any other problems, but if there are, they'll
         # propagate.
 
-    def _handle_twelve_hour_time(self, hour, minute, ampm):
+    def _handle_twelve_hour_time(self, hour, minute, second, ampm):
         """
-        Detect 24 hour time with an am/pm (e.g. 18:30pm, 0:30am) and do the
-        necessary transform for converting pm times to 24 hour times.
+        Detect 24 hour time with an am/pm (e.g. 18:30:00pm, 0:30:00am)
+        and do the necessary transform for converting pm times to 24
+        hour times.
         """
         if hour < 1 or hour > 12:
             raise ValidationError(self._ERROR_MESSAGES['invalid'])

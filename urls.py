@@ -22,6 +22,9 @@ urlpatterns = patterns('',
     (r'^mushroom_admin', mushroom_admin),
     (r'^members/list/due/(?P<year>[0-9][0-9][0-9][0-9])/(?P<month>)[0-9][0-9]/', memberships_due),
     (r'^members/((?P<membership>[0-9]+)/)?(?P<action>list|done|edit|view|edit_user|edit_due|status|dues|search)/(?P<criteria>[0-9a-z]+)?', memberships),
+    (r'^email/list/', list_emails),
+    (r'^email/send/', send_email),
+    (r'^email/sent/', sent_email),
     (r'^admin/(.*)', admin.site.root),
 
     # Finger wagging 'you don't have permission' page

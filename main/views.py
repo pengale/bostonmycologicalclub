@@ -3,6 +3,7 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import (login_required, 
                                             user_passes_test, 
@@ -14,7 +15,10 @@ from models import (Announcement, Newsbit, PublicWalk, IDSession,
                     Membership, Due)
 from django import forms
 from forms import (UserEditsUser, UserEditsProfile, 
-                   UserEditsMembership, MembershipSearch)
+                   UserEditsMembership, MembershipSearch,
+                   EmailForm)
+from django.core.mail import send_mail
+from smtplib import SMTPException
 
 def index(request):
     """ Return our front page. """
@@ -277,19 +281,81 @@ def mushroom_admin(request):
         }
     return render_to_response(template, ctxt)
 
-
-
-
-
-
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def list_emails(request):
+    """ List all user emails. """
+    try:
+        users = User.objects.all()
+    except ObjectDoesNotExist:
+        error = "Couldn't fetch a list of users!"
+        return error_404(request, error)
     
+    template='list_emails.html'
+    ctxt = { 'request' : request, 'users' : users }
+    return render_to_response(template, ctxt)
 
-    
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def sent_email(request, send_errors=None):
+    """ Return a page confirming a sent email """
+    template = 'sent_email.html'
+    ctxt = { 'request' : request,
+             'send_errors' : send_errors,
+             }
+    return render_to_response(template, ctxt)
+                 
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def send_email(request, sent=None):
+    """ Send an email to all club members. """
 
+    form = EmailForm()
+    template='send_email.html'
+    users = []
+    send_errors = []
+
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            form = form.cleaned_data
+            subject = form['subject']
+            message = form['message']
+
+            try:
+                users = User.objects.all()
+            except ObjectDoesNotExist:
+                error = "Can't pull up the user list!"
+                return error_404(request, error)
+
+            for user in users:
+                try:
+                    user_email = user.email
+                    send_mail(subject, 
+                              message, 
+                              SERVER_EMAIL,
+                              [user_email],
+                              fail_silently=False,
+                              )
+                except SMTPException:
+                    # Need to come up with a good way to display these
+                    # errors.  Not sure if possible to pass through a
+                    # redirect.
+                    send_error = 'error sending to %s' % user_email
+                    send_errors.append(send_error)
+
+            return HttpResponseRedirect(reverse(sent_email))
+
+        else:
+            form = EmailForm(request.POST)
+            
+    ctxt = { 
+        'request' : request, 
+        'form' : form, 
+        'users' : users,
+        }
+    return render_to_response(template, ctxt)
         
-
-    
-
-
-    
-
