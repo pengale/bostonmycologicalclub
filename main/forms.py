@@ -2,7 +2,7 @@ from models import Walk, Membership, UserProfile, Due
 from django.contrib.auth.models import User
 from django.forms import (ModelForm, Form, TextInput, DateField, 
                           TimeField, BooleanField, CharField,
-                          Textarea, IntegerField)
+                          Textarea, IntegerField, EmailField)
 from kungfutime import KungfuTimeField
 
 # Walk Editing Forms
@@ -33,6 +33,7 @@ class MembershipSearch(Form):
     membership_id = IntegerField()
 
 class UserForm(ModelForm):
+    username = EmailField(label='Email Address')
     class Meta:
         model = User
         exclude = (
@@ -52,7 +53,7 @@ class UserProfileForm(ModelForm):
 
 class DueForm(ModelForm):
     notes = CharField(widget=Textarea(
-            attrs={'rows':'2'}))
+            attrs={'rows':'2'}), required=False)
     class Meta:
         model = Due
         exclude = ('membership')
@@ -65,6 +66,7 @@ class MembershipStatus(ModelForm):
 # Forms for allowing a User to edit their info
 
 class UserEditsUser(ModelForm):
+    username = EmailField(label='Email Address')
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username')

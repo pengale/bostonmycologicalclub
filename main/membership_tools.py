@@ -361,6 +361,7 @@ def edit_due(request, membership, due=None):
             else:
                 template = 'edit_due.html'
                 ctxt = { 
+                    'due' : due,
                     'request' : request,
                     'membership' : membership,
                     'form' : form
@@ -389,13 +390,24 @@ def edit_due(request, membership, due=None):
                 return render_to_response(template, ctxt)
 
     else:
-        # return a blank due form
-        template = 'edit_due.html'
-        ctxt = {
-            'request' : request,
-            'form' : DueForm(),
-            }
-        return render_to_response(template, ctxt)
+        if due:
+            # return a blank due form
+            template = 'edit_due.html'
+            ctxt = {
+                'request' : request,
+                'form' : DueForm(instance=due),
+                'due' : due,
+                }
+            return render_to_response(template, ctxt)
+
+        else:
+            # return a blank due form
+            template = 'edit_due.html'
+            ctxt = {
+                'request' : request,
+                'form' : DueForm(),
+                }
+            return render_to_response(template, ctxt)
             
 
 def view_dues(request, membership):
@@ -413,6 +425,7 @@ def view_dues(request, membership):
     ctxt = {
         'request' : request,
         'dues' : dues,
+        'membership' : membership,
         }
     return render_to_response(template, ctxt)
 

@@ -12,13 +12,13 @@
 }
 .due h3 { 
         float: left; 
-        width: 8em; 
-        margin: 0; 
+        width: 10em; 
+        margin: 0.5em 0 0 0; 
         padding: 0; 
         color: black;
         font-size: 1.2em; 
 }
-.due p { margin-left: 10em; }
+.due p { margin-left: 12em; margin-top: 0.7em; }
 
 -->
     </style>
@@ -30,10 +30,11 @@
 <h2>Payment History</h2>
 {% for due in dues %}
 <div class="due">
-    <h3>{{ due.payment_date|date:"d/m/Y" }}</h3>
+    <h3>{{ due.payment_date|date }}</h3>
     <p><strong>Amount: </strong>${{ due.payment_amount }}</p>
-    <p><strong>Pays Through: </strong>{{ due.paid_thru }}</p>
+    <p><strong>Pays Through: </strong>{{ due.paid_thru|date }}</p>
     <p><strong>Notes:</strong> {{ due.notes }}</p>
+    <p><a href="/members/{{ membership.id }}/edit_due/{{ due.id }}/">Edit</a></p>
 <p>
 </div>
 {% endfor %}

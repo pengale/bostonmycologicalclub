@@ -196,7 +196,10 @@ def edit_profile(request):
                                               instance=membership)
         if (edit_user.is_valid() and edit_profile.is_valid() and 
             edit_membership.is_valid()):
-            edit_user.save()
+            user = edit_user.save(commit=False)
+            user.email = user.username
+            user.save()
+            edit_user.save_m2m()
             edit_profile.save()
             edit_membership.save()
             return HttpResponseRedirect('/accounts/profile/')

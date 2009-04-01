@@ -121,11 +121,11 @@ class Walk(models.Model):
     collecting_area = models.CharField(max_length=300)
     lat = models.DecimalField(
         max_digits=7, decimal_places=4, blank=True,
-        help_text = 'You may leave this blank.'
+        help_text = 'You may leave this blank.',
         )
     long = models.DecimalField(
         max_digits=7, decimal_places=4, blank=True,
-        help_text = 'You may leave this blank.'
+        help_text = 'You may leave this blank.',
         )
     permission = models.BooleanField(
         help_text = 'Has permission to use the area been granted?'

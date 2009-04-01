@@ -4,6 +4,7 @@
     {{ block.super }}
     <style type="text/css">
 <!--
+.suspended { color: gray; }
 #membership_info, #notes, #users { 
         margin-bottom: 2em; 
         width: 28em; 
@@ -41,7 +42,7 @@
 {% if membership.address2 %}{{ membership.address2 }}<br />{% endif %}
 {{ membership.city }}, {{ membership.state }}, {{ membership.zip }}
     </div>
-    <p>Joined: {{ membership.join_date }}</p>
+    <p>Joined: {{ membership.join_date|date }}</p>
     {% if Notes %}
     <h3>Notes</h3>
     <div id="notes">
@@ -55,7 +56,7 @@
     <h3>Users</h3>
     {% if user_profiles %}
         {% for profile in user_profiles %}
-        <p><strong>{{ profile.user }}</strong>: {{ profile.user.first_name }} {{ profile.user.last_name }} <a href="/members/{{ membership.id }}/edit_user/{{ profile.user.id }}/">edit</a></p>
+        <p {% if profile.user.is_active %}{% else %}class="suspended"{% endif %}><strong>{{ profile.user }}</strong>: {{ profile.user.first_name }} {{ profile.user.last_name }} {% if profile.user.is_active %}{% else %}(suspended){% endif %} <a href="/members/{{ membership.id }}/edit_user/{{ profile.user.id }}/">edit</a></p>
         {% endfor %}
     <p><a href="/members/{{ membership.id }}/edit_user/">Add a New User</a></p>
 
@@ -69,9 +70,9 @@
 
 <div id="dues">
     <h3>Dues</h3>
-    <p><strong>Last Paid:</strong>  {{ dues.0.payment_date }}</p>
+    <p><strong>Last Paid:</strong>  {{ dues.0.payment_date|date }}</p>
     <p><strong>Amount: </strong>${{ dues.0.payment_amount }}</p>
-    <p><strong>Pays Through: </strong>{{ dues.0.paid_thru }}</p>
+    <p><strong>Pays Through: </strong>{{ dues.0.paid_thru|date }}</p>
     <p><strong>Notes:</strong> {{ dues.0.notes }}</p>
     <form action="/members/{{ membership.id}}/edit_due/" method="POST" id="edit_due">
         <fieldset>

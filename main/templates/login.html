@@ -2,6 +2,12 @@
 
     {% block style %}
     {{ block.super }}
+<style type="text/css">
+<!--
+label { width: 13em; }
+input { margin-left: 13em; }
+-->
+</style>
     <style type="text/css">
 <!--
 p#password-reset { margin-top: 2em; font-size: 0.85em; }
@@ -20,7 +26,7 @@ p#password-reset { margin-top: 2em; font-size: 0.85em; }
         {% for field in form %}
         <div id="{{ field.label }}_wrap">
             {{ field.errors }}
-            {{ field.label_tag }} {{ field }}
+            {% if forloop.first %}<label for="id_username">Username/Email Address</label>{% else %}{{ field.label_tag }}{% endif %} {{ field }}
         </div>
         {% endfor %}
 	<p><input type="submit" value="Login" id="login-submit" /></p>
