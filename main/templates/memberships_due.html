@@ -5,7 +5,7 @@
 <ul>
     {{ due_memberships }}
     {% for member in due_memberhsips %}
-    <li><a href="/members/{{ member.membership.id }}/view/">{{ member.membership.address }} ({% for user in member.users %}{% if not forloop.first %}, {% endif %}{{ user.first_name }} {{ user.last_name }}{% endfor %})</a></li>
+    <li><a href="/memberships/{{ member.membership.id }}/view/">{{ member.membership.address }} ({% for user in member.users %}{% if not forloop.first %}, {% endif %}{{ user.first_name }} {{ user.last_name }}{% endfor %})</a></li>
     {% endfor %}
 </ul>
             {% endblock text %}

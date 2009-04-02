@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.decorators import (login_required, 
                                             user_passes_test, 
                                             permission_required)
@@ -16,9 +17,57 @@ from models import (Announcement, Newsbit, PublicWalk, IDSession,
 from django import forms
 from forms import (UserEditsUser, UserEditsProfile, 
                    UserEditsMembership, MembershipSearch,
-                   EmailForm)
+                   EmailForm, WalkForm, WalkMushroomForm,
+                   MembershipForm, UserForm, UserProfileForm,
+                   DueForm, MembershipStatus, MembershipSearch)
+
 from django.core.mail import send_mail
 from smtplib import SMTPException
+
+"""----------------------------------------------------------------
+                         Error Pages
+----------------------------------------------------------------"""
+
+def under_construction(request):
+    """ Return a friendly under construction message. """
+    template = 'under_construction.html'
+    ctxt = { 'request' : request, }
+    return render_to_response(template, ctxt)
+
+def error_404(request, error=None):
+    """ Return a friendly '404' Error """
+    if not error:
+        error = "We can't find the page you requested."
+    template = '404.html'
+    ctxt = { 'request' : request, 'error' : error }
+    return render_to_response(template, ctxt)
+
+def halt(request, error=None):
+    """ Display when the user is pokin' around some place they
+    shouldn't be pokin'"""
+    if not error:
+        error = "You do not have permission to be here."
+    template = 'halt.html'
+    ctxt = { 'request' : request, 'error' : error }
+    return render_to_response(template, ctxt)
+
+
+"""----------------------------------------------------------------
+                         Style Sheets
+----------------------------------------------------------------"""
+
+
+def style(request, sheet):
+    """ Returns a cascading stylesheet. """
+    template = sheet + '.css'
+    ctxt = { 'media_url' : MEDIA_URL, }
+    return render_to_response(template, ctxt, mimetype='text/css')
+
+
+
+"""----------------------------------------------------------------
+                         Public Pages
+----------------------------------------------------------------"""
 
 def index(request):
     """ Return our front page. """
@@ -60,12 +109,6 @@ def schedule(request):
         }
     return render_to_response(template, ctxt)
 
-def under_construction(request):
-    """ Return a friendly under construction message. """
-    template = 'under_construction.html'
-    ctxt = { 'request' : request, }
-    return render_to_response(template, ctxt)
-
 def page(request, page):
     """ Given the page name, return the page. """
     template = page + '.html'
@@ -101,41 +144,166 @@ def story(request, year, month, day, time):
 
         return render_to_response(template, ctxt)    
 
-def style(request, sheet):
-    """ Returns a cascading stylesheet. """
-    template = sheet + '.css'
-    ctxt = { 'media_url' : MEDIA_URL, }
-    return render_to_response(template, ctxt, mimetype='text/css')
 
-def error_404(request, error=None):
-    """ Return a friendly '404' Error """
-    if not error:
-        error = "We can't find the page you requested."
-    template = '404.html'
-    ctxt = { 'request' : request, 'error' : error }
-    return render_to_response(template, ctxt)
+"""----------------------------------------------------------------
+                         Walk Tools 
+----------------------------------------------------------------"""
 
-def halt(request, error=None):
-    """ Display when the user is pokin' around some place they
-    shouldn't be pokin'"""
-    if not error:
-        error = "You do not have permission to be here."
-    template = 'halt.html'
-    ctxt = { 'request' : request, 'error' : error }
+@login_required(redirect_field_name='redirect_to')
+def list_walks(request):
+    """ Lists all walks. """
+    walk_list = Walk.objects.all()
+    template = 'walklist.html'
+
+    ctxt = { 
+        'walk_list' : walk_list, 
+        'request' : request,
+}
     return render_to_response(template, ctxt)
 
 @login_required(redirect_field_name='redirect_to')
-def walks(request, action, walk):
-    """ If the user wants to edit, create, list, or view walks, 
-    call the appropriate function from walk_tools.py. """
-    from walk_tools import *
+def view_walk(request, walk=None):
+    """ View details about a specific walk. """
 
-    if action == "list" : return view_walklist(request)
-    if action == "view" :  return view_walk(request, walk)
-    if action == "create" :  return create_walk(request)
-    if action == "edit" :  return edit_walk(request, walk)
-    if action == "done" :  return made_walk(request, walk)
-    if action == "mushrooms" :  return mushrooms(request, walk)
+    if not walk:
+        error = "Please specify a walk to view"
+        return error_404(request, error)
+
+    try: 
+        walk = Walk.objects.get(id=walk)
+
+        # Decide whether user has permission to view 'edit' link
+        permission = False
+        if request.user.id == walk.creator.id: permission = True
+
+        template = "walk.html"
+        ctxt = { 
+            'walk' : walk, 
+            'request' : request, 
+            'permission' : permission 
+            }
+        return render_to_response(template, ctxt)
+
+    except:
+        error = "It appears that the walk you requested does not exist."
+        template = "404.html"
+        ctxt = { "error" : error, 'request' : request }
+        return render_to_response(template, ctxt)
+
+@login_required(redirect_field_name='redirect_to')
+def create_walk(request):
+    """ View to create a new walk.  """
+
+    if request.method == 'POST':
+        form = WalkForm(request.POST)
+        if form.is_valid():
+            walk = form.save(commit=False)
+            walk.creator = request.user
+            walk.save()
+            form.save_m2m()
+            return HttpResponseRedirect(reverse(list_walks))
+                
+        else:
+            form = WalkForm(request.POST)
+            template = 'edit_walk.html'
+            ctxt = { 'form' : form,  'request' : request }
+            return render_to_response(template, ctxt)
+
+    else:
+        form = WalkForm(initial={ 
+                'creator' : User.objects.get(username=request.user).id
+                })
+        template = 'edit_walk.html'
+        ctxt = { 
+            'form' : form,  
+            'request' : request, 
+            'walk' : None,
+            }
+        return render_to_response(template, ctxt)
+
+@login_required(redirect_field_name='redirect_to')
+def edit_walk(request, walk=None):
+    """ Edit an existing walk. """
+    if not walk:
+        return create_walk(request)
+
+    try:
+        walk = Walk.objects.get(id=walk)
+        if request.user.id != walk.creator.id:
+            if not request.user.is_superuser:
+                error = "You do not have permission to edit this walk."
+                return halt(request, error)
+
+    except ObjectDoesNotExist:
+        error = "That walk does not appear to exist"
+        return error_404(request, error)
+
+    if request.method == 'POST':
+
+        form = WalkForm(request.POST, instance=walk)
+
+        if form.is_valid():
+            walk = form.save(commit=False)
+            walk.creator = request.user
+            walk.save()
+            form.save_m2m()
+            return HttpResponseRedirect('/walks/list/')
+
+        else:
+            form = WalkForm(request.POST)
+            template = 'edit_walk.html'
+            ctxt = { 'form' : form, 'request' : request }
+            return render_to_response(template, ctxt)
+
+    else:
+        form = WalkForm(instance=walk)
+        template = 'edit_walk.html'
+        ctxt = { 
+            'form' : form,  
+            'request' : request,
+            'walk' : walk,
+            }
+        return render_to_response(template, ctxt)
+
+
+@login_required(redirect_field_name='redirect_to')
+def mushrooms(request, walk=None):
+    if not walk:
+        error = "Please specify a walk"
+        return error_404(request, error)
+
+    try:
+        walk = Walk.objects.get(id=walk)
+        
+    except ObjectDoesNotExist:
+        error = "That walk does not appear to exist"
+        return error_404(request, error)
+
+    if request.method == 'POST':
+        
+        form = WalkMushroomForm(request.POST, instance=walk)
+
+        if form.is_valid():
+            walk = form.save()
+            return HttpResponseRedirect(
+                '/walks/view/' + str(walk.id) + '/'
+                )
+
+        else:
+            form = WalkMushroomForm(request.POST)
+
+    else:
+        form = WalkMushroomForm(instance=walk)
+
+
+    template = 'walk_mushrooms.html'
+    ctxt = { 'form' : form, 'request' : request, 'walk' : walk }
+    return render_to_response(template, ctxt)
+
+
+"""----------------------------------------------------------------
+                         User Profile Tools
+----------------------------------------------------------------"""
 
 @login_required(redirect_field_name='redirect_to')
 def profile(request):
@@ -223,53 +391,510 @@ def edit_profile(request):
         ctxt = { 'forms' : forms, 'request' : request }
         return render_to_response(template, ctxt)
 
-@user_passes_test(
-    lambda u: u.has_perm('u.is_superuser'),
-    login_url = '/halt/')
-def memberships(request, action, membership=None, criteria=None):
-    """ Membership manipulation tools """
-
-    from membership_tools import *
-    
-    if action == "list" : return list_memberships(
-        request, criteria)
-    if action == "edit" : return edit_membership(
-        request, membership)
-    if action == "view" : return view_membership(
-        request, membership)
-    if action == "status" : return membership_status(
-        request, membership, criteria)
-    if action == "dues" : return view_dues(
-        request, membership)
-    if action == "edit_user" : return edit_user(
-        request, membership, criteria)
-    if action == "edit_due" : return edit_due(
-        request, membership, criteria)
-    if action == "search" : return membership_search(request)
+"""----------------------------------------------------------------
+                         Membership Tools
+----------------------------------------------------------------"""
 
 @user_passes_test(
     lambda u: u.has_perm('u.is_superuser'),
     login_url = '/halt/')
-def memberships_due(request, year, month):
-    """ Get overdue memberships """
-    
-    memberships = Membership.objects.all()
-    due_memberships = []
-    for membership in memberships:
-        try:
-            dues = Due.objects.filter(membership=membership.id)[:1]
-        except ObjectDoesNotExist:
-            pass
+def list_memberships(request, due_by=None, year=None, month=None):
+    """ List all memberships, or all late memberships. """
+    if request.method=='GET' and due_by:
+        if month and year:
+            due_by = datetime.date(int(year), int(month), 1)
+        else:
+            due_by = datetime.date.today()
+            
+        due_by_members = []
+        members = Membership.objects.all()
+        for member in members:
+            try:
+                dues = Due.objects.filter(
+                    membership=member.id,
+                    paid_thru__gte=due_by,
+                    )
+                if not dues:  due_by_members.append(member)            
 
-    template = "memberships_due.html"
+            except ObjectDoesNotExist:
+                due_by_members.append(member)
+
+        members = due_by_members                
+
+    else:
+        members = Membership.objects.all()
+        due_by = None
+    
+    member_list = []
+    for member in members:
+        users = User.objects.filter(
+            userprofile__membership=member.id)
+        mem_blob = { 'membership' : member, 'users' : users }
+        member_list.append(mem_blob)
+
+    template = 'memberlist.html'
     ctxt = { 
-        'request' : request, 
-        'due_memberships' : memberships,
-        'year' : year,
-        'month' : month,
+        'member_list' : member_list, 
+        'request' : request,
+        'due_by' : due_by,
         }
     return render_to_response(template, ctxt)
+
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def view_membership(request, membership=None):
+    """ View Details of a Membership """
+
+    if not membership:
+        error = "Please specify a membership to view."
+        return error_404(request, error)
+
+    try:
+        membership = Membership.objects.get(id=membership)
+        dues = Due.objects.filter(membership=membership)
+        user_profiles = UserProfile.objects.filter(membership=membership)
+
+        edit_user = UserForm()
+        edit_profile = UserProfileForm()
+        edit_due = DueForm()
+
+        # is the membership active?  
+        active = False  # we assume not ...
+        for profile in user_profiles:
+            # ... but only one user needs to be active in order for
+            # the whole membership to be 'active' (this allows us to
+            # turn off one username without wiping the whole profile)
+            if profile.user.is_active:
+                active = True            
+
+        
+        template = 'view_membership.html'
+        ctxt = {
+            'request' : request,
+            'membership' : membership,
+            'dues' : dues,
+            'user_profiles' : user_profiles,
+            'edit_user' : edit_user,
+            'edit_profile' : edit_profile,
+            'edit_due' : edit_due,
+            'active' : active,
+            }
+        return render_to_response(template, ctxt)
+
+    except ObjectDoesNotExist:
+        error = "That Membership does not appear to exist."
+        return error_404(request, error)
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def edit_membership(request, membership=None):
+    """ Edit an existing membership, or add a new membership if none
+    specified."""
+
+    # Fetch membership object
+    if membership: 
+        membership = int(membership)
+        try: 
+            membership = Membership.objects.get(id=membership)
+
+        except ObjectDoesNotExist:
+            error = "That Membership does not appear to exist."
+            return error_404(request, error)
+
+        
+    # Attempt to save the Membership
+    if request.method == 'POST':
+        if membership:
+            # save an existing membership
+            form = MembershipForm(request.POST, instance=membership)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(
+                    '/memberships/' + str(membership.id) + '/view/'
+                    )
+
+            else:
+                form = MembershipForm(request.POST)
+                template = 'edit_membership.html'
+                ctxt = { 
+                    'form' : form, 
+                    'request' : request, 
+                    'membership' : membership 
+                    }
+                return render_to_response(template, ctxt)
+
+        else:
+            # save a new membership
+            form = MembershipForm(request.POST)
+            if form.is_valid():
+                membership = form.save()
+                return HttpResponseRedirect(
+                    '/memberships/' + str(membership.id) + '/view/'
+                    )
+
+            else:
+                form = MembershipForm(request.POST)
+                template = 'edit_membership.html'
+                ctxt = { 
+                    'form' : form, 
+                    'request' : request, 
+                    'membership' : membership 
+                    }
+
+            return render_to_response(template, ctxt)
     
+    # Return a page to edit the membership
+    elif membership:
+        form = MembershipForm(instance=membership)
+        template = 'edit_membership.html'
+        ctxt = { 
+            'form' : form, 
+            'request' : request, 
+            'membership' : membership,
+            }
+        return render_to_response(template, ctxt)
+
+
+    # Return a blank membership form
+    else: 
+        form = MembershipForm()
+        template = 'edit_membership.html'
+        ctxt = { 
+            'form' : form, 
+            'request' : request, 
+            'membership' : membership,
+            }
+        return render_to_response(template, ctxt)
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def create_membership(request):
+    edit_membership(request, membership=None)
+
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def edit_user(request, membership, user=None):
+    """ Edit an existing user, or add a new one if no user specified
+    """
+
+    # Make sure that we are attempting to attach to a valid
+    # membership.
+    try:
+        membership = Membership.objects.get(id=membership)
+
+    except ObjectDoesNotExist:
+        error = "That Membership does not appear to exist."
+        return error_404(request, error)
+
+    # And make sure that we're talking about a valid user, if user was
+    # specified.
+    if user:
+        user = int(user)
+        try:
+            user = User.objects.get(id=user)
+            profile = UserProfile.objects.get(user=user)
+            
+        except ObjectDoesNotExist:
+            error = """That user does not exist, or you are attempting
+            to edit a user without a profile (you must use the admin
+            interface to edit this sort of user)."""
+            return error_404(request, error)
+
+    if request.method == 'POST':
+        if user:
+            # save changes to an existing user
+            user_form = UserForm(request.POST, instance=user)
+            profile_form = UserProfileForm(request.POST, instance=profile)
+            if user_form.is_valid() and profile_form.is_valid():
+                user = user_form.save(commit=False)
+                user.email = user.username
+                user.save()
+                user_form.save_m2m()
+                profile = profile_form.save()
+
+                return HttpResponseRedirect(
+                    '/memberships/' + str(membership.id) + '/view/'
+                    )
+            else:
+                template = 'edit_user.html'
+                ctxt = { 
+                    'request' : request, 
+                    'membership' : membership,
+                    'user' : user.id,
+                    'edit_user' : user_form,
+                    'edit_profile' : profile_form,
+                    }
+                return render_to_response(template, ctxt)
+
+
+        else:
+            # save a new user
+            user_form = UserForm(request.POST)
+            profile_form = UserProfileForm(request.POST)
+            if user_form.is_valid() and profile_form.is_valid():
+                user = user_form.save(commit=False)
+                user.email = user.username
+                user.save()
+                user_form.save_m2m()
+                profile = profile_form.save(commit=False)
+                profile.user = User.objects.get(id=user.id)
+                profile.membership = membership
+                profile.save()
+                profile_form.save_m2m()
+                return HttpResponseRedirect(
+                    '/memberships/' + str(membership.id) + '/view/'
+                    )
+
+            else:
+                template = 'edit_user.html'
+                ctxt = { 
+                    'request' : request, 
+                    'membership' : membership,
+                    'user' : None,
+                    'edit_user' : user_form,
+                    'edit_profile' : profile_form,
+                    }
+                return render_to_response(template, ctxt)
+
+    elif user:
+        template = 'edit_user.html'
+        ctxt = { 
+            'request' : request, 
+            'membership' : membership,
+            'user' : user.id,
+            'edit_user' : UserForm(instance=user),
+            'edit_profile' : UserProfileForm(instance=profile),
+            }
+        return render_to_response(template, ctxt)
+
+    else:
+        # return a  blank user form
+        template = 'edit_user.html'
+        ctxt = { 
+            'request' : request, 
+            'membership' : membership,
+            'user' : None,
+            'edit_user' : UserForm(),
+            'edit_profile' : UserProfileForm(),
+            }
+        return render_to_response(template, ctxt)
+
+        
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def membership_status(request, membership, action):
+    """ Suspend a membership, or restore a suspended account. """
+    membership = int(membership)
+    # Fetch membership
+    try: 
+        membership = Membership.objects.get(id=membership)
+        
+    except ObjectDoesNotExist:
+        error = "That Membership does not appear to exist."
+        return error_404(request, error)
+
+    # Fetch users
+    try:
+        profiles = UserProfile.objects.filter(membership=membership)
+    except ObjectDoesNotExist:
+        error = """ This Membership does not seem to have any users
+        attached to it."""
+        return error_404(request, error)
+        
+
+    if request.method == 'POST':
+        for profile in profiles:
+            user = profile.user
+            form = MembershipStatus(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+            else:
+                error = """ The form you submitted isn't valid.
+                    Either you're trying to do hacky things to the
+                    site (solution: please stop), or there's an error
+                    in the code (solution: please get in touch with
+                    you system admin)."""
+                return error_404(request, error)
+
+        return HttpResponseRedirect(
+            '/memberships/' + str(membership.id) + '/view/'
+            )
+
+    else:
+        status = True
+        if action == 'suspend': status = False
+
+        template = "membership_status.html"
+        ctxt = { 
+            'request' : request, 
+            'status' : status,
+            'form' : MembershipStatus(),
+            }
+        return render_to_response(template, ctxt)
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def edit_due(request, membership, due=None):
+    """ Add or edit a due """
+    
+    # Make sure that we are attempting to attach to a valid
+    # membership.  
+
+    try:
+        membership = Membership.objects.get(id=membership)
+    
+
+    except ObjectDoesNotExist:
+        error = "That Membership does not appear to exist"
+        return error_404(request, error)
+    
+    # And make sure that we're looking up a valid due
+    if due:
+        due = int(due)
+        try:
+            due = Due.objects.get(id=due)
+        
+        except ObjectDoesNotExist:
+            error = """ That due does not appear to exist."""
+            return error_404(request, error)
+
+    
+    if request.method == 'POST':
+        if due:
+            # save changes to an existing due
+            form = DueForm(request.POST, instance=due)
+            if form.is_valid():
+                due = form.save(commit=False)
+                due.membership = membership
+                due.save()
+                form.save_m2m()
+                return HttpResponseRedirect(
+                    '/memberships/' + str(membership.id) + '/view/'
+                    )
+
+            else:
+                template = 'edit_due.html'
+                ctxt = { 
+                    'due' : due,
+                    'request' : request,
+                    'membership' : membership,
+                    'form' : form
+                    }
+                return render_to_response(template, ctxt)
+
+            
+        else:
+            # save a new due
+            form = DueForm(request.POST)
+            if form.is_valid():
+                due = form.save(commit=False)
+                due.membership = membership
+                due.save()
+                form.save_m2m()
+                return HttpResponseRedirect(
+                    '/memberships/' + str(membership.id) + '/view/'
+                    )
+
+            else:
+                template = 'edit_due.html'
+                ctxt = {
+                    'request' : request,
+                    'form' : form,
+                    }
+                return render_to_response(template, ctxt)
+
+    else:
+        if due:
+            # return a blank due form
+            template = 'edit_due.html'
+            ctxt = {
+                'request' : request,
+                'form' : DueForm(instance=due),
+                'due' : due,
+                }
+            return render_to_response(template, ctxt)
+
+        else:
+            # return a blank due form
+            template = 'edit_due.html'
+            ctxt = {
+                'request' : request,
+                'form' : DueForm(),
+                }
+            return render_to_response(template, ctxt)
+            
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def view_dues(request, membership=None):
+    """ View a list of dues associated with a membership."""
+    if not membership:
+        error = "Plesae specify and membership"
+        return error_404(request, error)
+
+    membership = int(membership)
+    try: 
+        membership = Membership.objects.get(id=membership)
+        
+    except ObjectDoesNotExist:
+        error = "That Membership does not appear to exist."
+        return error_404(request, error)
+
+    dues = Due.objects.filter(membership=membership)
+
+    template = 'view_dues.html'
+    ctxt = {
+        'request' : request,
+        'dues' : dues,
+        'membership' : membership,
+        }
+    return render_to_response(template, ctxt)
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def membership_search(request):
+    """ Search for a member.  Currently only searches by id """
+    error = None
+    membership_id = None
+
+    if request.method == 'GET' and request.GET.has_key('membership_id'):
+        membership_search = MembershipSearch(request.GET)
+        if membership_search.is_valid():
+            membership_id = request.GET.__getitem__('membership_id')
+
+            try:
+                membership = Membership.objects.get(id=membership_id)
+                return HttpResponseRedirect(
+                    '/memberships/' + str(membership_id) + '/view/'
+                    )
+
+            except ObjectDoesNotExist:
+                error = """Membership #%s does not appear to exist.
+""" % membership_id
+        else:
+            error = "Please enter a valid membership id number"
+
+    else:
+        error = "You did not specify a member to search for."
+
+    template = "membership_search.html"
+    ctxt = { 
+            'request' : request, 
+            'error' : error, 
+            'membership_search' : MembershipSearch()
+            }
+    return render_to_response(template, ctxt)
+
 @user_passes_test(
     lambda u: u.has_perm('u.is_superuser'),
     login_url = '/halt/')
@@ -277,12 +902,35 @@ def mushroom_admin(request):
     """ Pulls up an custom admin page for the site."""
     membership_search = MembershipSearch()
 
+    # Fetch dates of "due_by by" list
+    today = datetime.date.today()
+    next_month = today.month + 1
+    nm_year = today.year
+    may_year = today.year
+
+    if next_month > 12:  
+        next_month = 1
+        mm_year += 1
+
+    may_year = today.year
+    if today.month > 5:
+        may_year += 1
+        
+
     template = 'mushroom_admin.html'
     ctxt = { 
         'request' : request, 
         'membership_search' : membership_search,
+        'next_month' : next_month,
+        'nm_year' : nm_year,
+        'may_year' : may_year,
+        'today' : today,
         }
     return render_to_response(template, ctxt)
+
+"""----------------------------------------------------------------
+                         Email Tools
+----------------------------------------------------------------"""
 
 @user_passes_test(
     lambda u: u.has_perm('u.is_superuser'),

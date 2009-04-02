@@ -21,7 +21,7 @@ class Membership(models.Model):
 
     # Address
     address = models.CharField(max_length=50)
-    address2 = models.CharField(max_length=50, blank=True)
+    address2 = models.CharField(max_length=50, blank=True, null=True)
     city = models.CharField(max_length=60)
     state = USStateField()
     zip = models.CharField(max_length=10)
@@ -31,7 +31,7 @@ class Membership(models.Model):
         )
 
     # Remarks
-    notes = models.TextField(blank=True)
+    notes = models.TextField(blank=True, null=True)
 
     # Type
     membership_type = models.CharField(
@@ -61,7 +61,7 @@ class Due(models.Model):
         )
     payment_type = models.CharField(max_length=20)
     paid_thru = models.DateField() # best way to do this?
-    notes = models.TextField(blank=True)
+    notes = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ["-paid_thru"]
@@ -120,15 +120,11 @@ class Walk(models.Model):
     meeting_place = models.CharField(max_length=300)
     collecting_area = models.CharField(max_length=300)
     latitude = models.DecimalField(
-        max_digits=7, decimal_places=4, 
-        blank=True, 
-        null=True,
+        max_digits=7, decimal_places=4, null=True
         help_text = 'You may leave this blank.',
         )
     longitude = models.DecimalField(
-        max_digits=7, decimal_places=4, 
-        blank=True, 
-        null=True,
+        max_digits=7, decimal_places=4, null=True
         help_text = 'You may leave this blank.',
         )
     permission = models.BooleanField(
@@ -140,8 +136,8 @@ class Walk(models.Model):
     areas = models.ManyToManyField(WalkArea)
 
     # Notes
-    mushrooms_found = models.TextField(blank=True)
-    notes = models.TextField(blank=True)
+    mushrooms_found = models.TextField(blank=True )
+    notes = models.TextField(blank=True )
 
     def __unicode__(self):
         return '%s %s' % (self.location, self.date)
@@ -155,7 +151,7 @@ class Announcement(models.Model):
     timestamp = models.DateTimeField()
     heading = models.CharField(max_length=40)
     summary = models.TextField()
-    full_story = models.TextField(blank=True)
+    full_story = models.TextField(blank=True )
 
     class Meta:
         ordering = ["-timestamp"]

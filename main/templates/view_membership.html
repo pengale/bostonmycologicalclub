@@ -49,20 +49,20 @@
 {{ Notes }}
     </div>
     {% endif %}
-    <p><a href="/members/{{ membership.id }}/edit/">Edit</a></p>
+    <p><a href="/memberships/{{ membership.id }}/edit/">Edit</a></p>
 </div><!-- close #membership_info -->
 
 <div id="users">
     <h3>Users</h3>
     {% if user_profiles %}
         {% for profile in user_profiles %}
-        <p {% if profile.user.is_active %}{% else %}class="suspended"{% endif %}><strong>{{ profile.user }}</strong>: {{ profile.user.first_name }} {{ profile.user.last_name }} {% if profile.user.is_active %}{% else %}(suspended){% endif %} <a href="/members/{{ membership.id }}/edit_user/{{ profile.user.id }}/">edit</a></p>
+        <p {% if profile.user.is_active %}{% else %}class="suspended"{% endif %}><strong>{{ profile.user }}</strong>: {{ profile.user.first_name }} {{ profile.user.last_name }} {% if profile.user.is_active %}{% else %}(suspended){% endif %} <a href="/memberships/{{ membership.id }}/edit_user/{{ profile.user.id }}/">edit</a></p>
         {% endfor %}
-    <p><a href="/members/{{ membership.id }}/edit_user/">Add a New User</a></p>
+    <p><a href="/memberships/{{ membership.id }}/edit_user/">Add a New User</a></p>
 
     {% else %}
     <p>Please add a user ...</p>
-    <form action="/members/{{ membership.id }}/edit_user/" method="POST" id="edit_user">
+    <form action="/memberships/{{ membership.id }}/edit_user/" method="POST" id="edit_user">
         {% include "includes/edit_user.html" %} 
     </form>
     {% endif %}
@@ -74,7 +74,7 @@
     <p><strong>Amount: </strong>${{ dues.0.payment_amount }}</p>
     <p><strong>Pays Through: </strong>{{ dues.0.paid_thru|date }}</p>
     <p><strong>Notes:</strong> {{ dues.0.notes }}</p>
-    <form action="/members/{{ membership.id}}/edit_due/" method="POST" id="edit_due">
+    <form action="/memberships/{{ membership.id}}/edit_due/" method="POST" id="edit_due">
         <fieldset>
             <h4>Add a Payment</h4>
             {% for field in edit_due %}
@@ -86,11 +86,11 @@
 	    <p><input type="submit" value="Submit" id="submit_dues" /></p>
         </fieldset>
     </form>
-    <p><a href="/members/{{ membership.id }}/dues/">Payment History</a>
+    <p><a href="/memberships/{{ membership.id }}/dues/">Payment History</a>
     {% if active %}
-    <p><a href="/members/{{ membership.id }}/status/suspend/">Suspend Membership</a></p>
+    <p><a href="/memberships/{{ membership.id }}/status/suspend/">Suspend Membership</a></p>
     {% else %}
-    <p><a href="/members/{{ membership.id }}/status/restore/">Restore Membership</a></p>
+    <p><a href="/memberships/{{ membership.id }}/status/restore/">Restore Membership</a></p>
     {% endif %}
     
 </div><!-- close #dues -->

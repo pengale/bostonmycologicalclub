@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
             {% block text %}
+{% if overdue_by %}
+<h2>Memberships Overdue as of {{ overdue_by|date }}</h2>
+{% else %}
 <h2>All Memberships</h2>
+{% endif %}
 <ul>
     {% for member in member_list %}
-    <li><a href="/members/{{ member.membership.id }}/view/">{{ member.membership.address }} ({% for user in member.users %}{% if not forloop.first %}, {% endif %}{{ user.first_name }} {{ user.last_name }}{% endfor %})</a></li>
+    <li><a href="/memberships/{{ member.membership.id }}/view/">{{ member.membership.address }} ({% for user in member.users %}{% if not forloop.first %}, {% endif %}{{ user.first_name }} {{ user.last_name }}{% endfor %})</a></li>
     {% endfor %}
 </ul>
             {% endblock text %}

@@ -10,22 +10,37 @@ from forms import (MembershipForm, UserForm, UserProfileForm,
 from models import Membership, UserProfile, User, Due
 from django.contrib.auth.models import User, UserManager
 from views import error_404
+import datetime
 
 def list_users(member):
     """ Returns a list of users associated with a membership """
-    users = []
-    user_profiles = UserProfile.objects.filter(membership=member.id)
+    users = User.objects.filter(userprofile__membership=member.id)
     
-    for profile in user_profiles:
-        user = User.objects.get(id=profile.user.id)
-        users.append(user)
+#    user_profiles = UserProfile.objects.filter(membership=member.id)
+    
+#    for profile in user_profiles:
+#        user = User.objects.get(id=profile.user.id)
+#        users.append(user)
 
     return users
 
 def list_memberships(request, criteria=None):
-    """ List all members. """
-    if criteria == 'late':
+    """ List all memberships, or all late memberships. """
+        if criteria == 'late':
+        late_members = []
         members = Membership.objects.all()
+        for member in members:
+            try:
+                dues = Due.objects.filter(
+                    membership=member.id,
+                    paid_thru__gte=datetime.date.today(),
+                    )
+                if not dues:  late_members.append(member)            
+
+            except ObjectDoesNotExist:
+                late_members.append(member)
+
+        members = late_members                
         
     else:
         members = Membership.objects.all()
@@ -42,7 +57,7 @@ def list_memberships(request, criteria=None):
 
 def edit_membership(request, membership=None):
     """ Edit an existing membership, or add a new membership if none
-    specified. """
+    specified."""
 
     # Fetch membership object
     if membership: 

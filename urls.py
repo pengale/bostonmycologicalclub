@@ -9,7 +9,22 @@ urlpatterns = patterns('',
     (r'^$', index),
 
     # Walks
-    (r'^walks/(?P<action>list|create|done|edit|view|mushrooms)(/(?P<walk>[0-9]+))?', walks),
+    (r'^walks/list/', list_walks),
+    (r'^walks/create/', create_walk),
+    (r'^walks/edit/((?P<walk>[0-9]+)/)?', edit_walk),
+    (r'^walks/view/((?P<walk>[0-9]+)/)?', view_walk),
+    (r'^walks/mushrooms/((?P<walk>[0-9]+)/)?', mushrooms),
+
+    #Membership Tools
+    (r'^memberships/list/((?P<due_by>due_by)/((?P<year>[1-2][0-9][0-9][0-9])/(?P<month>([0-1])?[0-9])/)?)?', list_memberships),
+    (r'^memberships/((?P<membership>[0-9]+)/)?view/', view_membership),
+    (r'^memberships/((?P<membership>[0-9]+)/)?edit/', edit_membership ),
+    (r'^memberships/create/', create_membership ),
+    (r'^memberships/((?P<membership>[0-9]+)/)?edit_user/((?P<user>[0-9]+)/)?', edit_user),
+    (r'^memberships/(?P<membership>[0-9]+)/status/(?P<action>suspend|restore)/', membership_status),
+    (r'^memberships/((?P<membership>[0-9]+)/)?edit_due/((?P<due>[0-9]+)/)?', edit_due),
+    (r'^memberships/((?P<membership>[0-9]+)/)?dues/', view_dues),
+    (r'^memberships/search/', membership_search),
 
     # Static Pages
     (r'^ClubActivities\.html$', schedule),  # legacy compatibility
@@ -20,8 +35,6 @@ urlpatterns = patterns('',
 
     # Admin Stuff
     (r'^mushroom_admin', mushroom_admin),
-    (r'^members/list/due/(?P<year>[0-9][0-9][0-9][0-9])/(?P<month>)[0-9][0-9]/', memberships_due),
-    (r'^members/((?P<membership>[0-9]+)/)?(?P<action>list|done|edit|view|edit_user|edit_due|status|dues|search)/(?P<criteria>[0-9a-z]+)?', memberships),
     (r'^email/list/', list_emails),
     (r'^email/send/', send_email),
     (r'^email/sent/', sent_email),
