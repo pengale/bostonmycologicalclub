@@ -146,162 +146,6 @@ def story(request, year, month, day, time):
 
 
 """----------------------------------------------------------------
-                         Walk Tools 
-----------------------------------------------------------------"""
-
-@login_required(redirect_field_name='redirect_to')
-def list_walks(request):
-    """ Lists all walks. """
-    walk_list = Walk.objects.all()
-    template = 'walklist.html'
-
-    ctxt = { 
-        'walk_list' : walk_list, 
-        'request' : request,
-}
-    return render_to_response(template, ctxt)
-
-@login_required(redirect_field_name='redirect_to')
-def view_walk(request, walk=None):
-    """ View details about a specific walk. """
-
-    if not walk:
-        error = "Please specify a walk to view"
-        return error_404(request, error)
-
-    try: 
-        walk = Walk.objects.get(id=walk)
-
-        # Decide whether user has permission to view 'edit' link
-        permission = False
-        if request.user.id == walk.creator.id: permission = True
-
-        template = "walk.html"
-        ctxt = { 
-            'walk' : walk, 
-            'request' : request, 
-            'permission' : permission 
-            }
-        return render_to_response(template, ctxt)
-
-    except:
-        error = "It appears that the walk you requested does not exist."
-        template = "404.html"
-        ctxt = { "error" : error, 'request' : request }
-        return render_to_response(template, ctxt)
-
-@login_required(redirect_field_name='redirect_to')
-def create_walk(request):
-    """ View to create a new walk.  """
-
-    if request.method == 'POST':
-        form = WalkForm(request.POST)
-        if form.is_valid():
-            walk = form.save(commit=False)
-            walk.creator = request.user
-            walk.save()
-            form.save_m2m()
-            return HttpResponseRedirect(reverse(list_walks))
-                
-        else:
-            form = WalkForm(request.POST)
-            template = 'edit_walk.html'
-            ctxt = { 'form' : form,  'request' : request }
-            return render_to_response(template, ctxt)
-
-    else:
-        form = WalkForm(initial={ 
-                'creator' : User.objects.get(username=request.user).id
-                })
-        template = 'edit_walk.html'
-        ctxt = { 
-            'form' : form,  
-            'request' : request, 
-            'walk' : None,
-            }
-        return render_to_response(template, ctxt)
-
-@login_required(redirect_field_name='redirect_to')
-def edit_walk(request, walk=None):
-    """ Edit an existing walk. """
-    if not walk:
-        return create_walk(request)
-
-    try:
-        walk = Walk.objects.get(id=walk)
-        if request.user.id != walk.creator.id:
-            if not request.user.is_superuser:
-                error = "You do not have permission to edit this walk."
-                return halt(request, error)
-
-    except ObjectDoesNotExist:
-        error = "That walk does not appear to exist"
-        return error_404(request, error)
-
-    if request.method == 'POST':
-
-        form = WalkForm(request.POST, instance=walk)
-
-        if form.is_valid():
-            walk = form.save(commit=False)
-            walk.creator = request.user
-            walk.save()
-            form.save_m2m()
-            return HttpResponseRedirect('/walks/list/')
-
-        else:
-            form = WalkForm(request.POST)
-            template = 'edit_walk.html'
-            ctxt = { 'form' : form, 'request' : request }
-            return render_to_response(template, ctxt)
-
-    else:
-        form = WalkForm(instance=walk)
-        template = 'edit_walk.html'
-        ctxt = { 
-            'form' : form,  
-            'request' : request,
-            'walk' : walk,
-            }
-        return render_to_response(template, ctxt)
-
-
-@login_required(redirect_field_name='redirect_to')
-def mushrooms(request, walk=None):
-    if not walk:
-        error = "Please specify a walk"
-        return error_404(request, error)
-
-    try:
-        walk = Walk.objects.get(id=walk)
-        
-    except ObjectDoesNotExist:
-        error = "That walk does not appear to exist"
-        return error_404(request, error)
-
-    if request.method == 'POST':
-        
-        form = WalkMushroomForm(request.POST, instance=walk)
-
-        if form.is_valid():
-            walk = form.save()
-            return HttpResponseRedirect(
-                '/walks/view/' + str(walk.id) + '/'
-                )
-
-        else:
-            form = WalkMushroomForm(request.POST)
-
-    else:
-        form = WalkMushroomForm(instance=walk)
-
-
-    template = 'walk_mushrooms.html'
-    ctxt = { 'form' : form, 'request' : request, 'walk' : walk }
-    return render_to_response(template, ctxt)
-
-
-"""----------------------------------------------------------------
                          User Profile Tools
 ----------------------------------------------------------------"""
 
@@ -328,7 +172,9 @@ def profile(request):
     areas = user_profile.areas.all()
     walks_in_area = []
     for area in areas:
-        walks_in_area.append(Walk.objects.filter(areas=area))
+        walks_in_area.append(Walk.objects.filter(
+                areas=area,
+                date__gte=datetime.date.today()))
 
      
     template = 'profile.html'
@@ -390,6 +236,162 @@ def edit_profile(request):
         template = 'edit_profile.html'
         ctxt = { 'forms' : forms, 'request' : request }
         return render_to_response(template, ctxt)
+
+
+"""----------------------------------------------------------------
+                         Walk Tools 
+----------------------------------------------------------------"""
+
+@login_required(redirect_field_name='redirect_to')
+def list_walks(request):
+    """ Lists all walks. """
+    walk_list = Walk.objects.all()
+    template = 'walklist.html'
+
+    ctxt = { 
+        'walk_list' : walk_list, 
+        'request' : request,
+}
+    return render_to_response(template, ctxt)
+
+@login_required(redirect_field_name='redirect_to')
+def view_walk(request, walk=None):
+    """ View details about a specific walk. """
+
+    if not walk:
+        error = "Please specify a walk to view"
+        return error_404(request, error)
+
+    try: 
+        walk = Walk.objects.get(id=walk)
+
+        # Decide whether user has permission to view 'edit' link
+        permission = False
+        if request.user.id == walk.creator.id: permission = True
+
+        template = "walk.html"
+        ctxt = { 
+            'walk' : walk, 
+            'request' : request, 
+            'permission' : permission 
+            }
+        return render_to_response(template, ctxt)
+
+    except:
+        error = "It appears that the walk you requested does not exist."
+        template = "404.html"
+        ctxt = { "error" : error, 'request' : request }
+        return render_to_response(template, ctxt)
+
+@login_required(redirect_field_name='redirect_to')
+def create_walk(request):
+    """ View to create a new walk.  """
+
+    if request.method == 'POST':
+        form = WalkForm(request.POST)
+        if form.is_valid():
+            walk = form.save(commit=False)
+            walk.creator = request.user
+            walk.save()
+            form.save_m2m()
+            return HttpResponseRedirect(reverse(profile))
+                
+        else:
+            form = WalkForm(request.POST)
+            template = 'edit_walk.html'
+            ctxt = { 'form' : form,  'request' : request }
+            return render_to_response(template, ctxt)
+
+    else:
+        form = WalkForm(initial={ 
+                'creator' : User.objects.get(username=request.user).id
+                })
+        template = 'edit_walk.html'
+        ctxt = { 
+            'form' : form,  
+            'request' : request, 
+            'walk' : None,
+            }
+        return render_to_response(template, ctxt)
+
+@login_required(redirect_field_name='redirect_to')
+def edit_walk(request, walk=None):
+    """ Edit an existing walk. """
+    if not walk:
+        return create_walk(request)
+
+    try:
+        walk = Walk.objects.get(id=walk)
+        if request.user.id != walk.creator.id:
+            if not request.user.is_superuser:
+                error = "You do not have permission to edit this walk."
+                return halt(request, error)
+
+    except ObjectDoesNotExist:
+        error = "That walk does not appear to exist"
+        return error_404(request, error)
+
+    if request.method == 'POST':
+
+        form = WalkForm(request.POST, instance=walk)
+
+        if form.is_valid():
+            walk = form.save(commit=False)
+            walk.creator = request.user
+            walk.save()
+            form.save_m2m()
+            return HttpResponseRedirect(reverse(profile))
+
+        else:
+            form = WalkForm(request.POST)
+            template = 'edit_walk.html'
+            ctxt = { 'form' : form, 'request' : request }
+            return render_to_response(template, ctxt)
+
+    else:
+        form = WalkForm(instance=walk)
+        template = 'edit_walk.html'
+        ctxt = { 
+            'form' : form,  
+            'request' : request,
+            'walk' : walk,
+            }
+        return render_to_response(template, ctxt)
+
+
+@login_required(redirect_field_name='redirect_to')
+def mushrooms(request, walk=None):
+    if not walk:
+        error = "Please specify a walk"
+        return error_404(request, error)
+
+    try:
+        walk = Walk.objects.get(id=walk)
+        
+    except ObjectDoesNotExist:
+        error = "That walk does not appear to exist"
+        return error_404(request, error)
+
+    if request.method == 'POST':
+        
+        form = WalkMushroomForm(request.POST, instance=walk)
+
+        if form.is_valid():
+            walk = form.save()
+            return HttpResponseRedirect(
+                '/walks/view/' + str(walk.id) + '/'
+                )
+
+        else:
+            form = WalkMushroomForm(request.POST)
+
+    else:
+        form = WalkMushroomForm(instance=walk)
+
+
+    template = 'walk_mushrooms.html'
+    ctxt = { 'form' : form, 'request' : request, 'walk' : walk }
+    return render_to_response(template, ctxt)
 
 """----------------------------------------------------------------
                          Membership Tools

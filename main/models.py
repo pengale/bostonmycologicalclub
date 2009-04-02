@@ -206,5 +206,3 @@ class Page(models.Model):
     """
     name = models.CharField(max_length=30)
     text = models.TextField()
-
-    
