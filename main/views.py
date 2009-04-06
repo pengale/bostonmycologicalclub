@@ -85,6 +85,12 @@ def schedule(request):
     template = 'ClubActivities.html'
 
     walks_in_area = []
+    public_walks = PublicWalk.objects.filter(
+        when__gte=datetime.date.today()
+        )
+    id_sessions = IDSession.objects.filter(
+        when__gte=datetime.date.today()
+        )
 
     if request.user.is_authenticated:
         try:
@@ -95,14 +101,17 @@ def schedule(request):
             walks_in_area = []
             for area in areas:
                 walks_in_area.append(
-                    Walk.objects.filter(areas=area)
+                    Walk.objects.filter(
+                            areas=area,
+                            date__gte=datetime.date.today(),
+                            )
                     )
         except ObjectDoesNotExist:
             pass
 
     ctxt = {
-        'public_walks' : PublicWalk.objects.all(),
-        'id_sessions' : IDSession.objects.all(),
+        'public_walks' : public_walks,
+        'id_sessions' : id_sessions,
         'media_url' : MEDIA_URL,
         'request' : request,
         'walks_in_area' : walks_in_area,
@@ -174,8 +183,8 @@ def profile(request):
     for area in areas:
         walks_in_area.append(Walk.objects.filter(
                 areas=area,
-                date__gte=datetime.date.today()))
-
+                date__gte=datetime.date.today()
+                ))
      
     template = 'profile.html'
     ctxt = { 
@@ -243,15 +252,53 @@ def edit_profile(request):
 ----------------------------------------------------------------"""
 
 @login_required(redirect_field_name='redirect_to')
-def list_walks(request):
+def list_walks(request, start=None, per_page=None):
     """ Lists all walks. """
-    walk_list = Walk.objects.all()
-    template = 'walklist.html'
 
+    # Figure out how many walks to display per page
+    if not per_page: per_page=25
+    else: per_page = int(per_page)
+
+    # Setup a 'toggle' value that allows us to switch between
+    # displaying 100 and 25 results per page in the template
+    if per_page == 25: toggle = 100
+    else: toggle = 25
+
+    # Setup defaults for previous and next navigation links
+    next = 0 + per_page
+    prev = 0
+    first = True  # used to turn "prev" link on and off in template
+
+    if start:
+        # If we've specified a place to start, calculate new values
+        # for everything
+        first = False   
+        start = int(start)
+        next = start + per_page
+        prev = start - per_page
+        walk_list = Walk.objects.all()[start:next]
+
+    else:
+        walk_list = Walk.objects.all()[:per_page]
+
+    # Set 'next' to 0 if we've reached the end of the list.  (If
+    # per_page is a factor of the length of the walk list, this
+    # doesn't work, and we get a blank list upon clicking on "next",
+    # which is handled in the template.)
+    if per_page > len(walk_list): next = 0
+
+
+    template = 'walk_list.html'
     ctxt = { 
-        'walk_list' : walk_list, 
         'request' : request,
-}
+        'walk_list' : walk_list, 
+        'next' : next,
+        'prev' : prev,
+        'per_page' : per_page,
+        'first' : first,
+        'start' : start,
+        'toggle' : toggle,
+        }
     return render_to_response(template, ctxt)
 
 @login_required(redirect_field_name='redirect_to')

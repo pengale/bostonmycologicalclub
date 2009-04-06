@@ -35,14 +35,15 @@
 <div id="walks">
 
 {% if request.user.is_authenticated %}
-<h2>BMC Walks in Your Area</h2>
+<h2>Upcoming BMC Walks in Your Area</h2>
 
 <ul>
     {% for area in walks_in_area %}
         {% for walk in area %}
     {% include "includes/walk.html" %}
         {% endfor %}
-    <li id="create_walk"><a href="/walks/create/">Create a Walk</a></li>
+    <li class="tool" id="create_walk"><a href="/walks/create/">Create a Walk</a></li>
+    <li class="tool"><a href="/walks/list/">List All Walks</a></li>
     {% endfor %}
 </ul>
 {% endif %}
@@ -50,13 +51,18 @@
 <h2>Public Walks</h2>
 
 <ul>
-    {% for walk in public_walks %}
+    {% if public_walks %}
+        {% for walk in public_walks %}
     <li class="walk">
         <p class="date"><strong>{{ walk.when|date:"l, F jS, g:i A" }}</strong></p>
         <p class="area"><strong>Collecting Area</strong>: {{ walk.collecting_area }}</p>
         <p class="location"><strong>Meeting Place</strong>: {{ walk.meeting_place }}.
     </li>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+    <li class="walk"><em>None schedule at present.  Check back this Spring or Fall.</em></li>
+    {% endif %}
+
 </ul>
 <div><!-- close #walks -->
 
@@ -67,9 +73,13 @@
 <p>At the Farlow Herbarium:</p>
 
 <ul>
-    {% for session in id_sessions %}
+    {% if id_sessions %}
+        {% for session in id_sessions %}
     <li>{{ session.when|date:"l, F jS, g:i A" }}</li>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+    <li><em>None scheduled at present.</em></li>
+    {% endif %}
 </ul>
 
 </div><!-- close #id_sessions -->

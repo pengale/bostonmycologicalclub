@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     (r'^$', index),
 
     # Walks
-    (r'^walks/list/', list_walks),
+    (r'^walks/list/(start(?P<start>[0-9]+)/)?((?P<per_page>[0-9]+)pp/)?', list_walks),
     (r'^walks/create/', create_walk),
     (r'^walks/edit/((?P<walk>[0-9]+)/)?', edit_walk),
     (r'^walks/view/((?P<walk>[0-9]+)/)?', view_walk),
