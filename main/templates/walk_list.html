@@ -1,4 +1,4 @@
-dd{% extends "base.html" %}
+{% extends "base.html" %}
 
     {% block style %}
     {{ block.super }}
@@ -23,10 +23,10 @@ dd{% extends "base.html" %}
 <p>Whoops.  You've reached the end of the list of walks!</p>
 {% endif %}
 <ul class="prev_next">
-    {% if start %}<li><a href="/walks/list/start{{ prev }}/{{ per_page }}pp/">Previous {{ per_page }} Walks</a></li>{% endif %}
-    {% if next %}<li><a href="/walks/list/start{{ next }}/{{ per_page }}pp/">Next {{ per_page }} Walks</a></li>{% endif %}
+    {% if prev_next.start %}<li><a href="/walks/list/start{{ prev_next.prev }}/{{ prev_next.per_page }}pp/">Previous {{ prev_next.per_page }} Walks</a></li>{% endif %}
+    {% if prev_next.next %}<li><a href="/walks/list/start{{ prev_next.next }}/{{ prev_next.per_page }}pp/">Next {{ prev_next.per_page }} Walks</a></li>{% endif %}
 </ul>
-<p id="toggle"><a href="/walks/list/start0/{{ toggle }}pp/">Show {{ toggle }} Walks Per Page</a></p>
+<p class="toggle"><a href="/walks/list/start0/{{ prev_next.toggle }}pp/">Show {{ prev_next.toggle }} Walks Per Page</a></p>
             {% endblock text %}
 
 

@@ -3,6 +3,7 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.template import Context, loader
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, UserManager
@@ -23,6 +24,7 @@ from forms import (UserEditsUser, UserEditsProfile,
 
 from django.core.mail import send_mail
 from smtplib import SMTPException
+from bmc.main.utilities import prev_next
 
 """----------------------------------------------------------------
                          Error Pages
@@ -255,49 +257,15 @@ def edit_profile(request):
 def list_walks(request, start=None, per_page=None):
     """ Lists all walks. """
 
-    # Figure out how many walks to display per page
-    if not per_page: per_page=25
-    else: per_page = int(per_page)
-
-    # Setup a 'toggle' value that allows us to switch between
-    # displaying 100 and 25 results per page in the template
-    if per_page == 25: toggle = 100
-    else: toggle = 25
-
-    # Setup defaults for previous and next navigation links
-    next = 0 + per_page
-    prev = 0
-    first = True  # used to turn "prev" link on and off in template
-
-    if start:
-        # If we've specified a place to start, calculate new values
-        # for everything
-        first = False   
-        start = int(start)
-        next = start + per_page
-        prev = start - per_page
-        walk_list = Walk.objects.all()[start:next]
-
-    else:
-        walk_list = Walk.objects.all()[:per_page]
-
-    # Set 'next' to 0 if we've reached the end of the list.  (If
-    # per_page is a factor of the length of the walk list, this
-    # doesn't work, and we get a blank list upon clicking on "next",
-    # which is handled in the template.)
-    if per_page > len(walk_list): next = 0
-
+    pn = prev_next(start, per_page)
+    walk_list = Walk.objects.all()[pn.start:pn.next]
+    if pn.per_page > len(walk_list): pn.next = 0  
 
     template = 'walk_list.html'
     ctxt = { 
         'request' : request,
         'walk_list' : walk_list, 
-        'next' : next,
-        'prev' : prev,
-        'per_page' : per_page,
-        'first' : first,
-        'start' : start,
-        'toggle' : toggle,
+        'prev_next' : pn
         }
     return render_to_response(template, ctxt)
 
@@ -447,16 +415,19 @@ def mushrooms(request, walk=None):
 @user_passes_test(
     lambda u: u.has_perm('u.is_superuser'),
     login_url = '/halt/')
-def list_memberships(request, due_by=None, year=None, month=None):
+def list_memberships(request, start=None, per_page=None, 
+                     due_by=None, year=None, month=None):
     """ List all memberships, or all late memberships. """
+
     if request.method=='GET' and due_by:
+        pn = None
         if month and year:
             due_by = datetime.date(int(year), int(month), 1)
         else:
             due_by = datetime.date.today()
             
-        due_by_members = []
         members = Membership.objects.all()
+        due_by_members = []
         for member in members:
             try:
                 dues = Due.objects.filter(
@@ -471,7 +442,9 @@ def list_memberships(request, due_by=None, year=None, month=None):
         members = due_by_members                
 
     else:
-        members = Membership.objects.all()
+        pn = prev_next(start, per_page)
+        members = Membership.objects.all()[pn.start:pn.next]
+        if pn.per_page > len(members): pn.next = 0  
         due_by = None
     
     member_list = []
@@ -486,6 +459,7 @@ def list_memberships(request, due_by=None, year=None, month=None):
         'member_list' : member_list, 
         'request' : request,
         'due_by' : due_by,
+        'prev_next' : pn,
         }
     return render_to_response(template, ctxt)
 
@@ -696,9 +670,28 @@ def edit_user(request, membership, user=None):
                 profile.membership = membership
                 profile.save()
                 profile_form.save_m2m()
+
+ #               try:
+                # Try to send an email w/ password reset link to
+                # the user
+                subject = "Boston Mycological Club Account "
+                subject += "Created"
+                email_template = 'registration/new_user_email.html'
+                ctxt = { 'user' : user }
+                message = loader.get_template(email_template)
+                message = message.render(Context(ctxt))
+
+                send_mail(subject, message, SERVER_EMAIL, 
+                          [user.email], fail_silently=False,
+                          )
+#                except:
+#                    error = "Account created, but email was not sent"
+#                    return error_404(request, error)
+
                 return HttpResponseRedirect(
                     '/memberships/' + str(membership.id) + '/view/'
                     )
+                
 
             else:
                 template = 'edit_user.html'
@@ -1026,7 +1019,10 @@ def send_email(request, sent=None):
             message = form['message']
 
             try:
-                users = User.objects.all()
+                users = User.objects.filter(
+                        is_active=True,
+                        userprofile__want_email=True,
+                        )
             except ObjectDoesNotExist:
                 error = "Can't pull up the user list!"
                 return error_404(request, error)

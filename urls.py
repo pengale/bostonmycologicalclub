@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     (r'^walks/mushrooms/((?P<walk>[0-9]+)/)?', mushrooms),
 
     #Membership Tools
-    (r'^memberships/list/((?P<due_by>due_by)/((?P<year>[1-2][0-9][0-9][0-9])/(?P<month>([0-1])?[0-9])/)?)?', list_memberships),
+    (r'^memberships/list/(start(?P<start>[0-9]+)/)?((?P<per_page>[0-9]+)pp/)?((?P<due_by>due_by)/((?P<year>[1-2][0-9][0-9][0-9])/(?P<month>([0-1])?[0-9])/)?)?', list_memberships),
     (r'^memberships/((?P<membership>[0-9]+)/)?view/', view_membership),
     (r'^memberships/((?P<membership>[0-9]+)/)?edit/', edit_membership ),
     (r'^memberships/create/', create_membership ),

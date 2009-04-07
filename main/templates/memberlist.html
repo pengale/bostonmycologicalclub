@@ -11,6 +11,14 @@
     <li><a href="/memberships/{{ member.membership.id }}/view/">{{ member.membership.address }} ({% for user in member.users %}{% if not forloop.first %}, {% endif %}{{ user.first_name }} {{ user.last_name }}{% endfor %})</a></li>
     {% endfor %}
 </ul>
+{% if prev_next %}
+<ul class="prev_next">
+    {% if prev_next.start %}<li><a href="/memberships/list/start{{ prev_next.prev }}/{{ prev_next.per_page }}pp/">Previous {{ prev_next.per_page }} Memberships</a></li>{% endif %}
+    {% if prev_next.next %}<li><a href="/memberships/list/start{{ prev_next.next }}/{{ prev_next.per_page }}pp/">Next {{ prev_next.per_page }} Memberships</a></li>{% endif %}
+</ul>
+<p class="toggle"><a href="/memberships/list/start0/{{ prev_next.toggle }}pp/">Show {{ prev_next.toggle }} Memberships Per Page</a></p>
+{% endif %}
+
             {% endblock text %}
 
 
