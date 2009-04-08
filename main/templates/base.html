@@ -6,7 +6,7 @@
 {% block head %}
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <title>{% block title %}Boston Mycological Club{% endblock title %}</title>
+    <title>{% block title %}Boston Mycological Club - {% block page %}{{ page_name }}{% endblock page %}{% endblock title %}</title>
 
     {% block style %}
     <link href="/bmc.css" rel="stylesheet" type="text/css" />
@@ -37,6 +37,15 @@
 	</div>
         {% endblock h1 %}
 
+	{% block breadcrumbs %}
+	<ul id="breadcrumbs">
+	    <li><a href="/">Home</a></li>
+	    {% block trail %}
+	    {% endblock trail %}
+	    {% block page_name %}<li>&gt; {{ page_name|title }}</li>{% endblock %}
+	</ul>
+	{% endblock breadcrumbs %}
+
         {% block content %}
 	<div id="content">
 
@@ -50,9 +59,9 @@
 	        {% block nav %}
 	        <ul id="nav">
 	            <li><h4>~ Directory ~</h4></li>
-  		    <li><a href="/membership.html">About the BMC</a></li>
-  		    <li><a href="/application.html">Application</a></li>
-		    <li><a href="/ClubActivities.html">Schedule</a></li>
+  		    <li><a href="/about/">About the BMC</a></li>
+  		    <li><a href="/application/">Application</a></li>
+		    <li><a href="/schedule/">Schedule</a></li>
 		    <li><a href="/Checklists.html">Checklists</a></li>
 		    <li><a href="/CurrentMembers.html">Member Websites</a></li>
 		    <li><a href="/SiteIndex.html">Sitemap</a></li>

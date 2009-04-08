@@ -29,9 +29,12 @@ class MembershipForm(ModelForm):
     class Meta:
         model = Membership
 
-class MembershipSearch(Form):
+class MembershipFetch(Form):
     membership_id = IntegerField()
 
+class MembershipSearch(Form):
+    last_name = CharField(max_length=30)
+        
 class UserForm(ModelForm):
     username = EmailField(label='Email Address')
     class Meta:

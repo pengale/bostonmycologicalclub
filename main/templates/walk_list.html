@@ -18,6 +18,7 @@
 {% include "includes/walk.html" %}
 {% block mushrooms %}<a href="/walks/mushrooms/{{ walk.id }}/">Add Mushrooms</a>{% endblock %}
     {% endfor %}
+    <li><a href="/walks/create/">Add a Walk</li>
 </ul>
 {% else %}
 <p>Whoops.  You've reached the end of the list of walks!</p>

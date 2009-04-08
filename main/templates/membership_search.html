@@ -2,20 +2,44 @@
 
     {% block style %}
     {{ block.super }}
+    <style type="text/css">
+<!--
+#membership_list { margin-bottom: 3em; }
+-->
+    </style>
     {% endblock style %}
 
             {% block text %}
-<h2>Search for a Member</h2>
+    {% if member_list %}
+<h2>Found The Following Memberships</h2>
+    {% else %}
+<h2>No Memberships Found Containing That Last Name</h2>
+    {% endif %}   
 
+    {% if member_list %}
+    <ul id="membership_list">
+        {% for member in member_list %}
+	<li><a href="/memberships/{{ member.membership.id }}/view/">{{ member.membership.address }} ({% for user in member.users %}{% if not forloop.first %}, {% endif %}{{ user.first_name }} {{ user.last_name }}{% endfor %})</a></li>
+        {% endfor %}
+	<li><em>Note:  This search recalls no more than 25 memberships at a time</em></li>
+    </ul>
+    {% endif %}
+    
+<h2>Search for a Membership</h2>
     <form action="." method="GET" id="membership_search">
         <fieldset>
         <div class=".error">{{ error }}</div>
         {% for field in membership_search %}
 	{% include "includes/field.html" %}
         {% endfor %}
-	<p><input type="submit" name="search" value="Search" /></p>
+	<p><input type="submit" name="search" value="Search" id="search"/></p>
         </fieldset>
     </form>
+
+
+
+
+
             {% endblock text %}
 
 

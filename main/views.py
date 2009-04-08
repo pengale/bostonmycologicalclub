@@ -17,7 +17,7 @@ from models import (Announcement, Newsbit, PublicWalk, IDSession,
                     Membership, Due)
 from django import forms
 from forms import (UserEditsUser, UserEditsProfile, 
-                   UserEditsMembership, MembershipSearch,
+                   UserEditsMembership, MembershipFetch,
                    EmailForm, WalkForm, WalkMushroomForm,
                    MembershipForm, UserForm, UserProfileForm,
                    DueForm, MembershipStatus, MembershipSearch)
@@ -79,12 +79,23 @@ def index(request):
         'newsbits' : Newsbit.objects.all(),
         'media_url' : MEDIA_URL,
         'request' : request,
+        'page_name' : 'Home',
         }
+    return render_to_response(template, ctxt)
+
+def about(request):
+    template = 'about.html'
+    ctxt = { 'request' : request, 'page_name' : 'About Us' }
+    return render_to_response(template, ctxt)
+
+def application(request):
+    template = 'application.html'
+    ctxt = { 'request' : request, 'page_name' : 'Application' }
     return render_to_response(template, ctxt)
 
 def schedule(request):
     """ Displays the clubs schedule of activities. """
-    template = 'ClubActivities.html'
+    template = 'schedule.html'
 
     walks_in_area = []
     public_walks = PublicWalk.objects.filter(
@@ -117,6 +128,7 @@ def schedule(request):
         'media_url' : MEDIA_URL,
         'request' : request,
         'walks_in_area' : walks_in_area,
+        'page_name' : 'Schedule',
         }
     return render_to_response(template, ctxt)
 
@@ -126,6 +138,7 @@ def page(request, page):
     ctxt = {
         'media_url' : MEDIA_URL,
         'request' : request,
+        'page_name' : page,
         }
     return render_to_response(template, ctxt)
 
@@ -145,15 +158,14 @@ def story(request, year, month, day, time):
             'full_story' : story.full_story,
             'ts' : story.timestamp,
             'request' : request,
+            'page_name' : story.heading,
             }
 
         return render_to_response(template, ctxt)    
 
     except ObjectDoesNotExist:
-        template = "error.html"
-        ctxt = { 'request' : request }
-
-        return render_to_response(template, ctxt)    
+        error = "We couldn't find a story with that timestamp."
+        return error_404(request, error)
 
 
 """----------------------------------------------------------------
@@ -196,6 +208,7 @@ def profile(request):
         'user_profile' : user_profile,
         'membership' : membership,
         'forms' : forms,
+        'page_name' : 'Profile',
         }
     return render_to_response(template, ctxt)
 
@@ -235,7 +248,11 @@ def edit_profile(request):
                 UserEditsMembership(request.POST),
                 )
             template = 'edit_profile.html'
-            ctxt = { 'forms' : forms, 'request' : request }
+            ctxt = { 
+                'forms' : forms, 
+                'request' : request, 
+                'page_name' : 'Edit Profile',
+                }
             return render_to_response(template, ctxt)
 
     else:
@@ -245,7 +262,11 @@ def edit_profile(request):
             UserEditsMembership(instance=membership),
             )
         template = 'edit_profile.html'
-        ctxt = { 'forms' : forms, 'request' : request }
+        ctxt = { 
+            'forms' : forms, 
+            'request' : request,
+            'page_name' : 'Edit Profile',
+            }
         return render_to_response(template, ctxt)
 
 
@@ -265,7 +286,8 @@ def list_walks(request, start=None, per_page=None):
     ctxt = { 
         'request' : request,
         'walk_list' : walk_list, 
-        'prev_next' : pn
+        'prev_next' : pn,
+        'page_name' : 'Walk List',
         }
     return render_to_response(template, ctxt)
 
@@ -288,15 +310,14 @@ def view_walk(request, walk=None):
         ctxt = { 
             'walk' : walk, 
             'request' : request, 
-            'permission' : permission 
+            'permission' : permission,
+            'page_name' : 'Walk',
             }
         return render_to_response(template, ctxt)
 
     except:
         error = "It appears that the walk you requested does not exist."
-        template = "404.html"
-        ctxt = { "error" : error, 'request' : request }
-        return render_to_response(template, ctxt)
+        return error_404(request, error)
 
 @login_required(redirect_field_name='redirect_to')
 def create_walk(request):
@@ -314,7 +335,11 @@ def create_walk(request):
         else:
             form = WalkForm(request.POST)
             template = 'edit_walk.html'
-            ctxt = { 'form' : form,  'request' : request }
+            ctxt = { 
+                'form' : form,  
+                'request' : request, 
+                'page_name' : 'Create Walk',
+                }
             return render_to_response(template, ctxt)
 
     else:
@@ -326,6 +351,7 @@ def create_walk(request):
             'form' : form,  
             'request' : request, 
             'walk' : None,
+            'page_name' : 'Create Walk',
             }
         return render_to_response(template, ctxt)
 
@@ -360,7 +386,11 @@ def edit_walk(request, walk=None):
         else:
             form = WalkForm(request.POST)
             template = 'edit_walk.html'
-            ctxt = { 'form' : form, 'request' : request }
+            ctxt = { 
+                'form' : form, 
+                'request' : request,
+                'page_name' : 'Edit Walk',
+                }
             return render_to_response(template, ctxt)
 
     else:
@@ -370,6 +400,7 @@ def edit_walk(request, walk=None):
             'form' : form,  
             'request' : request,
             'walk' : walk,
+            'page_name' : 'Edit Walk',
             }
         return render_to_response(template, ctxt)
 
@@ -405,7 +436,12 @@ def mushrooms(request, walk=None):
 
 
     template = 'walk_mushrooms.html'
-    ctxt = { 'form' : form, 'request' : request, 'walk' : walk }
+    ctxt = { 
+        'form' : form, 
+        'request' : request, 
+        'walk' : walk,
+        'page_name' : 'Mushrooms',
+        }
     return render_to_response(template, ctxt)
 
 """----------------------------------------------------------------
@@ -419,33 +455,23 @@ def list_memberships(request, start=None, per_page=None,
                      due_by=None, year=None, month=None):
     """ List all memberships, or all late memberships. """
 
-    if request.method=='GET' and due_by:
-        pn = None
+
+    pn = prev_next(start, per_page)
+    if due_by:
         if month and year:
             due_by = datetime.date(int(year), int(month), 1)
         else:
             due_by = datetime.date.today()
             
-        members = Membership.objects.all()
-        due_by_members = []
-        for member in members:
-            try:
-                dues = Due.objects.filter(
-                    membership=member.id,
-                    paid_thru__gte=due_by,
-                    )
-                if not dues:  due_by_members.append(member)            
-
-            except ObjectDoesNotExist:
-                due_by_members.append(member)
-
-        members = due_by_members                
-
+        members = Membership.objects.exclude(
+            due__paid_thru__gte=due_by,
+            )[pn.start:pn.next]
+            
     else:
-        pn = prev_next(start, per_page)
         members = Membership.objects.all()[pn.start:pn.next]
-        if pn.per_page > len(members): pn.next = 0  
         due_by = None
+
+    if pn.per_page > len(members): pn.next = 0  
     
     member_list = []
     for member in members:
@@ -460,6 +486,7 @@ def list_memberships(request, start=None, per_page=None,
         'request' : request,
         'due_by' : due_by,
         'prev_next' : pn,
+        'page_name' : 'List Memberships',
         }
     return render_to_response(template, ctxt)
 
@@ -503,6 +530,7 @@ def view_membership(request, membership=None):
             'edit_profile' : edit_profile,
             'edit_due' : edit_due,
             'active' : active,
+            'page_name' : 'Membership',
             }
         return render_to_response(template, ctxt)
 
@@ -545,7 +573,8 @@ def edit_membership(request, membership=None):
                 ctxt = { 
                     'form' : form, 
                     'request' : request, 
-                    'membership' : membership 
+                    'membership' : membership,
+                    'page_name' : 'Edit Membership', 
                     }
                 return render_to_response(template, ctxt)
 
@@ -564,7 +593,8 @@ def edit_membership(request, membership=None):
                 ctxt = { 
                     'form' : form, 
                     'request' : request, 
-                    'membership' : membership 
+                    'membership' : membership,
+                    'page_name' : 'Create Membership',
                     }
 
             return render_to_response(template, ctxt)
@@ -577,6 +607,7 @@ def edit_membership(request, membership=None):
             'form' : form, 
             'request' : request, 
             'membership' : membership,
+            'page_name' : 'Edit Membership',
             }
         return render_to_response(template, ctxt)
 
@@ -589,6 +620,7 @@ def edit_membership(request, membership=None):
             'form' : form, 
             'request' : request, 
             'membership' : membership,
+            'page_name' : 'Create Membership',
             }
         return render_to_response(template, ctxt)
 
@@ -597,7 +629,6 @@ def edit_membership(request, membership=None):
     login_url = '/halt/')
 def create_membership(request):
     edit_membership(request, membership=None)
-
 
 @user_passes_test(
     lambda u: u.has_perm('u.is_superuser'),
@@ -652,6 +683,7 @@ def edit_user(request, membership, user=None):
                     'user' : user.id,
                     'edit_user' : user_form,
                     'edit_profile' : profile_form,
+                    'page_name' : 'Edit User',
                     }
                 return render_to_response(template, ctxt)
 
@@ -701,6 +733,7 @@ def edit_user(request, membership, user=None):
                     'user' : None,
                     'edit_user' : user_form,
                     'edit_profile' : profile_form,
+                    'page_name' : 'Create User',
                     }
                 return render_to_response(template, ctxt)
 
@@ -712,6 +745,7 @@ def edit_user(request, membership, user=None):
             'user' : user.id,
             'edit_user' : UserForm(instance=user),
             'edit_profile' : UserProfileForm(instance=profile),
+            'page_name' : 'Edit User',
             }
         return render_to_response(template, ctxt)
 
@@ -724,6 +758,7 @@ def edit_user(request, membership, user=None):
             'user' : None,
             'edit_user' : UserForm(),
             'edit_profile' : UserProfileForm(),
+            'page_name' : 'Create User',
             }
         return render_to_response(template, ctxt)
 
@@ -778,6 +813,8 @@ def membership_status(request, membership, action):
             'request' : request, 
             'status' : status,
             'form' : MembershipStatus(),
+            'membership' : membership,
+            'page_name' : 'Change Membership Status',
             }
         return render_to_response(template, ctxt)
 
@@ -828,7 +865,8 @@ def edit_due(request, membership, due=None):
                     'due' : due,
                     'request' : request,
                     'membership' : membership,
-                    'form' : form
+                    'form' : form,
+                    'page_name' : 'Edit Due',
                     }
                 return render_to_response(template, ctxt)
 
@@ -850,17 +888,20 @@ def edit_due(request, membership, due=None):
                 ctxt = {
                     'request' : request,
                     'form' : form,
+                    'membership' : membership,
+                    'page_name' : 'Add Due',
                     }
                 return render_to_response(template, ctxt)
 
     else:
         if due:
-            # return a blank due form
             template = 'edit_due.html'
             ctxt = {
                 'request' : request,
                 'form' : DueForm(instance=due),
                 'due' : due,
+                'membership' : membership,
+                'page_name' : 'Edit Due',
                 }
             return render_to_response(template, ctxt)
 
@@ -870,6 +911,8 @@ def edit_due(request, membership, due=None):
             ctxt = {
                 'request' : request,
                 'form' : DueForm(),
+                'membership' : membership,
+                'page_name' : 'Add Due',
                 }
             return render_to_response(template, ctxt)
             
@@ -898,6 +941,7 @@ def view_dues(request, membership=None):
         'request' : request,
         'dues' : dues,
         'membership' : membership,
+        'page_name' : 'View Dues',
         }
     return render_to_response(template, ctxt)
 
@@ -905,13 +949,50 @@ def view_dues(request, membership=None):
     lambda u: u.has_perm('u.is_superuser'),
     login_url = '/halt/')
 def membership_search(request):
-    """ Search for a member.  Currently only searches by id """
+    member_list = []
+
+    if request.GET.has_key('last_name'):
+        membership_search = MembershipSearch(request.GET)
+        if membership_search.is_valid():
+            memberships = Membership.objects.filter(
+                userprofile__user__last_name__icontains=request.GET.__getitem__('last_name')
+                )[:25]
+            if len(memberships) == 1:
+                return HttpResponseRedirect(
+                    '/memberships/' + str(memberships[0].id) + '/view/'
+                    )
+                
+            for membership in memberships:
+                users = User.objects.filter(
+                    userprofile__membership=membership.id
+                    )
+                mem_blob = { 
+                    'membership' : membership, 
+                    'users' : users,
+                    }
+                member_list.append(mem_blob)
+
+        template = 'membership_search.html'
+        ctxt = { 
+            'request' : request, 
+            'memberships' : memberships,
+            'membership_search' : membership_search,
+            'member_list' : member_list,
+            }
+        return render_to_response(template, ctxt)
+            
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def membership_fetch(request):
+    """ Fetch a Member by Membership ID """
     error = None
     membership_id = None
 
     if request.method == 'GET' and request.GET.has_key('membership_id'):
-        membership_search = MembershipSearch(request.GET)
-        if membership_search.is_valid():
+        membership_fetch = MembershipFetch(request.GET)
+        if membership_fetch.is_valid():
             membership_id = request.GET.__getitem__('membership_id')
 
             try:
@@ -929,11 +1010,12 @@ def membership_search(request):
     else:
         error = "You did not specify a member to search for."
 
-    template = "membership_search.html"
+    template = "membership_fetch.html"
     ctxt = { 
             'request' : request, 
             'error' : error, 
-            'membership_search' : MembershipSearch()
+            'membership_fetch' : MembershipFetch(),
+            'page_name' : 'Search Error',
             }
     return render_to_response(template, ctxt)
 
@@ -942,6 +1024,7 @@ def membership_search(request):
     login_url = '/halt/')
 def mushroom_admin(request):
     """ Pulls up an custom admin page for the site."""
+    membership_fetch = MembershipFetch()
     membership_search = MembershipSearch()
 
     # Fetch dates of "due_by by" list
@@ -962,11 +1045,13 @@ def mushroom_admin(request):
     template = 'mushroom_admin.html'
     ctxt = { 
         'request' : request, 
+        'membership_fetch' : membership_fetch,
         'membership_search' : membership_search,
         'next_month' : next_month,
         'nm_year' : nm_year,
         'may_year' : may_year,
         'today' : today,
+        'page_name' : 'Mushroom Admin',
         }
     return render_to_response(template, ctxt)
 
@@ -986,7 +1071,11 @@ def list_emails(request):
         return error_404(request, error)
     
     template='list_emails.html'
-    ctxt = { 'request' : request, 'users' : users }
+    ctxt = { 
+        'request' : request, 
+        'users' : users, 
+        'page_name' : 'Email List', 
+        }
     return render_to_response(template, ctxt)
 
 @user_passes_test(
@@ -997,6 +1086,7 @@ def sent_email(request, send_errors=None):
     template = 'sent_email.html'
     ctxt = { 'request' : request,
              'send_errors' : send_errors,
+             'page_name' : 'Sent Email',
              }
     return render_to_response(template, ctxt)
                  
@@ -1037,11 +1127,13 @@ def send_email(request, sent=None):
                               fail_silently=False,
                               )
                 except SMTPException:
-                    # Need to come up with a good way to display these
-                    # errors.  Not sure if possible to pass through a
-                    # redirect.
-                    send_error = 'error sending to %s' % user_email
-                    send_errors.append(send_error)
+                    # Need to grab Exception and pass it to template
+                    error = "There was an error sending mail!"
+                    return error_404(request, error)
+
+                except:
+                    error = "There was an error sending mail!"
+                    return error_404(request, error)
 
             return HttpResponseRedirect(reverse(sent_email))
 
@@ -1052,6 +1144,7 @@ def send_email(request, sent=None):
         'request' : request, 
         'form' : form, 
         'users' : users,
+        'page_name' : 'Email All Members',
         }
     return render_to_response(template, ctxt)
         

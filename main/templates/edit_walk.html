@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load adminmedia %}
 
+        {% block trail %}
+        <li>&gt; <a href="/walks/list/">Walk List</a></li>
+        {% endblock trail %}
+
     {% block style %}
     {{ block.super }}
     <style typle="text/css">

@@ -25,10 +25,15 @@ urlpatterns = patterns('',
     (r'^memberships/((?P<membership>[0-9]+)/)?edit_due/((?P<due>[0-9]+)/)?', edit_due),
     (r'^memberships/((?P<membership>[0-9]+)/)?dues/', view_dues),
     (r'^memberships/search/', membership_search),
+    (r'^memberships/fetch/', membership_fetch),
 
-    # Static Pages
+    # 'Static' Pages
+    (r'^schedule', schedule),
     (r'^ClubActivities\.html$', schedule),  # legacy compatibility
-    (r'^schedule/$',schedule),
+    (r'^about', about),
+    (r'^membership.html$', about),  # legacy compatibility
+    (r'^application', application),
+    (r'^application.html$', application),  # legacy compatibility
     (r'^[Ss]tories/(?P<year>2[0-9][0-9][0-9])/(?P<month>[0-1][0-9])/(?P<day>[0-3][0-9])/(?P<time>[0-2][0-9]:[0-5][0-9]:[0-5][0-9])/$', story),
     (r'^(.*)\.html$', page),
     (r'^([a-z0-9\-]+)\.css$', style),

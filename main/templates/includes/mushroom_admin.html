@@ -5,17 +5,25 @@
         <li>List all Memberships Due as of:</li>
 	    <ul id="due_by">
 	        <li><a href="/memberships/list/due_by/">This Month</li>
-	        <li><a href="/memberships/list/due_by/{{ nm_year }}/{{ next_month }}">Next Month</li>
+	        <li><a href="/memberships/list/due_by/{{ nm_year }}/{{ next_month }}/">Next Month</li>
 	        <li><a href="/memberships/list/due_by/{{ may_year }}/5/">Next May</li>
             </ul><!-- close #overdue_memberships -->
 	<li><a href="/email/list/">List Email Addresses</a></li>
 	<li><a href="/email/send/">Send an Email to Club Members</a></li>
+        <form method="GET" id="membership_fetch" action="/memberships/fetch/">
+            <fieldset>
+                {% for field in membership_fetch %}
+                {% include "includes/field.html" %}
+                {% endfor %}
+                <input type="submit" value="Submit" />
+            </fieldset>
+        </form>
         <form method="GET" id="membership_search" action="/memberships/search/">
             <fieldset>
                 {% for field in membership_search %}
                 {% include "includes/field.html" %}
                 {% endfor %}
-                <input type="submit" value="Search" />
+                <input type="submit" value="Submit" />
             </fieldset>
         </form>
     </ul>
