@@ -43,4 +43,3 @@ class pages(entries):
     NAME = 'page'
 
 
-

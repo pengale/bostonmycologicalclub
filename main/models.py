@@ -116,6 +116,7 @@ class Walk(models.Model):
     from django.forms import TextInput
     date = models.DateField()
     time = models.TimeField()
+    #public = models.BooleanField(default=False)
 
     # Where
     meeting_place = models.CharField(max_length=300)
@@ -153,7 +154,7 @@ class Walk(models.Model):
 class Announcement(models.Model):
     """ Announcements for the front page.  
     """
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(default=datetime.datetime.now())
     heading = models.CharField(max_length=40)
     summary = models.TextField()
     full_story = models.TextField(blank=True)

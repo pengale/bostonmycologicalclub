@@ -447,6 +447,9 @@ def mushrooms(request, walk=None):
 
 """----------------------------------------------------------------
                          Membership Tools
+
+Note:  These tools need to get folded into generic "mushroom admin"
+       views at some point.  
 ----------------------------------------------------------------"""
 
 @user_passes_test(
@@ -1067,12 +1070,13 @@ def mushroom_admin_list(request, entries, start=None, per_page=None):
     """ List a series of entries for one model in the mushroom_admin
     page. """
 
-    entries = globals()[entries]() # Not sure if this is the most efficient
-                              # way to do this (using eval might
-                              # almost be okay, because we're only
-                              # accepting a regular expression
-                              # matching [a-z]+ as input for 'entries'
-                              # ... but paranoia is good, right?)
+    entries = globals()[entries]() # Not sure if this is the most
+                                   # efficient way to do this (using
+                                   # eval might almost be okay,
+                                   # because we're only accepting a
+                                   # regular expression matching
+                                   # [a-z]+ as input for 'entries'
+                                   # ... but paranoia is good, right?)
     model = entries.MODEL
     entry_name = entries.NAME
     template = entries.LIST_TEMPLATE

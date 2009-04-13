@@ -8,10 +8,6 @@ from kungfutime import KungfuTimeField
 # Walk Editing Forms
 
 class WalkForm(ModelForm):
-#    date = DateField(widget=TextInput(
-#            attrs={'class':'vDateField'}))
-#    time = KungfuTimeField(widget=TextInput(
-#            attrs={'class':'vTimeField'}))
     time = KungfuTimeField()
 
     class Meta:
