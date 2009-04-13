@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+        {% block trail %}
+        <li>&gt; <a href="/mushroom_admin/">Mushroom Admin</a></li>
+        {% endblock trail %}
+
+    {% block style %}
+    {{ block.super }}
+    <style type="text/css">
+<!--
+-->
+    </style>
+    <!--[if lte IE 6]>
+    <![endif]-->
+    {% endblock style %}
+
+            {% block text %}
+<h2>{{ entry_name|title}} #{{ entry.id }}</h2>
+
+<div id="{{ entry_name }}">
+{% block entry %}
+<p>{{ entry }}</p>
+{% endblock %}
+<p><a href="/mushroom_admin/{{ entry_name }}s/{{ entry_id }}/edit/">Edit</a></p>
+</div>
+            {% endblock text %}
+
+
+

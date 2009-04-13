@@ -39,7 +39,11 @@ urlpatterns = patterns('',
     (r'^([a-z0-9\-]+)\.css$', style),
 
     # Admin Stuff
+    (r'^mushroom_admin/(?P<entries>[a-z]+)/((?P<entry_id>[0-9]+)/)?(edit|create)/', mushroom_admin_edit),
+    (r'^mushroom_admin/(?P<entries>[a-z]+)/(?P<entry_id>[0-9]+)/', mushroom_admin_view),
+    (r'^mushroom_admin/(?P<entries>[a-z]+)/(start(?P<start>[0-9]+)/)?((?P<per_page>[0-9]+)pp/)?', mushroom_admin_list),
     (r'^mushroom_admin', mushroom_admin),
+
     (r'^email/list/', list_emails),
     (r'^email/send/', send_email),
     (r'^email/sent/', sent_email),

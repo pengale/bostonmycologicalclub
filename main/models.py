@@ -3,6 +3,7 @@ from bmc.settings import *
 from django.contrib.auth.models import User
 from django.contrib.localflavor.us.models import USStateField
 from django import forms
+import datetime
 
 class WalkArea(models.Model):
     """ Members might only want to hear about walks in their area.
@@ -167,7 +168,9 @@ class Newsbit(models.Model):
     """ Quick news blurbs to go on the front page for stuff that
     doesn't need a full announcement.
     """
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(
+        default=datetime.datetime.now()
+        )
     news = models.TextField()
 
     class Meta:
@@ -206,3 +209,6 @@ class Page(models.Model):
     """
     name = models.CharField(max_length=30)
     text = models.TextField()
+
+    def __unicode__(self):
+        return '%s' % (self.name)

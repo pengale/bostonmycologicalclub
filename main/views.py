@@ -25,6 +25,7 @@ from forms import (UserEditsUser, UserEditsProfile,
 from django.core.mail import send_mail
 from smtplib import SMTPException
 from bmc.main.utilities import prev_next
+from mushroom_admin import *
 
 """----------------------------------------------------------------
                          Error Pages
@@ -934,7 +935,7 @@ def view_dues(request, membership=None):
         error = "That Membership does not appear to exist."
         return error_404(request, error)
 
-    dues = Due.objects.filter(membership=membership)
+    dues = Due.objects.filter(membership=membership)[:25]
 
     template = 'view_dues.html'
     ctxt = {
@@ -1019,6 +1020,10 @@ def membership_fetch(request):
             }
     return render_to_response(template, ctxt)
 
+"""----------------------------------------------------------------
+                         Mushroom Admin and Other Tools
+----------------------------------------------------------------"""
+
 @user_passes_test(
     lambda u: u.has_perm('u.is_superuser'),
     login_url = '/halt/')
@@ -1054,6 +1059,133 @@ def mushroom_admin(request):
         'page_name' : 'Mushroom Admin',
         }
     return render_to_response(template, ctxt)
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def mushroom_admin_list(request, entries, start=None, per_page=None):
+    """ List a series of entries for one model in the mushroom_admin
+    page. """
+
+    entries = globals()[entries]() # Not sure if this is the most efficient
+                              # way to do this (using eval might
+                              # almost be okay, because we're only
+                              # accepting a regular expression
+                              # matching [a-z]+ as input for 'entries'
+                              # ... but paranoia is good, right?)
+    model = entries.MODEL
+    entry_name = entries.NAME
+    template = entries.LIST_TEMPLATE
+
+    pn = prev_next(start, per_page)
+
+    entries = model.objects.all()[pn.start:pn.next]
+    if pn.per_page > len(entries): pn.next = 0
+
+    ctxt = {
+        'entries' : entries,
+        'request' : request,
+        'prev_next' : pn,
+        'page_name' : "%ss" % entry_name,
+        'entry_name' : entry_name,
+        }
+    return render_to_response(template, ctxt)
+
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def mushroom_admin_view(request, entries, entry_id):
+    entries = globals()[entries]()
+    entry_name = entries.NAME
+    model = entries.MODEL
+    template = entries.VIEW_TEMPLATE
+    entry_id = int(entry_id)
+    permission = entries.edit_permission()
+
+    if not entry_id:
+        error = "Please specify a %s to view" % entry_name
+        return error_404(request, error)
+
+    try:
+        entry = model.objects.get(id=entry_id)
+
+    except:
+        error = "I could not find that %s" % entry_name
+        return error_404(request, error)
+
+    ctxt = {
+        'entry' : entry,
+        'entry_name' : entry_name,
+        'entry_id' : entry_id,
+        'page_name' : entry_name,
+        'request' : request,
+        'permission' : permission,
+        }
+
+    return render_to_response(template, ctxt)
+
+@user_passes_test(
+    lambda u: u.has_perm('u.is_superuser'),
+    login_url = '/halt/')
+def mushroom_admin_edit(request, entries, entry_id=None,):
+    """ Edit an entry, or create a new entry, if no entry specified
+    """
+
+    entry = ''
+    entries = globals()[entries]()
+    entry_name = entries.NAME
+    model = entries.MODEL
+    template = entries.EDIT_TEMPLATE
+    if entry_id: entry_id = int(entry_id)
+    form = entries.FORM
+
+    # Fetch an entry object, if we specified an entry.
+    if entry_id:
+        entry_id = int(entry_id)
+        try:
+            entry = model.objects.get(id=entry_id)
+
+        except ObjectDoesNotExist:
+            error = """That %s does not appear to exist in the database.
+                    """ % entry_name
+            return error_404(request, error)
+
+    # Attempt to save our entry.  
+    if request.method == 'POST':
+        if entry: form = form(request.POST, instance=entry)
+        else: form = form(request.POST)
+
+        if form.is_valid():
+            form = form.save()
+            return HttpResponseRedirect(
+                '/mushroom_admin/%ss/' % entry_name
+                )
+
+        else:
+            form = form(request.POST)
+            # renders below
+            
+    # Return a blank form, or a form with errors if we didn't specify
+    # an object to save, or if we tried to save an invalid form.
+    else:
+        if entry: form = form(instance=entry)
+        else: form = form()
+
+    if entry: page_name = 'Edit' 
+    else: page_name = 'Create'
+
+    ctxt = {
+        'form' : form,
+        'request' : request,
+        'entry' : entry,
+        'model' : model,
+        'page_name' : page_name,
+        'entry_id' : entry_id,
+        'entry_name' : entry_name,
+        }
+    return render_to_response(template, ctxt)
+
 
 """----------------------------------------------------------------
                          Email Tools

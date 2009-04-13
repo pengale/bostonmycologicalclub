@@ -1,4 +1,4 @@
-from models import Walk, Membership, UserProfile, Due
+from models import *
 from django.contrib.auth.models import User
 from django.forms import (ModelForm, Form, TextInput, DateField, 
                           TimeField, BooleanField, CharField,
@@ -65,6 +65,18 @@ class MembershipStatus(ModelForm):
     class Meta:
         model = User
         fields = ('is_active')
+
+class NewsbitForm(ModelForm):
+    class Meta:
+        model = Newsbit
+
+class PageForm(ModelForm):
+    class Meta:
+        model = Page
+
+class AnnouncementForm(ModelForm):
+    class Meta:
+        model = Announcement
 
 # Forms for allowing a User to edit their info
 

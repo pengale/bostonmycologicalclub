@@ -1,6 +1,5 @@
 """ Misc Useful Utilities """
 
-
 class prev_next:
     """ Make a series of prev, next links.  I'd be a nice guy if I
     took the time to add 'first' and 'last' links, plus links to each
@@ -22,6 +21,13 @@ class prev_next:
 
         if self.per_page == 25: self.toggle = 100
         else: self.toggle = 25
+
+    
+    
+    
+        
+
+    
 
 
 
