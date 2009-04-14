@@ -20,7 +20,8 @@ from forms import (UserEditsUser, UserEditsProfile,
                    UserEditsMembership, MembershipFetch,
                    EmailForm, WalkForm, WalkMushroomForm,
                    MembershipForm, UserForm, UserProfileForm,
-                   DueForm, MembershipStatus, MembershipSearch)
+                   DueForm, MembershipStatus, MembershipSearch,
+                   WalkFormAdmin)
 
 from django.core.mail import send_mail
 from smtplib import SMTPException
@@ -99,8 +100,9 @@ def schedule(request):
     template = 'schedule.html'
 
     walks_in_area = []
-    public_walks = PublicWalk.objects.filter(
-        when__gte=datetime.date.today()
+    public_walks = Walk.objects.filter(
+        public=True,
+        date__gte=datetime.date.today(),
         )
     id_sessions = IDSession.objects.filter(
         when__gte=datetime.date.today()
@@ -324,6 +326,10 @@ def view_walk(request, walk=None):
 def create_walk(request):
     """ View to create a new walk.  """
 
+    # Give our admins a Walk Form w/ added features
+    if request.user.is_superuser: WalkForm = WalkFormAdmin
+    else: from forms import WalkForm
+
     if request.method == 'POST':
         form = WalkForm(request.POST)
         if form.is_valid():
@@ -331,6 +337,7 @@ def create_walk(request):
             walk.creator = request.user
             walk.save()
             form.save_m2m()
+
             return HttpResponseRedirect(reverse(profile))
                 
         else:
@@ -359,6 +366,11 @@ def create_walk(request):
 @login_required(redirect_field_name='redirect_to')
 def edit_walk(request, walk=None):
     """ Edit an existing walk. """
+
+    # Give our admins a Walk Form w/ added features
+    if request.user.is_superuser: WalkForm = WalkFormAdmin
+    else: from forms import WalkForm
+
     if not walk:
         return create_walk(request)
 
@@ -378,10 +390,7 @@ def edit_walk(request, walk=None):
         form = WalkForm(request.POST, instance=walk)
 
         if form.is_valid():
-            walk = form.save(commit=False)
-            walk.creator = request.user
-            walk.save()
-            form.save_m2m()
+            walk = form.save()
             return HttpResponseRedirect(reverse(profile))
 
         else:
@@ -785,6 +794,7 @@ def membership_status(request, membership, action):
     try:
         profiles = UserProfile.objects.filter(membership=membership)
     except ObjectDoesNotExist:
+        profiles = []
         error = """ This Membership does not seem to have any users
         attached to it."""
         return error_404(request, error)
@@ -819,6 +829,7 @@ def membership_status(request, membership, action):
             'form' : MembershipStatus(),
             'membership' : membership,
             'page_name' : 'Change Membership Status',
+            'profiles' : profiles
             }
         return render_to_response(template, ctxt)
 

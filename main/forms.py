@@ -12,6 +12,13 @@ class WalkForm(ModelForm):
 
     class Meta:
         model = Walk
+        exclude = ('creator', 'mushrooms_found', 'public')
+
+class WalkFormAdmin(WalkForm):
+    time = KungfuTimeField()
+
+    class Meta:
+        model = Walk
         exclude = ('creator', 'mushrooms_found')
 
 class WalkMushroomForm(ModelForm):

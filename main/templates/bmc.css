@@ -59,6 +59,7 @@ h4 { font-size: 1.1em; margin: 0; padding: 0; }
 .prev_next li { float: left; margin-right: 1em; }
 .toggle { clear: left; padding-top: 1em; font-size: 0.8em; }
 .tool { margin-bottom: 0.5em; }
+.note { font-style: italic; }
 
 ul { margin: 0 0 1em 0; padding: 0; list-style: none; }
 li { margin: 0; padding: 0; }

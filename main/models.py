@@ -116,7 +116,7 @@ class Walk(models.Model):
     from django.forms import TextInput
     date = models.DateField()
     time = models.TimeField()
-    #public = models.BooleanField(default=False)
+    public = models.BooleanField(default=False)
 
     # Where
     meeting_place = models.CharField(max_length=300)

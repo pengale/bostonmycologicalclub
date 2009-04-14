@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+    {% block style %}
+    {{ block.super }}
+    <style type="text/css">
+<!--
+.email_list { margin-left: 2em; font-style: italic; }
+-->
+    </style>
+    {% endblock %}
+
         {% block trail %}
         <li>&gt; <a href="/mushroom_admin/">Mushroom Admin</a></li>
         <li>&gt; <a href="/memberships/list/">List Memberships</a></li>
@@ -11,6 +20,12 @@
 <h2>Suspend This Membership?</h2>
 <p>Clicking the suspend button below will suspend this account by deactivating all users attached to this membership.</p>
 <p>This won't delete any information from the database, but it will prevent users from logging in.</p>
+<p class="note">Note:  you'll want to remove the following users from the <a target="_blank" href="http://lists.bostonmycologicalclub.org/admin.cgi/bmc-bostonmycologicalclub.org/members/remove">mailing list</a> [link opens in new window, for your copy-and-pasting convenience]:</p>
+<p class="email_list">
+    {% for profile in profiles %}
+    {{ profile.user.email }}<br />
+    {% endfor %}
+</p>
 <form method="post" action="." id="membership_status">
     <fieldset>
         <input type="hidden" value="{{ status }}" />
@@ -20,6 +35,12 @@
 {% else %}
 <h2>Restore This Membership?</h2>
 <p>Clicking the restore button below will restore this account by activating all users attached to the membership.</p>
+<p class="note">Note:  you'll want to add the following users to the <a target="_blank" href="http://lists.bostonmycologicalclub.org/admin.cgi/bmc-bostonmycologicalclub.org/members/add">mailing list</a> [link opens in new window, for your copy-and-pasting convenience]:</p>
+<p class="email_list">
+    {% for profile in profiles %}
+    {{ profile.user.email }}<br />
+    {% endfor %}
+</p>
 <form method="post" action="." id="membership_status">
     <fieldset>
         <input type="hidden" name="is_active" id="id_is_active" value="{{ status }}" />

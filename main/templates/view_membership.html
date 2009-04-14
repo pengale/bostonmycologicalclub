@@ -10,7 +10,7 @@
     <style type="text/css">
 <!--
 .suspended { color: gray; }
-#membership_info, #notes, #users { 
+#membership_info, #users, #notes { 
         margin-bottom: 2em; 
         width: 28em; 
 }
@@ -48,12 +48,7 @@
 {{ membership.city }}, {{ membership.state }}, {{ membership.zip }}
     </div>
     <p>Joined: {{ membership.join_date|date }}</p>
-    {% if Notes %}
-    <h3>Notes</h3>
-    <div id="notes">
-{{ Notes }}
-    </div>
-    {% endif %}
+    <p>Type: {{ membership.membership_type|title }}</p>
     <p><a href="/memberships/{{ membership.id }}/edit/">Edit</a></p>
 </div><!-- close #membership_info -->
 
@@ -72,6 +67,15 @@
     </form>
     {% endif %}
 </div><!-- close #users -->
+
+<div id="notes">
+    {% if membership.notes %}
+    <h3>Notes</h3>
+{{ membership.notes }}
+    <p><a href="/memberships/{{ membership.id }}/edit/">Edit</a></p>
+    {% endif %}
+</div><!-- close #notes -->
+
 
 <div id="dues">
     <h3>Dues</h3>
