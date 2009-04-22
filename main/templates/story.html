@@ -3,7 +3,7 @@
 	    {% block text %}
 
 <h2>{{ heading }}</h2>
-{{ summary|linebreaks }}
-{{ full_story|linebreaks }}
+{{ summary|urlize|linebreaks }}
+{{ full_story|urlize|linebreaks }}
 <p class="fine-print">posted {{ ts }}</p>
 	    {% endblock text %}

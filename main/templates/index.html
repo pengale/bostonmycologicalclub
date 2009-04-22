@@ -32,11 +32,11 @@
     <div class="announcement">
         {% if announcement.full_story %}
 	<h3><a href="Stories/{{ announcement.timestamp|date:"Y/m/d/H:i:s" }}">{{ announcement.heading }}</a></h3>
-{{ announcement.summary|linebreaks }}
+{{ announcement.summary|urlize|linebreaks }}
 	<p><a href="Stories/{{ announcement.timestamp|date:"Y/m/d/H:i:s" }}">Full story</a></p>
 	{% else %}
         <h3>{{ announcement.heading }}</h3>
-{{ announcement.summary|linebreaks }}
+{{ announcement.summary|urlize|linebreaks }}
 	{% endif %}
     </div>
     {% endfor %}
