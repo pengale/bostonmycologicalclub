@@ -92,7 +92,7 @@ class UserEditsUser(ModelForm):
 class UserEditsProfile(ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('areas', 'want_email')
+        fields = ('areas', 'want_email', 'phone', 'alt_phone')
     
 class UserEditsMembership(ModelForm):
     class Meta:

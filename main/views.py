@@ -478,7 +478,11 @@ def list_memberships(request, start=None, per_page=None,
             
         members = Membership.objects.exclude(
             due__paid_thru__gte=due_by,
-            )[pn.start:pn.next]
+            ).exclude(
+                membership_type='honorary'
+                ).exclude(
+                    membership_type__startswith='corresponding'
+                    )[pn.start:pn.next]
             
     else:
         members = Membership.objects.all()[pn.start:pn.next]

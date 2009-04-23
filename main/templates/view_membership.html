@@ -43,6 +43,7 @@
 <div id="membership_info">
     <h3>Address</h3>
     <div id="address">
+{% if membership.organization %}{{ membership.organization }}<br />{% endif %} 
 {{ membership.address }}<br />
 {% if membership.address2 %}{{ membership.address2 }}<br />{% endif %}
 {{ membership.city }}, {{ membership.state }}, {{ membership.zip }}
@@ -56,7 +57,14 @@
     <h3>Users</h3>
     {% if user_profiles %}
         {% for profile in user_profiles %}
-        <p {% if profile.user.is_active %}{% else %}class="suspended"{% endif %}><strong>{{ profile.user }}</strong>: {{ profile.user.first_name }} {{ profile.user.last_name }} {% if profile.user.is_active %}{% else %}(suspended){% endif %} <a href="/memberships/{{ membership.id }}/edit_user/{{ profile.user.id }}/">edit</a></p>
+        <div {% if profile.user.is_active %}{% else %}class="suspended"{% endif %}><strong>{{ profile.user.first_name }} {{ profile.user.last_name }}{% if profile.user.is_active %}{% else %} (suspended){% endif %}</strong>
+        <ul>
+            <li>{{ profile.user.email }}</li>
+            <li>{{ profile.phone }}</li>
+            <li>{{ profile.alt_phone }}</li>
+            <li><a href="/memberships/{{ membership.id }}/edit_user/{{ profile.user.id }}/">Edit</a></li>
+        </ul>
+    </div>
         {% endfor %}
     <p><a href="/memberships/{{ membership.id }}/edit_user/">Add a New User</a></p>
 

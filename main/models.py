@@ -1,7 +1,7 @@
 from django.db import models
 from bmc.settings import *
 from django.contrib.auth.models import User
-from django.contrib.localflavor.us.models import USStateField
+from django.contrib.localflavor.us.models import USStateField, PhoneNumberField
 from django import forms
 import datetime
 
@@ -21,6 +21,7 @@ class Membership(models.Model):
     join_date = models.DateField()
 
     # Address
+    organization = models.CharField(max_length=100, blank=True)
     address = models.CharField(max_length=50)
     address2 = models.CharField(max_length=50, blank=True)
     city = models.CharField(max_length=60)
@@ -68,9 +69,8 @@ class Due(models.Model):
         ordering = ["-paid_thru"]
 
 
-
 class UserProfile(models.Model):
-    """ Extends the User class in contrib.auth.models to include some
+    """ Expands the User class in contrib.auth.models to include some
     BMC specific stuff.
     """
     # Membership
@@ -80,8 +80,8 @@ class UserProfile(models.Model):
     title = models.CharField(max_length=200, blank=True)
     
     # Contact Info
-    #phone = models.PhoneNumberField()
-    #phone2 = models.PhoneNumberField()
+    phone = PhoneNumberField(blank=True)
+    alt_phone = PhoneNumberField(blank=True)
 
     # Type
     # we need a few special user types in addition to staff and superusers

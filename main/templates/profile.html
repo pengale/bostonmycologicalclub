@@ -40,6 +40,7 @@
         {% endif %}
         <li>
             <address><strong>Address</strong>: <br />
+                     {% if membership.organization %}{{ membership.organization }}<br />{% endif %}
 	             {{ membership.address }}<br />
                      {% if membership.address2 %}
                      {{ membership.address2 }}<br />
