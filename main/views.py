@@ -87,7 +87,11 @@ def index(request):
 
 def about(request):
     template = 'about.html'
-    ctxt = { 'request' : request, 'page_name' : 'About Us' }
+    ctxt = { 
+        'request' : request, 
+        'page_name' : 'About Us',
+        'media_url' : MEDIA_URL,
+        }
     return render_to_response(template, ctxt)
 
 def application(request):
