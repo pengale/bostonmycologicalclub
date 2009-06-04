@@ -9,6 +9,11 @@ from kungfutime import KungfuTimeField
 
 class WalkForm(ModelForm):
     time = KungfuTimeField()
+    permission = BooleanField(
+        required=True,
+        help_text = """
+Has permission to use the area been granted? (required)""",
+        )
 
     class Meta:
         model = Walk
@@ -16,6 +21,11 @@ class WalkForm(ModelForm):
 
 class WalkFormAdmin(WalkForm):
     time = KungfuTimeField()
+    permission = BooleanField(
+        required=True,
+        help_text = """
+Has permission to use the area been granted? (required)""",
+        )
 
     class Meta:
         model = Walk
@@ -24,7 +34,7 @@ class WalkFormAdmin(WalkForm):
 class WalkMushroomForm(ModelForm):
     class Meta:
         model = Walk
-        fields = ('mushrooms_found')
+        fields = ('terrain', 'weather', 'mushrooms_found')
 
 # Membership and User Forms
 
@@ -39,18 +49,41 @@ class MembershipSearch(Form):
     last_name = CharField(max_length=30)
         
 class UserForm(ModelForm):
-    username = EmailField(label='Email Address')
+    """ A slightly hacky re-implementation of the auth module's
+    built-in UserCreationForm.
+
+    """
+    username = forms.RegexField(
+        max_length=30, 
+        regex=r'^\w+$',
+        help_text = """
+Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores).""",
+        error_message = """
+This value must contain only letters, numbers and underscores.""",
+        )
+
     class Meta:
         model = User
         exclude = (
             'user_permissions', 
             'password',
-            'email',
+            #'email',
             'is_superuser',
             'last_login',
             'groups',
             'is_staff',
             )
+
+class NewUserForm(UserForm):
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+        try:
+            User.objects.get(username=username)
+        except User.DoesNotExist:
+            return username
+        raise forms.ValidationError("""
+A user with that username already exists.""")
+
 
 class UserProfileForm(ModelForm):
     class Meta:

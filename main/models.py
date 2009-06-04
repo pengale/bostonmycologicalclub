@@ -102,6 +102,9 @@ class UserProfile(models.Model):
     areas = models.ManyToManyField(WalkArea)
     user = models.ForeignKey(User, unique=True, blank=True)
 
+    # Notes
+    notes = models.TextField(blank=True)
+
     def __unicode__(self):
         return  '%s' % (self.user)
 
@@ -119,26 +122,26 @@ class Walk(models.Model):
     public = models.BooleanField(default=False)
 
     # Where
-    meeting_place = models.CharField(max_length=300)
-    collecting_area = models.CharField(max_length=300)
+    location = models.TextField()
+    meeting_place = models.TextField()
     latitude = models.DecimalField(
-        max_digits=7, decimal_places=4, 
+        max_digits=9, decimal_places=7, 
         blank=True, 
         null=True,
         help_text = 'You may leave this blank.',
         )
     longitude = models.DecimalField(
-        max_digits=7, decimal_places=4, 
+        max_digits=9, decimal_places=7, 
         blank=True, 
         null=True,
         help_text = 'You may leave this blank.',
         )
     permission = models.BooleanField(
-        help_text = 'Has permission to use the area been granted?'
+        help_text = 'Has permission to use the area been granted?',
         )
-    directions = models.TextField()
-    weather = models.TextField() 
-    terrain = models.TextField()
+    directions = models.TextField(verbose_name="Address and Directions")
+    weather = models.TextField(blank=True) 
+    terrain = models.TextField(blank=True)
     areas = models.ManyToManyField(WalkArea)
 
     # Notes

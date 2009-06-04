@@ -25,8 +25,8 @@
     <div id="info">
         <h3>When and Where</h3>
         <h4>Date/Time</h4> <p>{{ walk.date|date }}, {{ walk.time|time }}</p>
+        <h4>Location</h4> <p>{{ walk.location }}</p>
         <h4>Meeting Place</h4> <p>{{ walk.meeting_place }}</p>
-        <h4>Collecting Area</h4> <p>{{ walk.collecting_area }}</p>
         {% if walk.coordinates %}
         <h4>Coordinates</h4> <p>{{ walk.lat }} {{ walk.long }}<p>
         {% endif %}
