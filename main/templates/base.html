@@ -71,7 +71,6 @@
                     {% endif %}
 	        </ul>
                 {% block login %}
-{% if request.user.is_authenticated %}
 	        <div id="account">
 		    {% if request.user.is_authenticated %}
 		    <p>You are logged in as {{ request.user }}</p>
@@ -81,7 +80,6 @@
 		    <p>You are not logged in</p>
 		    <p><a href="/accounts/login/">Login</a> or <a href="/accounts/password_reset/">Create a Password</a>.
 		    {% endif %}
-{% endif %}
                 {% endblock login %}
 	        </div>
 	        {% endblock nav %}
