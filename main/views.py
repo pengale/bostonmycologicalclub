@@ -25,7 +25,7 @@ from forms import (UserEditsUser, UserEditsProfile,
 
 from django.core.mail import send_mail
 from smtplib import SMTPException
-from bmc.main.utilities import prev_next
+from bmc.main.utilities import prev_next, unique
 from mushroom_admin import *
 
 """----------------------------------------------------------------
@@ -204,13 +204,17 @@ def profile(request):
             error += "Please contact the BMC admin."
             return error_404(request, error)
     
+    # Pull up list of walks in the users' area
     areas = user_profile.areas.all()
-    walks_in_area = Walk.objects
+    walks_in_area = []
     for area in areas:
-        walks_in_area = walks_in_area.filter(
-            areas__name__contains=area,
+        walks_in_area += Walk.objects.filter(
+            areas=area,
             date__gte=datetime.date.today()
             )
+
+    # Eliminate duplicate entries
+    walks_in_area=unique(walks_in_area)
      
     template = 'profile.html'
     ctxt = { 
