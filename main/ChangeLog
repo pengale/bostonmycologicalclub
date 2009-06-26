@@ -1,0 +1,17 @@
+2009-06-26  Pete Vander Giessen  <petevg@greta>
+
+	* templates/profile.html: added "walk" to "walk areas you're
+	interested in"
+
+	* views.py (edit_profile): Fixed prob with user editing
+	profile (was grabbing wrong data for membership).
+
+	* templates/base.html: Added link to favicon.png.
+
+	* views.py: Added media_url to all pages (really should add
+	context processor object)
+	(edit_user): user form no longer overwrites email with username.
+	(index): Restricted number of newsbits (10) and announcements (5)
+	that can show up on front page.
+
+

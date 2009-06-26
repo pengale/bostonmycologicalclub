@@ -27,7 +27,7 @@
         <li><h3>Your Membership Info</h3></li>
         <li><strong>Name</strong>:  {{ user.first_name }} {{ user.last_name }}</li>
         <li><strong>Email Address</strong>:  {{ user.email }}</li>
-        <li><strong>Areas you're interested in</strong>:</a></li>
+        <li><strong>Walk areas you're interested in</strong>:</a></li>
             <ul id="areas_of_interest">
                 {% for area in user_profile.areas.all %}
                 <li>{{ area }}</li>

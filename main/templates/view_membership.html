@@ -59,9 +59,11 @@
         {% for profile in user_profiles %}
         <div {% if profile.user.is_active %}{% else %}class="suspended"{% endif %}><strong>{{ profile.user.first_name }} {{ profile.user.last_name }}{% if profile.user.is_active %}{% else %} (suspended){% endif %}</strong>
         <ul>
-            <li>{{ profile.user.email }}</li>
+            <li>{{ profile.user }}</li>
+	    <li>{{ profile.user.email }}</li>
             <li>{{ profile.phone }}</li>
             <li>{{ profile.alt_phone }}</li>
+	    <li>Notes: {{ profile.notes }}</li>
             <li><a href="/memberships/{{ membership.id }}/edit_user/{{ profile.user.id }}/">Edit</a></li>
         </ul>
     </div>

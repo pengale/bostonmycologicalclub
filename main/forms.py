@@ -49,25 +49,15 @@ class MembershipSearch(Form):
     last_name = CharField(max_length=30)
         
 class UserForm(ModelForm):
-    """ A slightly hacky re-implementation of the auth module's
-    built-in UserCreationForm.
+    """ Form to create a new user via the mushroom_admin.  
 
     """
-    username = forms.RegexField(
-        max_length=30, 
-        regex=r'^\w+$',
-        help_text = """
-Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores).""",
-        error_message = """
-This value must contain only letters, numbers and underscores.""",
-        )
 
     class Meta:
         model = User
         exclude = (
             'user_permissions', 
             'password',
-            #'email',
             'is_superuser',
             'last_login',
             'groups',
@@ -75,6 +65,7 @@ This value must contain only letters, numbers and underscores.""",
             )
 
 class NewUserForm(UserForm):
+#@@@ Not sure if this is actually used for anything at present
     def clean_username(self):
         username = self.cleaned_data["username"]
         try:
@@ -117,10 +108,9 @@ class AnnouncementForm(ModelForm):
 # Forms for allowing a User to edit their info
 
 class UserEditsUser(ModelForm):
-    username = EmailField(label='Email Address')
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username')
+        fields = ('first_name', 'last_name', 'email')
 
 class UserEditsProfile(ModelForm):
     class Meta:

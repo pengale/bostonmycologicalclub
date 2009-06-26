@@ -35,7 +35,7 @@ from mushroom_admin import *
 def under_construction(request):
     """ Return a friendly under construction message. """
     template = 'under_construction.html'
-    ctxt = { 'request' : request, }
+    ctxt = { 'request' : request, 'media_url' : MEDIA_URL }
     return render_to_response(template, ctxt)
 
 def error_404(request, error=None):
@@ -43,7 +43,7 @@ def error_404(request, error=None):
     if not error:
         error = "We can't find the page you requested."
     template = '404.html'
-    ctxt = { 'request' : request, 'error' : error }
+    ctxt = { 'request' : request, 'error' : error, 'media_url' : MEDIA_URL }
     return render_to_response(template, ctxt)
 
 def halt(request, error=None):
@@ -52,7 +52,7 @@ def halt(request, error=None):
     if not error:
         error = "You do not have permission to be here."
     template = 'halt.html'
-    ctxt = { 'request' : request, 'error' : error }
+    ctxt = { 'request' : request, 'error' : error, 'media_url' : MEDIA_URL }
     return render_to_response(template, ctxt)
 
 
@@ -77,8 +77,8 @@ def index(request):
     """ Return our front page. """
     template = 'index.html'
     ctxt = {
-        'announcements' : Announcement.objects.all(),
-        'newsbits' : Newsbit.objects.all(),
+        'announcements' : Announcement.objects.all()[:5],
+        'newsbits' : Newsbit.objects.all()[:10],
         'media_url' : MEDIA_URL,
         'request' : request,
         'page_name' : 'Home',
@@ -96,7 +96,11 @@ def about(request):
 
 def application(request):
     template = 'application.html'
-    ctxt = { 'request' : request, 'page_name' : 'Application' }
+    ctxt = { 
+        'request' : request, 
+        'page_name' : 'Application', 
+        'media_url' : MEDIA_URL,
+        }
     return render_to_response(template, ctxt)
 
 def schedule(request):
@@ -166,6 +170,7 @@ def story(request, year, month, day, time):
             'ts' : story.timestamp,
             'request' : request,
             'page_name' : story.heading,
+            'media_url' : MEDIA_URL,
             }
 
         return render_to_response(template, ctxt)    
@@ -199,13 +204,13 @@ def profile(request):
             error += "Please contact the BMC admin."
             return error_404(request, error)
     
-    areas = user_profile.areas.all()
     walks_in_area = []
+    areas = user_profile.areas.all()
     for area in areas:
         walks_in_area.append(Walk.objects.filter(
-                areas=area,
-                date__gte=datetime.date.today()
-                ))
+            areas=area,
+            date__gte=datetime.date.today()
+            ))
      
     template = 'profile.html'
     ctxt = { 
@@ -216,6 +221,7 @@ def profile(request):
         'membership' : membership,
         'forms' : forms,
         'page_name' : 'Profile',
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
 
@@ -226,7 +232,7 @@ def edit_profile(request):
     try:
         user = User.objects.get(id=request.user.id)
         user_profile = UserProfile.objects.get(user=user.id)
-        membership = Membership.objects.get(id=1)
+        membership = Membership.objects.get(id=user_profile.membership.id)
 
     except ObjectDoesNotExist:
         error = "We cannot find you user profile. "
@@ -241,10 +247,7 @@ def edit_profile(request):
                                               instance=membership)
         if (edit_user.is_valid() and edit_profile.is_valid() and 
             edit_membership.is_valid()):
-            user = edit_user.save(commit=False)
-            user.email = user.username
-            user.save()
-            edit_user.save_m2m()
+            edit_user.save()
             edit_profile.save()
             edit_membership.save()
             return HttpResponseRedirect('/accounts/profile/')
@@ -259,6 +262,7 @@ def edit_profile(request):
                 'forms' : forms, 
                 'request' : request, 
                 'page_name' : 'Edit Profile',
+                'media_url' : MEDIA_URL,
                 }
             return render_to_response(template, ctxt)
 
@@ -273,6 +277,7 @@ def edit_profile(request):
             'forms' : forms, 
             'request' : request,
             'page_name' : 'Edit Profile',
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -295,6 +300,7 @@ def list_walks(request, start=None, per_page=None):
         'walk_list' : walk_list, 
         'prev_next' : pn,
         'page_name' : 'Walk List',
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
 
@@ -319,6 +325,7 @@ def view_walk(request, walk=None):
             'request' : request, 
             'permission' : permission,
             'page_name' : 'Walk',
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -351,6 +358,7 @@ def create_walk(request):
                 'form' : form,  
                 'request' : request, 
                 'page_name' : 'Create Walk',
+                'media_url' : MEDIA_URL,
                 }
             return render_to_response(template, ctxt)
 
@@ -364,6 +372,7 @@ def create_walk(request):
             'request' : request, 
             'walk' : None,
             'page_name' : 'Create Walk',
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -404,6 +413,7 @@ def edit_walk(request, walk=None):
                 'form' : form, 
                 'request' : request,
                 'page_name' : 'Edit Walk',
+                'media_url' : MEDIA_URL,
                 }
             return render_to_response(template, ctxt)
 
@@ -415,6 +425,7 @@ def edit_walk(request, walk=None):
             'request' : request,
             'walk' : walk,
             'page_name' : 'Edit Walk',
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -455,6 +466,7 @@ def mushrooms(request, walk=None):
         'request' : request, 
         'walk' : walk,
         'page_name' : 'Mushrooms',
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
 
@@ -508,6 +520,7 @@ def list_memberships(request, start=None, per_page=None,
         'due_by' : due_by,
         'prev_next' : pn,
         'page_name' : 'List Memberships',
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
 
@@ -552,6 +565,7 @@ def view_membership(request, membership=None):
             'edit_due' : edit_due,
             'active' : active,
             'page_name' : 'Membership',
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -596,6 +610,7 @@ def edit_membership(request, membership=None):
                     'request' : request, 
                     'membership' : membership,
                     'page_name' : 'Edit Membership', 
+                    'media_url' : MEDIA_URL,
                     }
                 return render_to_response(template, ctxt)
 
@@ -616,6 +631,7 @@ def edit_membership(request, membership=None):
                     'request' : request, 
                     'membership' : membership,
                     'page_name' : 'Create Membership',
+                    'media_url' : MEDIA_URL,
                     }
 
             return render_to_response(template, ctxt)
@@ -629,6 +645,7 @@ def edit_membership(request, membership=None):
             'request' : request, 
             'membership' : membership,
             'page_name' : 'Edit Membership',
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -642,6 +659,7 @@ def edit_membership(request, membership=None):
             'request' : request, 
             'membership' : membership,
             'page_name' : 'Create Membership',
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -687,10 +705,7 @@ def edit_user(request, membership, user=None):
             user_form = UserForm(request.POST, instance=user)
             profile_form = UserProfileForm(request.POST, instance=profile)
             if user_form.is_valid() and profile_form.is_valid():
-                user = user_form.save(commit=False)
-                user.email = user.username
-                user.save()
-                user_form.save_m2m()
+                user = user_form.save()
                 profile = profile_form.save()
 
                 return HttpResponseRedirect(
@@ -705,6 +720,7 @@ def edit_user(request, membership, user=None):
                     'edit_user' : user_form,
                     'edit_profile' : profile_form,
                     'page_name' : 'Edit User',
+                    'media_url' : MEDIA_URL,
                     }
                 return render_to_response(template, ctxt)
 
@@ -714,23 +730,20 @@ def edit_user(request, membership, user=None):
             user_form = UserForm(request.POST)
             profile_form = UserProfileForm(request.POST)
             if user_form.is_valid() and profile_form.is_valid():
-                user = user_form.save(commit=False)
-                user.email = user.username
-                user.save()
-                user_form.save_m2m()
+                user = user_form.save()
                 profile = profile_form.save(commit=False)
                 profile.user = User.objects.get(id=user.id)
                 profile.membership = membership
                 profile.save()
                 profile_form.save_m2m()
 
- #               try:
+#               try:
                 # Try to send an email w/ password reset link to
                 # the user
                 subject = "Boston Mycological Club Account "
                 subject += "Created"
                 email_template = 'registration/new_user_email.html'
-                ctxt = { 'user' : user }
+                ctxt = { 'user' : user, 'media_url' : MEDIA_URL, }
                 message = loader.get_template(email_template)
                 message = message.render(Context(ctxt))
 
@@ -755,6 +768,7 @@ def edit_user(request, membership, user=None):
                     'edit_user' : user_form,
                     'edit_profile' : profile_form,
                     'page_name' : 'Create User',
+                    'media_url' : MEDIA_URL,
                     }
                 return render_to_response(template, ctxt)
 
@@ -767,6 +781,7 @@ def edit_user(request, membership, user=None):
             'edit_user' : UserForm(instance=user),
             'edit_profile' : UserProfileForm(instance=profile),
             'page_name' : 'Edit User',
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -780,6 +795,7 @@ def edit_user(request, membership, user=None):
             'edit_user' : UserForm(),
             'edit_profile' : UserProfileForm(),
             'page_name' : 'Create User',
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -837,7 +853,8 @@ def membership_status(request, membership, action):
             'form' : MembershipStatus(),
             'membership' : membership,
             'page_name' : 'Change Membership Status',
-            'profiles' : profiles
+            'profiles' : profiles,
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
 
@@ -890,6 +907,7 @@ def edit_due(request, membership, due=None):
                     'membership' : membership,
                     'form' : form,
                     'page_name' : 'Edit Due',
+                    'media_url' : MEDIA_URL,
                     }
                 return render_to_response(template, ctxt)
 
@@ -913,6 +931,7 @@ def edit_due(request, membership, due=None):
                     'form' : form,
                     'membership' : membership,
                     'page_name' : 'Add Due',
+                    'media_url' : MEDIA_URL,
                     }
                 return render_to_response(template, ctxt)
 
@@ -925,6 +944,7 @@ def edit_due(request, membership, due=None):
                 'due' : due,
                 'membership' : membership,
                 'page_name' : 'Edit Due',
+                'media_url' : MEDIA_URL,
                 }
             return render_to_response(template, ctxt)
 
@@ -936,6 +956,7 @@ def edit_due(request, membership, due=None):
                 'form' : DueForm(),
                 'membership' : membership,
                 'page_name' : 'Add Due',
+                'media_url' : MEDIA_URL,
                 }
             return render_to_response(template, ctxt)
             
@@ -965,6 +986,7 @@ def view_dues(request, membership=None):
         'dues' : dues,
         'membership' : membership,
         'page_name' : 'View Dues',
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
 
@@ -1001,6 +1023,7 @@ def membership_search(request):
             'memberships' : memberships,
             'membership_search' : membership_search,
             'member_list' : member_list,
+            'media_url' : MEDIA_URL,
             }
         return render_to_response(template, ctxt)
             
@@ -1039,6 +1062,7 @@ def membership_fetch(request):
             'error' : error, 
             'membership_fetch' : MembershipFetch(),
             'page_name' : 'Search Error',
+            'media_url' : MEDIA_URL,
             }
     return render_to_response(template, ctxt)
 
@@ -1079,6 +1103,7 @@ def mushroom_admin(request):
         'may_year' : may_year,
         'today' : today,
         'page_name' : 'Mushroom Admin',
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
 
@@ -1111,6 +1136,7 @@ def mushroom_admin_list(request, entries, start=None, per_page=None):
         'prev_next' : pn,
         'page_name' : "%ss" % entry_name,
         'entry_name' : entry_name,
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
 
@@ -1144,6 +1170,7 @@ def mushroom_admin_view(request, entries, entry_id):
         'page_name' : entry_name,
         'request' : request,
         'permission' : permission,
+        'media_url' : MEDIA_URL,
         }
 
     return render_to_response(template, ctxt)
@@ -1206,6 +1233,7 @@ def mushroom_admin_edit(request, entries, entry_id=None,):
         'page_name' : page_name,
         'entry_id' : entry_id,
         'entry_name' : entry_name,
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
 
@@ -1230,6 +1258,7 @@ def list_emails(request):
         'request' : request, 
         'users' : users, 
         'page_name' : 'Email List', 
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
 
@@ -1242,6 +1271,7 @@ def sent_email(request, send_errors=None):
     ctxt = { 'request' : request,
              'send_errors' : send_errors,
              'page_name' : 'Sent Email',
+             'media_url' : MEDIA_URL,
              }
     return render_to_response(template, ctxt)
                  
@@ -1300,6 +1330,7 @@ def send_email(request, sent=None):
         'form' : form, 
         'users' : users,
         'page_name' : 'Email All Members',
+        'media_url' : MEDIA_URL,
         }
     return render_to_response(template, ctxt)
         
