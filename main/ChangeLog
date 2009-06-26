@@ -1,5 +1,8 @@
 2009-06-26  Pete Vander Giessen  <petevg@greta>
 
+	* views.py (profile): Worked on issue with walks showing up
+	multiple times.
+
 	* templates/profile.html: added "walk" to "walk areas you're
 	interested in"
 

@@ -204,13 +204,13 @@ def profile(request):
             error += "Please contact the BMC admin."
             return error_404(request, error)
     
-    walks_in_area = []
     areas = user_profile.areas.all()
+    walks_in_area = Walk.objects
     for area in areas:
-        walks_in_area.append(Walk.objects.filter(
-            areas=area,
+        walks_in_area = walks_in_area.filter(
+            areas__name__contains=area,
             date__gte=datetime.date.today()
-            ))
+            )
      
     template = 'profile.html'
     ctxt = { 
