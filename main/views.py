@@ -233,6 +233,7 @@ def profile(request):
 def edit_profile(request):
     """ Allows a user to edit limited information about their
     username, membership, and user profile. """
+
     try:
         user = User.objects.get(id=request.user.id)
         user_profile = UserProfile.objects.get(user=user.id)

@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from bmc.main.views import *
+from bmc.reports.views import *
 from django.contrib.auth.views import *
 
 admin.autodiscover()
@@ -42,6 +43,7 @@ urlpatterns = patterns('',
     (r'^mushroom_admin/(?P<entries>[a-z]+)/((?P<entry_id>[0-9]+)/)?(edit|create)/', mushroom_admin_edit),
     (r'^mushroom_admin/(?P<entries>[a-z]+)/(?P<entry_id>[0-9]+)/', mushroom_admin_view),
     (r'^mushroom_admin/(?P<entries>[a-z]+)/(start(?P<start>[0-9]+)/)?((?P<per_page>[0-9]+)pp/)?', mushroom_admin_list),
+    (r'^mushroom_admin/mailing_labels\.csv', mailing_labels),
     (r'^mushroom_admin', mushroom_admin),
 
     (r'^email/list/', list_emails),
