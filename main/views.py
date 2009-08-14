@@ -191,7 +191,7 @@ def profile(request):
     try:
         user = User.objects.get(id=request.user.id)
         user_profile = UserProfile.objects.get(user=user.id)
-        membership = Membership.objects.get(id=1)
+        membership = Membership.objects.get(id=user_profile.membership.id)
 
     except ObjectDoesNotExist:
         if request.user.is_superuser:
