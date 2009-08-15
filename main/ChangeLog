@@ -1,5 +1,8 @@
 2009-08-14  Pete Vander Giessen  <petevg@raven>
 
+	* templates/registration/password_reset_email.html: Fixed problem
+	with password reset link funkiness.
+
 	* backends.py (EmailOrUsernameModelBackend.get_user): Added
 	backend to authenticate using email address.
 
