@@ -4,24 +4,29 @@
     {{ block.super }}
     <style type="text/css">
 <!--
-#announcements { 
-        padding: 0 10px;
-        margin-left: 200px;
-        position: relative;
-        border-left: 1px solid black; 
+.announcement { clear: right; }
+.announcement .picture { 
+        position: relative;    
+        float: right; 
+   margin: 0 0 0 1em; 
+        max-width: 50%; 
 }
-#newsbox {
-        position: absolute;
-        top: 0;
-        left: 0px;
-        width: 180px;
-        padding: 0 10px;
-}
-#newsbox h3 { text-align: center; }
-.news p { font-style: italic; padding-top: 0; margin-top: 0.8em; }
+.announcement img { max-width: 100%; }
+*html .announcement .picture { width: 50%; }
+*html .announcement img { width: 100%; }
 -->
     </style>
     {% endblock style %}
+
+        {% block news_n_nuggets %}
+    <h3 class="news">News</h3>
+    {% for newsbit in newsbits %}
+    <div class="news">
+        <p>{{ newsbit.timestamp|date:"M d, Y" }} - {{ newsbit.news }}</p>
+    </div>
+    {% endfor %}
+	{% endblock news_n_nuggets %}
+
 
     {% block breadcrumbs %}
     {% endblock breadcrumbs %}
@@ -30,6 +35,12 @@
 <div id="announcements">
     {% for announcement in announcements %}
     <div class="announcement">
+	{% if announcement.picture %}
+        <div class="picture">
+            <img src="{{ media_url }}/{{ announcement.picture }}" alt="{{ announcement.picture_caption }}" />
+            <div class="caption">{{ announcement.picture_caption|linebreaks }}</div>
+        </div>
+        {% endif %}
         {% if announcement.full_story %}
 	<h3><a href="Stories/{{ announcement.timestamp|date:"Y/m/d/H:i:s" }}">{{ announcement.heading }}</a></h3>
 {{ announcement.summary|urlize|linebreaks }}
@@ -42,15 +53,6 @@
     {% endfor %}
 </div><!-- close #announcements -->
 
-
-<div id="newsbox">
-    <h3>~ News ~</h3>
-    {% for newsbit in newsbits %}
-    <div class="news">
-        <p>{{ newsbit.timestamp|date:"M d, Y" }} - {{ newsbit.news }}</p>
-    </div>
-    {% endfor %}
-</div><!-- close #newsbow -->
 
 	{% endblock text %}
 

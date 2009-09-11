@@ -20,40 +20,32 @@
 
 /* Ground Rules */
 body { 
-/*        background-color: #ffffc2; */
-        background-color: LemonChiffon;
+        background-color: #eceaea;
 	color: black;
-	margin: 0; padding: 5px;  
-	background-image: url('{{ media_url }}/img/BMC_Logo2.png'); 
-	background-repeat: no-repeat; 
-	background-position: 14px 10px; 
-	min-width: 768px;
+	padding: 0; 
+	margin: 0;
 }
 
 #container {
         position: relative;
         width: 100%;
-    	margin: 0 auto;
-	background-image: url('{{ media_url }}/img/BMC_Russula2.png');
-	background-repeat: no-repeat; 
-	background-position: right 6px;
-	font: 0.8em Arial, "Courier New", sans-serif;
+    	margin: 10px auto;
+	font-family: Arial, sans;
+	min-width: 1000px;
 }
 
-a { color: #cc0000; }
-a:active { color: #ff0000;  }
-a:visited { color: #cc6666; }
+a { }
+a:active { }
+a:visited { }
 
 h1, h2, h3, h4 { 
-        color: rgb(102,51,0); 
 	margin-top: 0; 
 	padding-top: 0; 
-	font-family: "Courier New", sans-serif;
 }
 
-h2 { font-size: 1.4em; }
-h3 { font-size: 1.3em; margin: 0 0 1em 0; padding: 0; }
-h4 { font-size: 1.1em; margin: 0; padding: 0; }
+h2 {  }
+h3 {  }
+h4 {  }
 
 .blurb { font-style: italic; }
 .fine-print { font-size: 0.8em; font-style: italic; }
@@ -65,33 +57,82 @@ h4 { font-size: 1.1em; margin: 0; padding: 0; }
 ul { margin: 0 0 1em 0; padding: 0; list-style: none; }
 li { margin: 0; padding: 0; }
 
+.picture .caption { 
+        position: absolute; 
+        bottom: 5px; 
+	right: 10px;
+        width: 100%; 
+        text-align: right; 
+	color: white;
+	font-weight: bold;
+	padding: 0;
+	margin: 0;
+}
+
+/* News/Nuggets (BMC Facts) Box */
+#news_n_nuggets {
+        margin: 0;
+	padding: 0 0 0 317px;
+	position: relative;
+	height: 7.8em;
+	border-bottom: 24px solid #ccc;
+}
+h3.news, h3.nugget { 
+         float: left; 
+	 padding: 0; 
+	 margin: 0; 
+	 font-weight: normal;
+	 font-size: 1.2em;
+}
+h3.news { width: 7%; }
+h3.nugget { width: 18%; }
+
+div.news, div.nugget { 
+         float: left; 
+	 padding: 0;
+	 font-size: 0.8em;
+}
+div.news {
+	 width: 28%; 
+	 margin: 0 1%; 
+}
+
+div.news p, div.nugget p { padding: 18px 0 10px; margin: 0; }
+
+
 /* Main Heading */
 h1 { 
-        text-align: center; margin-top: 3px;       
-	font-size: 1.7em;
+        width: 317px;
+	height: 315px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: -10px;
+	left: 0;
 }
-h1 a { text-decoration: none; color: rgb(102,51,0); } 
-h1 a:hover { text-decoration: underline; }
-h1 a:visited { color: rgb(102,51,0); }
+h1 a img { border: none; }
 
 #subh1 { 
-        text-align: center;
-	border-bottom: 1px solid rgb(102,51,0);
-	padding-bottom: 1em; 
-	width: 100%;
+        clear: left;
+	background-color: #eceaea;
+	padding: 0;
+	border-top: 11px solid #018607;
+	border-bottom: 11px solid #018607; 
 }
-#subh1 p { margin: 0 240px; padding: 0; }
-#subh1 .phone { 
-        margin-top: 0.9em; 
-	font-weight: bold; 
-	font-size: 1.1em;
+#subh1 p { 
+	margin: 0; 
+	padding: 0 5px 0 0;
+	text-align: right;
+	font-size: 1.5em;
 }
-/* Temp style while phone number is commented out */
 
-#subh1 .founded { margin-bottom: 1em; }
-#subh1 .email { margin-bottom: 0.4em; }
-/* End temp style */
-
+#subh1 .founded { 
+        border-top: 3px solid #f49d14;
+	padding: 5px 9px 2px 0;
+}
+#subh1 .who {
+        padding-bottom: 20px;
+}
 /* Breadcrumbs */
 #breadcrumbs {
         border-bottom: 1px solid black; height: 1.5em;
@@ -103,49 +144,51 @@ h1 a:visited { color: rgb(102,51,0); }
 }
 #breadcrumbs a { text-decoration: none; }
 
+/* Main Nav */
+#main_nav { 
+	border-bottom: 11px solid #018607;
+	height: 1.7em;
+	font-size: 1.2em;
+	padding-left: 28%;
+	background-color: #cccccc;
+}
+#main_nav li {
+        float: left;
+	text-align: center;
+	padding-top: 5px;
+	width: 20%;
+}
+#main_nav a { color: black; text-decoration: none; }
+#main_nav a:hover { text-decoration: underline; }
+
 /* Content */
 #content { 
-        margin: 1em 12em 2em 1em;
-	border-right: 1px solid black; 
-	padding: 0 5px 0;
+        padding: 2em 13em 2em 1em;
 	position: relative;
-	min-height: 40em;
-	min-width: 62em;
-	clear: left;
 }
+#content p { font-size: 0.8em; }
 
-#content img { float: left; }
+#content img { }
 
 
 /* Sidebar */
-#sidebar {
-        position: absolute;
-	top: 0;
-    	right: -12em; 
-    	width: 12em; 
+#directory {
+         width: 12em;
+	 position: absolute;
+	 padding-right: 2em;
+	 top: 2em;
+	 right: 0;
+	 text-align: right;
 }
-#nav { 
-        list-style: none; 
-	padding: 0; 
-	margin: 0 5px 0; 
-	font-size: 1em; 
-	font-weight: bold; 
-	text-align: center;
+#directory h4 { 
+        font-size: 1.5em; 
+	font-weight: normal; 
+	padding: 0 0 0.5em 0; 
+	margin: 0; 
 }
-#nav li { font: 1.2em "Courier new"; margin-bottom: 5px; }
-
-#account {
-        list-style: none;
-	padding: 0;
-        font-size: 0.8em;
-        border: 1px black solid;
-        margin: 10px;
-        padding: 5px;
-	text-align: center;
-}
-#account fieldset { 
-        border: none;
-}
+#directory li { font-size: 0.8em; padding-bottom: 0.8em; }
+#directory li a { text-decoration: none; color: black; }
+#directory li a:hover { text-decoration: underline; }
 
 #footer { text-align: center; }
 

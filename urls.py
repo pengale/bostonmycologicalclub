@@ -71,6 +71,15 @@ urlpatterns += patterns('django.contrib.auth.views',
     (r'^reset/done/$', 'password_reset_complete'),
 )
 
+# serves up static files through Django if we're in DEBUG mode (i.e.,
+# editing the site on a test server)
+from django.conf import settings
+if settings.DEBUG:
+    urlpatterns += patterns('',
+	url(r'^site_media_files/(?P<path>.*)$', 'django.views.static.serve',
+	        {'document_root': settings.MEDIA_ROOT}),
+)
+
 urlpatterns += patterns('',
     (r'^.*', error_404),  # nice 404 page
 )

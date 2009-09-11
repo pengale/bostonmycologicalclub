@@ -161,6 +161,8 @@ class Announcement(models.Model):
     heading = models.CharField(max_length=40)
     summary = models.TextField()
     full_story = models.TextField(blank=True)
+    picture = models.FileField(upload_to='uploaded_pics/', blank=True,);
+    picture_caption = models.TextField(blank=True)
 
     class Meta:
         ordering = ["-timestamp"]

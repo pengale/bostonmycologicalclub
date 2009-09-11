@@ -78,7 +78,7 @@ def index(request):
     template = 'index.html'
     ctxt = {
         'announcements' : Announcement.objects.all()[:5],
-        'newsbits' : Newsbit.objects.all()[:10],
+        'newsbits' : Newsbit.objects.all()[:3],
         'media_url' : MEDIA_URL,
         'request' : request,
         'page_name' : 'Home',
