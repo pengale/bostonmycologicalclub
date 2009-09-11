@@ -38,7 +38,7 @@
         </div><!-- close #news_n_nuggets -->
 
         {% block h1 %}
-        <h1><a href="/"><img src="{{ media_url }}/BMClogo.png" alt="Boston Mycological Club" /></a></h1>
+        <h1><a href="/"><span>Boston Mycological Club<span></a></h1>
 	<div id="subh1">
 	    <p class="founded">Founded in 1895</p>
 	    <p class="who">The oldest amateur mycological club in North America.</p>
@@ -65,6 +65,9 @@
             {% block directory %}
             <ul id="directory">
 	        <li><h4>Directory</h4></li>
+		{% if request.user.is_superuser %}
+		<li class="strong"><a href="/mushroom_admin/">Mushroom Admin</a></li>
+		{% endif %}
   		<li><a href="/about/">About the BMC</a></li>
   		<li><a href="/application/">Application</a></li>
 		<li><a href="/schedule/">Schedule</a></li>
@@ -72,9 +75,6 @@
 		<li><a href="/CurrentMembers.html">Member Websites</a></li>
 		<li><a href="/SiteIndex.html">Archive</a></li>
 		<li><a href="/">Home</a></li>
-		{% if request.user.is_superuser %}
-		<li><a href="/mushroom_admin/">Mushroom Admin</a></li>
-		{% endif %}
 	    </ul><!-- close directory -->
             {% endblock directory %}
 
@@ -83,7 +83,7 @@
 
         {% block footer %}
         <div id="footer">
-            <p id="copyright">Copyright 2009, BMC</p>
+            <p id="copyright">Copyright 2009, Boston Mycological Club</p>
         </div><!-- close #footer -->
         {% endblock footer %}
 

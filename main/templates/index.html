@@ -22,7 +22,7 @@
     <h3 class="news">News</h3>
     {% for newsbit in newsbits %}
     <div class="news">
-        <p>{{ newsbit.timestamp|date:"M d, Y" }} - {{ newsbit.news }}</p>
+        <p {% if forloop.first %}class="strong"{% endif %}>{{ newsbit.timestamp|date:"M d, Y" }} - <br />{{ newsbit.news }}</p>
     </div>
     {% endfor %}
 	{% endblock news_n_nuggets %}

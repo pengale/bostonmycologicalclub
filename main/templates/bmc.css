@@ -53,6 +53,7 @@ h4 {  }
 .toggle { clear: left; padding-top: 1em; font-size: 0.8em; }
 .tool { margin-bottom: 0.5em; }
 .note { font-style: italic; }
+.strong { font-weight: bold; }
 
 ul { margin: 0 0 1em 0; padding: 0; list-style: none; }
 li { margin: 0; padding: 0; }
@@ -101,7 +102,9 @@ div.news p, div.nugget p { padding: 18px 0 10px; margin: 0; }
 
 
 /* Main Heading */
-h1 { 
+h1 { margin: 0; padding: 0; }
+h1 a { 
+        display: block; 
         width: 317px;
 	height: 315px;
 	margin: 0;
@@ -109,8 +112,9 @@ h1 {
 	position: absolute;
 	top: -10px;
 	left: 0;
+	background-image: url('{{ media_url }}/BMClogo.png');
 }
-h1 a img { border: none; }
+h1 span { position: absolute; left: -9999px; }
 
 #subh1 { 
         clear: left;
@@ -163,19 +167,18 @@ h1 a img { border: none; }
 
 /* Content */
 #content { 
-        padding: 2em 13em 2em 1em;
+        padding: 2em 14em 5em 3em;
 	position: relative;
+	font-size: 0.8em; 
 }
-#content p { font-size: 0.8em; }
-
 #content img { }
 
 
 /* Sidebar */
 #directory {
-         width: 12em;
+         width: 11em;
 	 position: absolute;
-	 padding-right: 2em;
+	 padding-right: 3em;
 	 top: 2em;
 	 right: 0;
 	 text-align: right;
@@ -186,11 +189,11 @@ h1 a img { border: none; }
 	padding: 0 0 0.5em 0; 
 	margin: 0; 
 }
-#directory li { font-size: 0.8em; padding-bottom: 0.8em; }
+#directory li { padding-bottom: 0.8em; }
 #directory li a { text-decoration: none; color: black; }
 #directory li a:hover { text-decoration: underline; }
 
-#footer { text-align: center; }
+#footer { text-align: center; font-size: 0.8em; clear: left; clear: right; }
 
 /* General Form Style */
 form { 
