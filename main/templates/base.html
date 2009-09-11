@@ -1,3 +1,5 @@
+{% load main_tags %}
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -32,7 +34,7 @@
         {% block news_n_nuggets %}
         <h3 class="nugget">BMC Facts</h3>
         <div class="nugget">
-            <p>This is a test of the nuggets thingy</p>
+            <p>{% get_nugget %}</p>
 	</div>
 	{% endblock news_n_nuggets %}
         </div><!-- close #news_n_nuggets -->

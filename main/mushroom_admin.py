@@ -42,4 +42,9 @@ class pages(entries):
     FORM = PageForm
     NAME = 'page'
 
+class nuggets(entries):
+    MODEL = Nugget
+    FORM = NuggetForm
+    NAME = 'nugget'
+
 

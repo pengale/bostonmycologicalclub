@@ -210,6 +210,23 @@ class IDSession(models.Model):
     def __unicode__(self):
         return '%s' % (self.when)
 
+class Nugget(models.Model):
+    """ A brief fact about the BMC
+    """
+    active = models.BooleanField(
+        default=True,
+        help_text="uncheck this box if you do not want the fact to show up on the site"
+        )
+    text = models.TextField()
+
+    def __unicode__(self):
+        if self.active:
+            status = "active"
+        else:
+            status = "disabled"
+        return '%s (%s)' % (self.text, status)
+
+
 class Page(models.Model):
     """ A generic page.  
     """

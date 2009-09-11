@@ -101,6 +101,10 @@ class PageForm(ModelForm):
     class Meta:
         model = Page
 
+class NuggetForm(ModelForm):
+    class Meta:
+        model = Nugget
+
 class AnnouncementForm(ModelForm):
     class Meta:
         model = Announcement
