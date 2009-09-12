@@ -143,6 +143,42 @@ def schedule(request):
         }
     return render_to_response(template, ctxt)
 
+def news_archive(request, start=None, per_page=None):
+    """ Return an archive of the news pages. """
+
+    template = 'news_archive.html'
+
+    pn = prev_next(start, per_page)
+    newsbits = Newsbit.objects.all()[pn.start:pn.next]
+    if pn.per_page > len(newsbits): pn.next = 0
+
+    ctxt = {
+        'newsbits' : newsbits,
+        'media_url':  MEDIA_URL,
+        'prev_next' : pn,
+        }
+
+    return render_to_response(template, ctxt)
+
+
+def announcements_archive(request, start=None, per_page=None):
+    """ Return an archive of the announcements/articles. """
+
+    template = 'article_archive.html'
+
+    pn = prev_next(start, per_page)
+    announcements = Announcement.objects.all()[pn.start:pn.next]
+    if pn.per_page > len(announcements): pn.next = 0
+
+    ctxt = {
+        'announcements' : announcements,
+        'media_url' : MEDIA_URL,
+        'prev_next' : pn,
+        }
+
+    return render_to_response(template, ctxt)
+    
+
 def page(request, page):
     """ Given the page name, return the page. """
     template = page + '.html'

@@ -25,28 +25,17 @@ body {
 	padding: 0; 
 	margin: 0;
 }
-
 #container {
         position: relative;
-        width: 100%;
+        width: 100%; 
     	margin: 10px auto;
 	font-family: Arial, sans;
 	min-width: 1000px;
 }
-
-a { }
-a:active { }
-a:visited { }
-
 h1, h2, h3, h4 { 
 	margin-top: 0; 
 	padding-top: 0; 
 }
-
-h2 {  }
-h3 {  }
-h4 {  }
-
 .blurb { font-style: italic; }
 .fine-print { font-size: 0.8em; font-style: italic; }
 .prev_next li { float: left; margin-right: 1em; }
@@ -75,7 +64,7 @@ li { margin: 0; padding: 0; }
         margin: 0;
 	padding: 0 0 0 317px;
 	position: relative;
-	height: 7.8em;
+	height: 8.5em;
 	border-bottom: 24px solid #ccc;
 }
 h3.news, h3.nugget { 
@@ -100,7 +89,6 @@ div.news {
 
 div.news p, div.nugget p { padding: 18px 0 10px; margin: 0; }
 
-
 /* Main Heading */
 h1 { margin: 0; padding: 0; }
 h1 a { 
@@ -110,7 +98,7 @@ h1 a {
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	top: -10px;
+	top: 0;
 	left: 0;
 	background-image: url('{{ media_url }}/BMClogo.png');
 }
@@ -137,6 +125,7 @@ h1 span { position: absolute; left: -9999px; }
 #subh1 .who {
         padding-bottom: 20px;
 }
+
 /* Breadcrumbs */
 #breadcrumbs {
         border-bottom: 1px solid black; height: 1.5em;
@@ -167,12 +156,10 @@ h1 span { position: absolute; left: -9999px; }
 
 /* Content */
 #content { 
-        padding: 2em 14em 5em 3em;
-	position: relative;
+        padding: 2em 14em 5em 3em; 
+	position: relative;  
 	font-size: 0.8em; 
 }
-#content img { }
-
 
 /* Sidebar */
 #directory {

@@ -9,6 +9,10 @@ admin.autodiscover()
 urlpatterns = patterns('',
     (r'^$', index),
 
+    # Misc Pages
+    (r'^news/(start(?P<start>[0-9]+)/)?((?P<per_page>[0-9]+)pp/)?', news_archive),
+    (r'^articles/(start(?P<start>[0-9]+)/)?((?P<per_page>[0-9]+)pp/)?', announcements_archive),
+
     # Walks
     (r'^walks/list/(start(?P<start>[0-9]+)/)?((?P<per_page>[0-9]+)pp/)?', list_walks),
     (r'^walks/create/', create_walk),

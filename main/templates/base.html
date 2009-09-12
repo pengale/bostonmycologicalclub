@@ -1,7 +1,7 @@
-{% load main_tags %}
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+{% load main_tags %}
 
 <html>
 
@@ -31,16 +31,16 @@
     <div id="container">
 
         <div id="news_n_nuggets">
-        {% block news_n_nuggets %}
-        <h3 class="nugget">BMC Facts</h3>
-        <div class="nugget">
-            <p>{% get_nugget %}</p>
-	</div>
-	{% endblock news_n_nuggets %}
+            {% block news_n_nuggets %}
+            <h3 class="nugget">BMC Facts</h3>
+            <div class="nugget">
+                <p>{% get_nugget %}</p>
+	    </div>
+	    {% endblock news_n_nuggets %}
         </div><!-- close #news_n_nuggets -->
 
         {% block h1 %}
-        <h1><a href="/"><span>Boston Mycological Club<span></a></h1>
+        <h1><a href="/"><span>Boston Mycological Club</span></a></h1>
 	<div id="subh1">
 	    <p class="founded">Founded in 1895</p>
 	    <p class="who">The oldest amateur mycological club in North America.</p>
