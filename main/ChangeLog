@@ -1,3 +1,10 @@
+2009-10-11  Pete Vander Giessen  <petevg@raven>
+
+	* views.py: Fixed request not being passed to articles and
+	announcemtns archive.
+
+	* templates/edit_walk.html: Fixed layout problems w/ new layout.
+
 2009-08-14  Pete Vander Giessen  <petevg@raven>
 
 	* templates/registration/password_reset_email.html: Fixed problem

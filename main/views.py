@@ -156,6 +156,7 @@ def news_archive(request, start=None, per_page=None):
         'newsbits' : newsbits,
         'media_url':  MEDIA_URL,
         'prev_next' : pn,
+        'request': request,
         }
 
     return render_to_response(template, ctxt)
@@ -174,6 +175,7 @@ def announcements_archive(request, start=None, per_page=None):
         'announcements' : announcements,
         'media_url' : MEDIA_URL,
         'prev_next' : pn,
+        'request' : request,
         }
 
     return render_to_response(template, ctxt)
