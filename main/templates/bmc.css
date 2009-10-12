@@ -180,7 +180,11 @@ h1 span { position: absolute; left: -9999px; }
 #directory li a { text-decoration: none; color: black; }
 #directory li a:hover { text-decoration: underline; }
 
-#footer { text-align: center; font-size: 0.8em; clear: left; clear: right; }
+#footer { 
+    text-align: center; 
+    font-size: 0.8em; 
+    clear: both;
+}
 
 /* General Form Style */
 form { 

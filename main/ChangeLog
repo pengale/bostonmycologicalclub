@@ -1,3 +1,14 @@
+2009-10-11  Pete Vander Giessen  <petevg@fox>
+
+	* templates/schedule.html: Tweaked schedule template so that it
+	shows walk.
+
+	* admin.py: Removed public walks from admin.
+
+	* views.py (schedule): uniqued walks in area on schedule.
+
+	* templates/base.html: Added "your account" link.
+
 2009-10-11  Pete Vander Giessen  <petevg@raven>
 
 	* views.py: Fixed request not being passed to articles and

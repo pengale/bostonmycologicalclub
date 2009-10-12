@@ -122,14 +122,15 @@ def schedule(request):
                 user=request.user.id
                 )
             areas = user_profile.areas.all()
+
             walks_in_area = []
             for area in areas:
-                walks_in_area.append(
-                    Walk.objects.filter(
-                            areas=area,
-                            date__gte=datetime.date.today(),
-                            )
+                walks_in_area += Walk.objects.filter(
+                    areas=area,
+                    date__gte=datetime.date.today()
                     )
+            walks_in_area=unique(walks_in_area)
+
         except ObjectDoesNotExist:
             pass
 

@@ -2,7 +2,7 @@
 interface.  """
 
 from django.contrib import admin
-from bmc.main.models import Membership, UserProfile, WalkArea, Walk, Announcement, Newsbit, PublicWalk, IDSession, Page
+from bmc.main.models import Membership, UserProfile, WalkArea, Walk, Announcement, Newsbit, IDSession, Page
 
 """ Long way to do things, for reference: """
 #class UserProfileAdmin(admin.ModelAdmin):
@@ -15,7 +15,6 @@ admin.site.register(WalkArea)
 admin.site.register(Walk)
 admin.site.register(Announcement)
 admin.site.register(Newsbit)
-admin.site.register(PublicWalk)
 admin.site.register(IDSession)
 admin.site.register(Page)
 

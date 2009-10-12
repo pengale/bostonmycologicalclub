@@ -37,10 +37,8 @@
 <h2>Upcoming BMC Walks in Your Area</h2>
 
 <ul>
-    {% for area in walks_in_area %}
-        {% for walk in area %}
-    {% include "includes/walk.html" %}
-        {% endfor %}
+    {% for walk in walks_in_area %}
+        {% include "includes/walk.html" %}
     {% endfor %}
     <li class="tool" id="create_walk"><a href="/walks/create/">Create a Walk</a></li>
     <li class="tool"><a href="/walks/list/">List All Walks</a></li>
