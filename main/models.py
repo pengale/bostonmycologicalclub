@@ -29,7 +29,8 @@ class Membership(models.Model):
     zip = models.CharField(max_length=10)
     country = models.CharField(
         max_length=50, 
-        default="United States of America"
+        default="United States of America",
+        blank=True,
         )
 
     # Remarks

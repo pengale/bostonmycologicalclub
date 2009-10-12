@@ -1,3 +1,9 @@
+2009-10-12  Pete Vander Giessen  <petevg@raven>
+
+	* forms.py: hid join date in user.
+
+	* models.py: made country not required.
+
 2009-10-11  Pete Vander Giessen  <petevg@fox>
 
 	* templates/schedule.html: Tweaked schedule template so that it

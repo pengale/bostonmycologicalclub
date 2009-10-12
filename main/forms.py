@@ -62,6 +62,7 @@ class UserForm(ModelForm):
             'last_login',
             'groups',
             'is_staff',
+            'date_joined',
             )
 
 class NewUserForm(UserForm):
