@@ -84,7 +84,7 @@ if settings.DEBUG:
 	        {'document_root': settings.MEDIA_ROOT}),
 )
 
-urlpatterns += patterns('',
-    (r'^.*', error_404),  # nice 404 page
-)
+#urlpatterns += patterns('',
+#    (r'^.*', error_404),  # nice 404 page
+#)
 

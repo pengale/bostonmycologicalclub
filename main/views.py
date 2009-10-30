@@ -581,41 +581,47 @@ def view_membership(request, membership=None):
 
     try:
         membership = Membership.objects.get(id=membership)
-        dues = Due.objects.filter(membership=membership)
-        user_profiles = UserProfile.objects.filter(membership=membership)
-
-        edit_user = UserForm()
-        edit_profile = UserProfileForm()
-        edit_due = DueForm()
-
-        # is the membership active?  
-        active = False  # we assume not ...
-        for profile in user_profiles:
-            # ... but only one user needs to be active in order for
-            # the whole membership to be 'active' (this allows us to
-            # turn off one username without wiping the whole profile)
-            if profile.user.is_active:
-                active = True            
-
-        
-        template = 'view_membership.html'
-        ctxt = {
-            'request' : request,
-            'membership' : membership,
-            'dues' : dues,
-            'user_profiles' : user_profiles,
-            'edit_user' : edit_user,
-            'edit_profile' : edit_profile,
-            'edit_due' : edit_due,
-            'active' : active,
-            'page_name' : 'Membership',
-            'media_url' : MEDIA_URL,
-            }
-        return render_to_response(template, ctxt)
 
     except ObjectDoesNotExist:
         error = "That Membership does not appear to exist."
         return error_404(request, error)
+
+    dues = Due.objects.filter(membership=membership)
+    user_profiles = UserProfile.objects.filter(membership=membership)
+
+    edit_user = UserForm()
+    edit_profile = UserProfileForm()
+    edit_due = DueForm()
+
+    # is the membership active?  
+    active = False  # we assume not ...
+    for profile in user_profiles:
+        # ... but only one user needs to be active in order for
+        # the whole membership to be 'active' (this allows us to
+        # turn off one username without wiping the whole profile)
+        try:
+            if profile.user.is_active:
+                active = True            
+        except User.DoesNotExist:
+            pass
+
+        
+    template = 'view_membership.html'
+    ctxt = {
+        'request' : request,
+        'membership' : membership,
+        'dues' : dues,
+        'user_profiles' : user_profiles,
+        'edit_user' : edit_user,
+        'edit_profile' : edit_profile,
+        'edit_due' : edit_due,
+        'active' : active,
+        'page_name' : 'Membership',
+        'media_url' : MEDIA_URL,
+        }
+    return render_to_response(template, ctxt)
+
+
 
 @user_passes_test(
     lambda u: u.has_perm('u.is_superuser'),
