@@ -42,10 +42,25 @@ class Membership(models.Model):
         choices=MEMBERSHIP_TYPES
         )
 
+    def get_profiles(self):
+        model = models.get_model('main', 'UserProfile')
+        profiles = model.objects.filter(user=self)
+        return profiles
+
+    def get_name_list(self):
+        profiles = self.get_profiles()
+        name_list = ','.join(
+            (profile.user.first_name + ' ' + profile.user.last_name
+             ) for profile in profiles)
+
+        return name_list
+
+    
     def __unicode__(self):
-        return  '%s, %s, %s' % (
+        return  '%s, %s, %s - %s' % (
             self.address, 
-            self.city, self.state
+            self.city, self.state,
+            self.get_name_list()
             )
 
     class Meta:
@@ -68,6 +83,9 @@ class Due(models.Model):
 
     class Meta:
         ordering = ["-paid_thru"]
+
+    def __unicode__(self):
+        return  '%s' % (self.payment_amount)
 
 
 class UserProfile(models.Model):
@@ -107,7 +125,7 @@ class UserProfile(models.Model):
     notes = models.TextField(blank=True)
 
     def __unicode__(self):
-        return  '%s' % (self.user)
+        return  '%s %s' % (self.user.first_name, self.user.last_name)
 
 
 class Walk(models.Model):
@@ -236,3 +254,5 @@ class Page(models.Model):
 
     def __unicode__(self):
         return '%s' % (self.name)
+
+
