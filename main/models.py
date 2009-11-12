@@ -50,20 +50,30 @@ class Membership(models.Model):
     def get_name_list(self):
         profiles = self.get_profiles()
         try:
-            name_list = ','.join(
-                (profile.user.first_name + ' ' + profile.user.last_name
+            name_list = ' & '.join(
+                (profile.user.last_name + ', ' + profile.user.first_name
                  ) for profile in profiles)
         except:    #@@@ Evil generic exception
             name_list = 'blank'            
 
         return name_list
 
-    
+    def is_active(self):
+        profiles = self.get_profiles()
+        for profile in profiles:
+            try:
+                if profile.user.is_active:
+                    return True
+            except:
+                pass
+            
+        return False
+
     def __unicode__(self):
-        return  '%s, %s, %s - %s' % (
+        return  '%s: %s, %s, %s' % (
+            self.get_name_list(),
             self.address, 
             self.city, self.state,
-            self.get_name_list()
             )
 
     class Meta:

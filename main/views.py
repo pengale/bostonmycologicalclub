@@ -1297,11 +1297,8 @@ def mushroom_admin_edit(request, entries, entry_id=None,):
     login_url = '/halt/')
 def list_emails(request):
     """ List all user emails. """
-    try:
-        users = User.objects.all()
-    except ObjectDoesNotExist:
-        error = "Couldn't fetch a list of users!"
-        return error_404(request, error)
+    users = User.objects.filter(is_active=True).exclude(
+        email='NoEmail@BostonMycologicalClub.Org')
     
     template='list_emails.html'
     ctxt = { 

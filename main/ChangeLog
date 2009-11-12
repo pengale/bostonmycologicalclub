@@ -1,5 +1,8 @@
 2009-11-12  Pete Vander Giessen  <petevg@raven>
 
+	* views.py (list_emails): Now only lists email addresses
+	of active members, excluding those with no email address.
+
 	* models.py (Membership.get_name_list): Now catches cases where we
 	have orphaned profiles (however that happened)
 
