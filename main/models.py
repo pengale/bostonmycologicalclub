@@ -44,14 +44,17 @@ class Membership(models.Model):
 
     def get_profiles(self):
         model = models.get_model('main', 'UserProfile')
-        profiles = model.objects.filter(user=self)
+        profiles = model.objects.filter(membership=self)
         return profiles
 
     def get_name_list(self):
         profiles = self.get_profiles()
-        name_list = ','.join(
-            (profile.user.first_name + ' ' + profile.user.last_name
-             ) for profile in profiles)
+        try:
+            name_list = ','.join(
+                (profile.user.first_name + ' ' + profile.user.last_name
+                 ) for profile in profiles)
+        except:    #@@@ Evil generic exception
+            name_list = 'blank'            
 
         return name_list
 

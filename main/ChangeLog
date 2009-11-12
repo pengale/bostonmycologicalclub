@@ -1,3 +1,8 @@
+2009-11-12  Pete Vander Giessen  <petevg@raven>
+
+	* models.py (Membership.get_name_list): Now catches cases where we
+	have orphaned profiles (however that happened)
+
 2009-10-30  Pete Vander Giessen  <petevg@raven>
 
 	* views.py (view_membership): Fixed issue with membership not
