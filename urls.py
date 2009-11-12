@@ -32,6 +32,9 @@ urlpatterns = patterns('',
     (r'^memberships/search/', membership_search),
     (r'^memberships/fetch/', membership_fetch),
 
+    #New Reports
+    (r'^memberships/new_report/', memberships),
+
     # 'Static' Pages
     (r'^schedule', schedule),
     (r'^ClubActivities\.html$', schedule),  # legacy compatibility

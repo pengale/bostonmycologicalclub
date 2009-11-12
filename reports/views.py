@@ -47,3 +47,16 @@ def mailing_labels(request):
         'media_url' : MEDIA_URL,        
         }
     return render_to_response(template, ctxt, mimetype='text/csv')
+
+def memberships(request):
+    """
+    """
+
+    memberships = Membership.objects.all()
+
+    template = 'report_memberships.html'
+    ctxt = {
+        'memberships': memberships,
+        'request': request,
+        }
+    return render_to_response(template, ctxt)

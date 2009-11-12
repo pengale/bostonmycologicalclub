@@ -1,5 +1,7 @@
 2009-11-12  Pete Vander Giessen  <petevg@raven>
 
+	* templates/report_memberships.html: Added.  
+
 	* views.py (list_emails): Now only lists email addresses
 	of active members, excluding those with no email address.
 
