@@ -1,4 +1,0 @@
-Name | Address | Address2 | City | State | Zip
-{% for mem in mem_blob %}{% for profile in mem.profiles %}{% if not forloop.first %} and {% endif %}{{ profile.user.first_name }} {{ profile.user.last_name }}{% endfor %} | {{ mem.membership.address }} | {{ mem.membership.address2 }} | {{ mem.membership.city }} | {{ mem.membership.state }} | {{ mem.membership.zip }}
-{% endfor %}
-

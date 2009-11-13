@@ -1,9 +1,0 @@
-<ul class="pages">
-{% for num in page_range %}
-{% ifequal num page %}
-<li>{{ num }}</li>
-{% else %}
-<li><a href="{% url reports_membership filter_by=filter_by page=num%}" />{{ num }}</a></li>
-{% endifequal %}
-{% endfor %}
-</ul>
