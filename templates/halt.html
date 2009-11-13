@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+            {% block text %}
+<h2>Permission Required</h2>
+<p>{{ error }}</p>
+<p>If you think that you do have permission, please <a href="/accounts/logout/">login</a>.</p>
+            {% endblock text %}

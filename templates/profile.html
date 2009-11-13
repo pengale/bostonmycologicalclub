@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+    {% block style %}
+    {{ block.super }}
+    <style type="text/css">
+#profile { min-width: 60em; }
+
+#membership_info li { margin-bottom: 0.5em; }
+#areas_of_interest { margin-left: 2em; margin-bottom: 0; }
+#login_info p { margin: 0 0 0.5em 0; }
+#membership_info, #login_info { float: left; width: 28em; }
+#login_info { clear: left; }
+#walks { width: 28em; margin-left: 30em; }
+    </style>
+<!--[if lte IE 6]>
+<style type="text/css">
+#profile { width: 60em; }
+</style>
+<![endif]-->
+    {% endblock style %}
+
+            {% block text %}
+<div id="profile">
+    <h2>Your Account</h2>
+    
+    <ul id="membership_info">
+        <li><h3>Your Membership Info</h3></li>
+        <li><strong>Name</strong>:  {{ user.first_name }} {{ user.last_name }}</li>
+        <li><strong>Email Address</strong>:  {{ user.email }}</li>
+        <li><strong>Walk areas you're interested in</strong>:</a></li>
+            <ul id="areas_of_interest">
+                {% for area in user_profile.areas.all %}
+                <li>{{ area }}</li>
+                {% endfor %}
+            </ul>
+        {% if want_email %}
+        <li><strong>Email updates</strong> from the BMC are turned on</li>
+        {% else %}
+        <li><strong>Email updates</strong> from the BMC are turned off</li>
+        {% endif %}
+        <li>
+            <address><strong>Address</strong>: <br />
+                     {% if membership.organization %}{{ membership.organization }}<br />{% endif %}
+	             {{ membership.address }}<br />
+                     {% if membership.address2 %}
+                     {{ membership.address2 }}<br />
+                     {% endif %}
+                     {{ membership.city }}, {{ membership.state }} {{ membership.zip }}<br />
+	             {{ membership.country }}<br />
+            </address>
+        <li><a href="/accounts/profile/edit/">Edit this information</a></li>
+    </ul>
+
+    <div id="login_info">
+        <h3>Login Info</h3>
+        <p>Username:  {{ request.user }}</p>
+        <p>Password:  (hidden) <a href="/accounts/password_change/">Change Password</a>
+    </div>
+
+    <div id="walks">
+    <h3>Upcoming Walks in Your Area</h3>
+    <ul>
+        {% for walk in walks_in_area %}
+{% include "includes/walk.html" %}
+        {% endfor %}
+        <li class="tool" id="create_walk"><a href="/walks/create/">Create a Walk</a></li>
+	<li class="tool"><a href="/walks/list/">List All Walks</a></li>
+    </ul>
+    </div>
+</div>
+            {% endblock text %}
+
+
+

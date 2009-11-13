@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+            {% block text %}
+<h2>Walk Created</h2>
+
+<p>*Whew*!  You're done editing "{{ walk.title }}"</p>
+<p>Not really done?  <a href="/walks/edit/{{ walk.id }}">Edit your walk</a>, or <a href="/walks/create">create another</a> walk.</p>
+<p><a href="/walks/list">View the Walk List</p>
+            {% endblock text %}
+
+
+

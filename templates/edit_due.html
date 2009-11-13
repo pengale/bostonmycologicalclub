@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+        {% block trail %}
+        <li>&gt; <a href="/mushroom_admin/">Mushroom Admin</a></li>
+        <li>&gt; <a href="/memberships/list/">List Memberships</a></li>
+        <li>&gt; <a href="/memberships/{{ membership.id }}/view/">Membership {{ membership.id }}</a></li>
+        {% endblock trail %}
+
+
+    {% block style %}
+    {{ block.super }}
+    {% endblock style %}
+
+            {% block text %}
+<h2>Membership #{{ membership.id }}</h2>
+
+    <form action="." method="POST" id="edit_due">
+        <fieldset>
+            {% for field in form %}
+	    <div id="{{ field.label }}_wrap">
+                {{ field.errors }}
+		{{ field.label_tag }} {{ field }}
+	    </div>
+            {% endfor %}
+            <input type="submit" value="Submit" id="submit_dues" />
+        </fieldset>
+    </form>
+            {% endblock text %}
+
+
+

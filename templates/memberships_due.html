@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+            {% block text %}
+<h2>All Memberships</h2>
+<ul>
+    {{ due_memberships }}
+    {% for member in due_memberhsips %}
+    <li><a href="/memberships/{{ member.membership.id }}/view/">{{ member.membership.address }} ({% for user in member.users %}{% if not forloop.first %}, {% endif %}{{ user.first_name }} {{ user.last_name }}{% endfor %})</a></li>
+    {% endfor %}
+</ul>
+            {% endblock text %}
+
+
+

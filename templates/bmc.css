@@ -1,0 +1,237 @@
+/*
+***************************************************************************
+**  {% block sheet_name %}bmc.css{% endblock sheet_name %}
+**  
+**  Written by Pete Vander Giessen (http://www.petevg.com/)
+**    for the Boston Mycological Club
+**    Summer, 2008
+**
+***************************************************************************
+** 
+**  Style Guide
+**  
+**  
+***************************************************************************
+*/
+
+
+@media screen {
+{% block screen %}
+
+/* Ground Rules */
+body { 
+        background-color: #eceaea;
+	color: black;
+	padding: 0; 
+	margin: 0;
+}
+#container {
+        position: relative;
+        width: 100%; 
+    	margin: 10px auto;
+	font-family: Arial, sans;
+	min-width: 1000px;
+}
+h1, h2, h3, h4 { 
+	margin-top: 0; 
+	padding-top: 0; 
+}
+.blurb { font-style: italic; }
+.fine-print { font-size: 0.8em; font-style: italic; }
+.prev_next li { float: left; margin-right: 1em; }
+.toggle { clear: left; padding-top: 1em; font-size: 0.8em; }
+.tool { margin-bottom: 0.5em; }
+.note { font-style: italic; }
+.strong { font-weight: bold; }
+
+ul { margin: 0 0 1em 0; padding: 0; list-style: none; }
+li { margin: 0; padding: 0; }
+
+.picture .caption { 
+        position: absolute; 
+        bottom: 5px; 
+	right: 10px;
+        width: 100%; 
+        text-align: right; 
+	color: white;
+	font-weight: bold;
+	padding: 0;
+	margin: 0;
+}
+
+/* News/Nuggets (BMC Facts) Box */
+#news_n_nuggets {
+        margin: 0;
+	padding: 0 0 0 317px;
+	position: relative;
+	height: 8.5em;
+	border-bottom: 24px solid #ccc;
+}
+h3.news, h3.nugget { 
+         float: left; 
+	 padding: 0; 
+	 margin: 0; 
+	 font-weight: normal;
+	 font-size: 1.2em;
+}
+h3.news { width: 7%; }
+h3.nugget { width: 18%; }
+
+div.news, div.nugget { 
+         float: left; 
+	 padding: 0;
+	 font-size: 0.8em;
+}
+div.news {
+	 width: 28%; 
+	 margin: 0 1%; 
+}
+
+div.news p, div.nugget p { padding: 18px 0 10px; margin: 0; }
+
+/* Main Heading */
+h1 { margin: 0; padding: 0; }
+h1 a { 
+        display: block; 
+        width: 317px;
+	height: 315px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-image: url('{{ media_url }}/BMClogo.png');
+}
+h1 span { position: absolute; left: -9999px; }
+
+#subh1 { 
+        clear: left;
+	background-color: #eceaea;
+	padding: 0;
+	border-top: 11px solid #018607;
+	border-bottom: 11px solid #018607; 
+}
+#subh1 p { 
+	margin: 0; 
+	padding: 0 5px 0 0;
+	text-align: right;
+	font-size: 1.5em;
+}
+
+#subh1 .founded { 
+        border-top: 3px solid #f49d14;
+	padding: 5px 9px 2px 0;
+}
+#subh1 .who {
+        padding-bottom: 20px;
+}
+
+/* Breadcrumbs */
+#breadcrumbs {
+        border-bottom: 1px solid black; height: 1.5em;
+}
+#breadcrumbs li { 
+        float: left; 
+	margin: 0 0.5em 0 0; 
+	line-height: 1.5em; 
+}
+#breadcrumbs a { text-decoration: none; }
+
+/* Main Nav */
+#main_nav { 
+	border-bottom: 11px solid #018607;
+	height: 1.7em;
+	font-size: 1.2em;
+	padding-left: 28%;
+	background-color: #cccccc;
+}
+#main_nav li {
+        float: left;
+	text-align: center;
+	padding-top: 5px;
+	width: 20%;
+}
+#main_nav a { color: black; text-decoration: none; }
+#main_nav a:hover { text-decoration: underline; }
+
+/* Content */
+#content { 
+        padding: 2em 14em 5em 3em; 
+	position: relative;  
+	font-size: 0.8em; 
+}
+
+/* Sidebar */
+#directory {
+         width: 11em;
+	 position: absolute;
+	 padding-right: 3em;
+	 top: 2em;
+	 right: 0;
+	 text-align: right;
+}
+#directory h4 { 
+        font-size: 1.5em; 
+	font-weight: normal; 
+	padding: 0 0 0.5em 0; 
+	margin: 0; 
+}
+#directory li { padding-bottom: 0.8em; }
+#directory li a { text-decoration: none; color: black; }
+#directory li a:hover { text-decoration: underline; }
+
+#footer { 
+    text-align: center; 
+    font-size: 0.8em; 
+    clear: both;
+}
+
+/* General Form Style */
+form { 
+        position: relative; 
+	padding: 1em; 
+	border: 1px dotted black; 
+        position: relative; 
+}
+
+fieldset {
+        padding: 0; border: 0; margin: 0; 
+        position: relative;
+}
+
+.errorlist, .non_field_error { color: red;  }
+.errorlist { 
+        position: absolute; 
+	top: 1.5em; 
+        left: 0;
+	list-style: none;
+}
+form ul { position: relative; min-height: 2.9em; }
+form div, form p { 
+        position: relative; 
+	margin: 0 0 0 0;   
+	min-height: 2.9em; 
+}
+form p { margin-top: 1em; }
+label { position: absolute; top: 0.3em; width: 10em; }
+input, textarea, select { margin-left: 10em; }
+
+.help_text { 
+        position: absolute; 
+        top: 0; 
+        width: 12em;
+        margin-left: 0.5em; 
+        font-size: 0.85em;
+        line-height: 1em; 
+        color: gray; 
+} 
+#id_date { width: 5em; }
+#id_time { width: 5em; }
+
+/* Walk List */
+
+.walk { margin: 1em; }
+.walk p { margin: 0em; }
+
+{% endblock screen %}
+} /* end rules for screen */

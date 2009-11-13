@@ -1,0 +1,12 @@
+<xml>
+<ADDRESSES count="{{ num_mems }}">
+    {% for membership in memberships %}
+    <ADDRESS>
+        <STREET>{{ membership.address }}</STREET>
+	<CITY>{{ membership.city }}</CITY>
+	<STATE>{{ membership.state }}</STATE>
+	<ZIP>{{ membership.zip }}</ZIP>
+    </ADDRESS>
+    {% endfor %}
+</ADDRESSES>
+</xml>

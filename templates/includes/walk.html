@@ -1,0 +1,5 @@
+<li class="walk">
+    <p class="date"><strong>{{ walk.date|date }}, {{ walk.time|time }}</strong></p>
+    <p class="area"><strong>Location</strong>: {{ walk.location }}</p>
+    <p class="details"><a href="/walks/view/{{ walk.id }}/">Details</a> {% block mushrooms %}{% endblock %}</a>
+</li>

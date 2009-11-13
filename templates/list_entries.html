@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+        {% block trail %}
+        <li>&gt; <a href="/mushroom_admin/">Mushroom Admin</a></li>
+        {% endblock trail %}
+
+    {% block style %}
+    {{ block.super }}
+    <style type="text/css">
+<!--
+#toggle { clear: left; padding-top: 1em; font-size: 0.8em; }
+.details a { margin-right: 1em; }
+li.{{ entry_name }} { margin: 0 0 0.5em 1em; }
+li.create { margin-top: 1em; }
+
+-->
+    </style>
+    {% endblock style %}
+
+            {% block text %}
+<h2>View All {{ entry_name|title }}s</h2>
+{% if entries %}
+<ul>
+    {% for entry in entries %}
+    <li class="{{ entry_name }}">{{ entry }} <a class="edit_link" href="/mushroom_admin/{{ entry_name }}s/{{ entry.id }}/edit/">edit</a></li>
+    {% endfor %}
+    <li class="create"><a href="/mushroom_admin/{{ entry_name }}s/create/">Add a {{ entry_name|title }}</li>
+</ul>
+{% else %}
+<p>Whoops.  You've reached the end of the list of {{ entry_name }}s!</p>
+{% endif %}
+<ul class="prev_next">
+    {% if prev_next.start %}<li><a href="/mushroom_admin/{{ entry_name }}s/start{{ prev_next.prev }}/{{ prev_next.per_page }}pp/">Previous {{ prev_next.per_page }} {{ entry_name|title }}</a></li>{% endif %}
+    {% if prev_next.next %}<li><a href="/mushroom_admin/{{ entry_name }}s/start{{ prev_next.next }}/{{ prev_next.per_page }}pp/">Next {{ prev_next.per_page }} {{ entry_name|title }}s</a></li>{% endif %}
+</ul>
+<p class="toggle"><a href="/mushroom_admin/{{ entry_name }}s/start0/{{ prev_next.toggle }}pp/">Show {{ prev_next.toggle }} {{ entry_name|title }} Per Page</a></p>
+            {% endblock text %}
+
+
+

@@ -1,0 +1,37 @@
+/*
+***************************************************************************
+**  {% block sheet_name %}aiee.css{% endblock sheet_name %}
+**  
+**  Written by Pete Vander Giessen (http://www.petevg.com/)
+**    for the Boston Mycological Club
+**    Summer, 2008
+**
+***************************************************************************
+** 
+**  Contains fixes for Internet Exploder
+**  
+**  
+***************************************************************************
+*/
+
+
+@media screen {
+
+/* IE doesn't like to style things relative to a form element, and
+firefox has a rendering bug when we absolutely position elements in a
+fieldset in a form.  IE is easier to pick out of the bunch, so we give
+it the special style */
+fieldset { position: relative; }
+
+/* min-height fixes for IE 6*/
+*html form div, *html form p { height: 2.9em; }
+
+
+*html h1 a {
+        background-image: none;
+	cursor: hand;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader (
+	    src = '{{ media_url }}/BMClogo.png',sizingMethod='crop');
+}
+
+

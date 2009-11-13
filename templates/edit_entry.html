@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+        {% block trail %}
+        <li>&gt; <a href="/mushroom_admin/">Mushroom Admin</a></li>
+	<li>&gt; <a href="/mushroom_admin/{{ entry_name }}s/">{{ entry_name|title }}s</a></li>
+	{% if entry %}
+	<li>&gt; <a href="/mushroom_admin/{{ entry_name }}/{{ entry_id }}/">{{ entry_name|title }} {{ entry_id }}</a></li>
+	{% endif %}
+        {% endblock trail %}
+
+    {% block style %}
+    {{ block.super }}
+    <style type="text/css">
+<!--
+-->
+    </style>
+    <!--[if lte IE 6]>
+    <style type="text/css">
+form { width: 60em; }
+    </style>
+    <![endif]-->
+    {% endblock style %}
+
+            {% block text %}
+{% if entry %}
+<h2>Edit {{ entry_name|title }} #{{ entry_id }}</h2>
+{% else %}
+<h2>Create a {{ entry_name|title }}</h2>
+{% endif %}
+
+<form action="." method="POST" id="membership_form">
+    <fieldset>
+        {% for field in form %}
+	<div id="{{ field.label }}_wrap">
+            {{ field.errors }}
+	    {{ field.label_tag }} {{ field }}
+	</div>
+	{% endfor %}
+	<p><input type="submit" value="Submit" id="id_submit" /></p>
+    </fieldset>
+</form>
+            {% endblock text %}
+
+
+

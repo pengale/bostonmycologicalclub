@@ -1,4 +1,0 @@
-2009-06-29  Pete Vander Giessen  <petevg@greta>
-
-	* views.py (mailing_labels): Added mailing label app, with views. 
-

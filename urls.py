@@ -22,7 +22,7 @@ urlpatterns = patterns('',
 
     #Membership Tools
     (r'^memberships/list/(start(?P<start>[0-9]+)/)?((?P<per_page>[0-9]+)pp/)?((?P<due_by>due_by)/((?P<year>[1-2][0-9][0-9][0-9])/(?P<month>([0-1])?[0-9])/)?)?', list_memberships),
-    (r'^memberships/((?P<membership>[0-9]+)/)?view/', view_membership),
+    url(r'^memberships/(?P<membership>[0-9]+)/view/', view_membership, name="membership_view"),
     (r'^memberships/((?P<membership>[0-9]+)/)?edit/', edit_membership ),
     (r'^memberships/create/', create_membership ),
     (r'^memberships/((?P<membership>[0-9]+)/)?edit_user/((?P<user>[0-9]+)/)?', edit_user),
@@ -33,7 +33,7 @@ urlpatterns = patterns('',
     (r'^memberships/fetch/', membership_fetch),
 
     #New Reports
-    (r'^memberships/new_report/', memberships),
+    url(r'^memberships/membership_report/filter_(?P<filter_by>[-\w\+]+)/page_(?P<page>[0-9]+)', membership_report, name="reports_membership"),
 
     # 'Static' Pages
     (r'^schedule', schedule),

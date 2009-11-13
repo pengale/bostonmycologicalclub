@@ -47,6 +47,15 @@ class Membership(models.Model):
         profiles = model.objects.filter(membership=self)
         return profiles
 
+    def get_most_recent_due(self):
+        model = models.get_model('main', 'Due')
+        dues = model.objects.filter(membership=self)
+        try:
+            due = dues[0]
+        except IndexError:
+            return '--'
+        return due
+
     def get_name_list(self):
         profiles = self.get_profiles()
         try:

@@ -1,0 +1,55 @@
+    <ul id="manage_memberships">
+        <li><h3>Manage Memberships</h3></li>
+        <li><a href="/memberships/edit/">Add a New Membership</a></li>
+        <li><a href="/memberships/list/">List all Memberships</a></li>
+        <li>List all Memberships Due as of:</li>
+	    <ul id="due_by">
+	        <li><a href="/memberships/list/due_by/">This Month</li>
+	        <li><a href="/memberships/list/due_by/{{ nm_year }}/{{ next_month }}/">Next Month</li>
+	        <li><a href="/memberships/list/due_by/{{ may_year }}/5/">Next May</li>
+            </ul><!-- close #overdue_memberships -->
+	<li><a href="/mushroom_admin/mailing_labels.csv">Generate Mailing Labels</a></li>
+	<li><a href="/email/list/">List Email Addresses</a></li>
+	<li><a href="/email/send/">Send an Email to Club Members</a></li>
+        <form method="GET" id="membership_fetch" action="/memberships/fetch/">
+            <fieldset>
+                {% for field in membership_fetch %}
+                {% include "includes/field.html" %}
+                {% endfor %}
+                <input type="submit" value="Submit" />
+            </fieldset>
+        </form>
+        <form method="GET" id="membership_search" action="/memberships/search/">
+            <fieldset>
+                {% for field in membership_search %}
+                {% include "includes/field.html" %}
+                {% endfor %}
+                <input type="submit" value="Submit" />
+            </fieldset>
+        </form>
+    </ul>
+    <ul id="manage_walks">
+        <li><h3>Manage Walks</h3></li>
+        <li><a href="/walks/list/">List All Walks</a></li>
+        <li><a href="/walks/create/">Add A Walk</a></li>
+    </ul>
+    <ul id="manage_site">
+        <li><h3>Manage the Site</h3></li>
+        <li>
+	    <ul>
+	        <li><a href="/mushroom_admin/newsbits/create/">Add Newsbit</a></li>
+		<li><a href="/mushroom_admin/newsbits/">List/Edit Newsbits</a></li>
+            </ul>
+        <li>
+	    <ul>
+                <li><a href="/mushroom_admin/announcements/create/">Add Announcement</a></li>
+		<li><a href="/mushroom_admin/announcements/">List/Edit Announcements</a></li>
+            </ul>
+        <li>
+            <ul>
+                <li><a href="/mushroom_admin/nuggets/create/">Add a Nugget (BMC Fact)</a></li>
+		<li><a href="/mushroom_admin/nuggets/">List/Edit Nuggets</a></li>
+            </ul>
+        <li><a href="/admin/">Advanced Administration</a></li>
+    </ul>
+    <p id="mischief_managed"><a href="/accounts/logout/">Mischief Managed (Logout)</a></p>

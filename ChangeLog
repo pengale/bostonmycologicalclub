@@ -1,0 +1,70 @@
+2009-11-12  Pete Vander Giessen  <petevg@raven>
+
+	* templates/report_memberships.html: Added.  
+
+	* views.py (list_emails): Now only lists email addresses
+	of active members, excluding those with no email address.
+
+	* models.py (Membership.get_name_list): Now catches cases where we
+	have orphaned profiles (however that happened)
+
+2009-10-30  Pete Vander Giessen  <petevg@raven>
+
+	* views.py (view_membership): Fixed issue with membership not
+	showing when we have an orphan profile.
+
+2009-10-12  Pete Vander Giessen  <petevg@raven>
+
+	* forms.py: hid join date in user.
+
+	* models.py: made country not required.
+
+2009-10-11  Pete Vander Giessen  <petevg@fox>
+
+	* templates/schedule.html: Tweaked schedule template so that it
+	shows walk.
+
+	* admin.py: Removed public walks from admin.
+
+	* views.py (schedule): uniqued walks in area on schedule.
+
+	* templates/base.html: Added "your account" link.
+
+2009-10-11  Pete Vander Giessen  <petevg@raven>
+
+	* views.py: Fixed request not being passed to articles and
+	announcemtns archive.
+
+	* templates/edit_walk.html: Fixed layout problems w/ new layout.
+
+2009-08-14  Pete Vander Giessen  <petevg@raven>
+
+	* templates/registration/password_reset_email.html: Fixed problem
+	with password reset link funkiness.
+
+	* backends.py (EmailOrUsernameModelBackend.get_user): Added
+	backend to authenticate using email address.
+
+	* views.py (profile): Fixed profile view (was being evil and
+	pulling membership id from a fixed poit.)
+
+2009-06-26  Pete Vander Giessen  <petevg@greta>
+
+	* views.py (profile): Fixed issue w/ walks showing up multiple
+	times.
+
+	* templates/profile.html: added "walk" to "walk areas you're
+	interested in"
+
+	* views.py (edit_profile): Fixed prob with user editing
+	profile (was grabbing wrong data for membership).
+
+	* templates/base.html: Added link to favicon.png.
+
+	* views.py: Added media_url to all pages (really should add
+	context processor object)
+	(edit_user): user form no longer overwrites email with username.
+	(index): Restricted number of newsbits (10) and announcements (5)
+	that can show up on front page.
+
+

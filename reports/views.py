@@ -1,7 +1,10 @@
 # Reports for the BMC project
 
+from datetime import date
+
 from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import list_detail
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import (login_required, 
                                             user_passes_test, 
@@ -48,15 +51,47 @@ def mailing_labels(request):
         }
     return render_to_response(template, ctxt, mimetype='text/csv')
 
-def memberships(request):
+def membership_report(request, filter_by='active', page=1):
     """
     """
-
+    
     memberships = Membership.objects.all()
 
-    template = 'report_memberships.html'
-    ctxt = {
-        'memberships': memberships,
-        'request': request,
-        }
-    return render_to_response(template, ctxt)
+    filter_list = filter_by.split('+')
+
+    if 'inactive' in filter_list:
+        memberships = memberships.exclude(
+            userprofile__user__is_active=True,
+            )
+    else:
+        memberships = memberships.filter(
+            userprofile__user__is_active=True,
+            ).distinct()
+
+    if 'due' in filter_list:
+        year = date.today().year
+        due_by = date(int(year), 1, 1)
+
+        memberships = memberships.exclude(
+            due__paid_thru__gte=due_by,
+            ).exclude(
+                membership_type="honorary",
+                ).exclude(
+                    membership_type__startswith='corresponding'
+                    )
+
+
+    return list_detail.object_list(
+        request,
+        template_name='reports_memberships.html',
+        queryset=memberships,
+        template_object_name='membership',
+        paginate_by=100,
+        page = page,
+        extra_context={ 
+            'media_url': MEDIA_URL, 
+            'filter_by': filter_by,
+            }
+        )
+
+
