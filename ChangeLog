@@ -1,6 +1,11 @@
+2009-11-13  Pete Vander Giessen  <petevg@raven>
+
+	* reports/views.py (membership_report): Added revised membership
+	report.
+
 2009-11-12  Pete Vander Giessen  <petevg@raven>
 
-	* templates/report_memberships.html: Added.  
+	* templates/report_memberships.html: Added.
 
 	* views.py (list_emails): Now only lists email addresses
 	of active members, excluding those with no email address.

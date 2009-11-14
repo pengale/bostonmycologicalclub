@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+    {% block style %}
+    {{ block.super }}
+    <style type="text/css">
+<!--
+.inactive { color: gray; font-style: italic; }
+.inactive a, .inactive a:visited { color: gray; }
+.pages li { float: left; height: 2em; margin: 1em 1em 1em 0.2em; }
+.pages ul { }
+table { clear: left; }
+th { text-align: left; }
+tr.even { background-color: #cccccc; }
+-->
+    </style>
+    {% endblock style %}
+
+            {% block text %}
+<h2>Member Report</h2>
+
+{% include 'includes/dues_pages.html' %}
+
+<table id="due_report">
+    <tr>
+	<th style="width: 8em;">Date</th>
+        <th>Amount</th>
+	<th>Type</th>
+	<th style="width: 8em;">Pays Through</th>
+	<th>Notes</th>
+	<th>Membership</th>
+    </tr>
+    {% for due in due_list %}
+    <tr class="{% cycle 'odd' 'even' %}">
+        <td>{{ due.payment_date|date }}</td>
+        <td>${{ due.payment_amount }}</td>
+        <td>{{ due.payment_type }}</td>
+	<td>{{ due.paid_thru|date }}</td>
+	<td>{{ due.notes }}</td>
+	<td><a href="{% url membership_view membership=due.membership.id %}">{{ due.membership }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% include 'includes/dues_pages.html' %}
+
+            {% endblock text %}
+

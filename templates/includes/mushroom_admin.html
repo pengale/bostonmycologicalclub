@@ -1,16 +1,34 @@
     <ul id="manage_memberships">
         <li><h3>Manage Memberships</h3></li>
         <li><a href="/memberships/edit/">Add a New Membership</a></li>
-        <li><a href="/memberships/list/">List all Memberships</a></li>
-        <li>List all Memberships Due as of:</li>
-	    <ul id="due_by">
-	        <li><a href="/memberships/list/due_by/">This Month</li>
-	        <li><a href="/memberships/list/due_by/{{ nm_year }}/{{ next_month }}/">Next Month</li>
-	        <li><a href="/memberships/list/due_by/{{ may_year }}/5/">Next May</li>
-            </ul><!-- close #overdue_memberships -->
-	<li><a href="/mushroom_admin/mailing_labels.csv">Generate Mailing Labels</a></li>
-	<li><a href="/email/list/">List Email Addresses</a></li>
 	<li><a href="/email/send/">Send an Email to Club Members</a></li>
+
+    </ul>
+    <ul id="membership_reports">
+        <li><h3>Reports</h3></li>
+	<li>Billing:
+	    <ul>
+        <li><a href="{% url reports_membership filter_by='due' page=1 order_by='-join_date' %}">Memberships Due this Year</a> (<a href="{% url reports_membership_csv filter_by='due' format='csv' %}">csv</a>)</li>
+	<li><a href="{% url reports_dues page=1 %}">Payment History</a></li>
+            </ul>
+        </li>
+
+	<li>List all ..
+            <ul>
+	        <li><a href="{% url reports_membership filter_by='active' page=1 order_by='-join_date' %}">Active Memberships</a> (<a href="{% url reports_membership_csv filter_by='active' format='csv' %}">csv</a>)</li>
+	        <li><a href="{% url reports_membership filter_by='inactive' page=1 order_by='-join_date' %}">Suspended Memberships</a> (<a href="{% url reports_membership_csv filter_by='inactive' format='csv' %}">csv</a>)</li>
+	        <li><a href="{% url reports_membership filter_by='noemail' page=1 order_by='-join_date' %}">Memberships Without an Email Address</a> (<a href="{% url reports_membership_csv filter_by='noemail' format='csv' %}">csv</a>)</li>
+	        <li><a href="{% url reports_membership filter_by='corresponding' page=1 order_by='-join_date' %}">Corresponding Memberships</a> (<a href="{% url reports_membership_csv filter_by='corresponding' format='csv' %}">csv</a>)</li>
+            </ul>
+        </li>
+        <li>Mail/Email
+            <ul>
+		<li><a href="/email/list/">List Email Addresses</a></li>
+		<li><a href="/mushroom_admin/mailing_labels.csv">Generate Mailing Labels</a></li>
+            </ul>
+    </ul>
+    <ul id="membership_search">
+        <li><h3>Search</h3></li>
         <form method="GET" id="membership_fetch" action="/memberships/fetch/">
             <fieldset>
                 {% for field in membership_fetch %}
@@ -28,6 +46,13 @@
             </fieldset>
         </form>
     </ul>
+
+
+
+
+
+
+
     <ul id="manage_walks">
         <li><h3>Manage Walks</h3></li>
         <li><a href="/walks/list/">List All Walks</a></li>

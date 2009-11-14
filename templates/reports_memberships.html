@@ -6,9 +6,11 @@
 <!--
 .inactive { color: gray; font-style: italic; }
 .inactive a, .inactive a:visited { color: gray; }
-.pages li { float: left; margin: 0 0.5em; }
-.pages ul { height: 2em; }
+.pages li { float: left; height: 2em; margin: 1em 1em 1em 0.2em; }
+.pages ul { }
 table { clear: left; }
+th { text-align: left; }
+tr.even { background-color: #cccccc; }
 -->
     </style>
     {% endblock style %}
@@ -21,12 +23,14 @@ table { clear: left; }
 
 <table id="member_report">
     <tr>
+	<th style="width: 8em;">Date Joined</th>
         <th>Name(s)</th>
 	<th>Address</th>
-	<th>Paid Through</th>
+	<th style="width: 8em;">Paid Through</th>
     </tr>
     {% for membership in membership_list %}
-    <tr {% if not membership.is_active %}class="inactive"{% endif %}>
+    <tr class="{% cycle 'odd' 'even' %}{% if not membership.is_active %} inactive{% endif %}">
+        <td>{{ membership.join_date|date }}</td>
         <td>
 <a href="{% url membership_view membership=membership.id %}">
 {% for profile in membership.get_profiles %}
@@ -40,7 +44,7 @@ table { clear: left; }
 {{ membership.address }} {{ membership.address2 }}, {{ membership.city }} {{ membership.state }}, {{ membership.zip }}
 </a>
 	</td>
-	<td>{{ membership.get_most_recent_due.paid_thru }}</td>
+	<td>{{ membership.get_most_recent_due.paid_thru|date }}</td>
     </tr>
     {% endfor %}
 </table>

@@ -4,9 +4,14 @@
     {{ block.super }}
     <style type="text/css">
 <!--
-#manage_memberships, #manage_walks, #manage_site { width: 28em; }
+#manage_memberships, #manage_walks, #manage_site, #membership_reports, #membership_search { 
+        width: 28em; 
+}
 #manage_walks, #manage_site { margin-left: 30em; }
-#manage_memberships { float: left; }
+#manage_memberships, #membership_reports, #membership_search { 
+        float: left; 
+        clear: left; 
+   }
 #mischief_managed { clear: left; }
 form { border: none; padding: 0; margin: 1em 0 0 0; }
 form div, form p { 

@@ -33,7 +33,9 @@ urlpatterns = patterns('',
     (r'^memberships/fetch/', membership_fetch),
 
     #New Reports
-    url(r'^memberships/membership_report/filter_(?P<filter_by>[-\w\+]+)/page_(?P<page>[0-9]+)', membership_report, name="reports_membership"),
+    url(r'^memberships/membership_report/filter_(?P<filter_by>[-\w\+]+)/order_(?P<order_by>[-\w]+)/page_(?P<page>[0-9]+)', membership_report, name="reports_membership"),
+    url(r'^memberships/membership_report/filter_(?P<filter_by>[-\w\+]+)/(?P<format>csv)', membership_report, name="reports_membership_csv"),
+    url(r'^memberships/due_report/page_(?P<page>[0-9]+)', due_report, name="reports_dues"),
 
     # 'Static' Pages
     (r'^schedule', schedule),

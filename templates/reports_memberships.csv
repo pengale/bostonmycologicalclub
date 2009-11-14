@@ -1,0 +1,4 @@
+Join Date | Name(s) | Address | Address2 | City | State | Zip | Paid Through | Membership Type
+{% for membership in membership_list %}{{ membership.join_date }} | {% for profile in membership.get_profiles %}{% if not forloop.first %} and {% endif %}{{ profile.user.first_name }} {{ profile.user.last_name }}{% endfor %} | {{ membership.address }} | {{ membership.address2 }} | {{ membership.city }} | {{ membership.state }} | {{ membership.zip }} | {{ membership.get_most_recent_due.paid_thru }} | {{ membership.membership_type }}
+{% endfor %}
+

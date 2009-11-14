@@ -4,7 +4,7 @@
 {% ifequal num page %}
 <li>{{ num }}</li>
 {% else %}
-<li><a href="{% url reports_membership filter_by=filter_by page=num order_by=order_by %}" />{{ num }}</a></li>
+<li><a href="{% url reports_dues page=num %}" />{{ num }}</a></li>
 {% endifequal %}
 {% endfor %}
 </ul>
