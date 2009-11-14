@@ -39,7 +39,7 @@
 <div class="due">
     <h3>{{ due.payment_date|date }}</h3>
     <p><strong>Amount: </strong>${{ due.payment_amount }}</p>
-    <p><strong>Pays Through: </strong>{{ due.paid_thru|date }}</p>
+    <p><strong>Paid Through: </strong>{{ due.paid_thru|date }}</p>
     <p><strong>Notes:</strong> {{ due.notes }}</p>
     <p><a href="/memberships/{{ membership.id }}/edit_due/{{ due.id }}/">Edit</a></p>
 <p>

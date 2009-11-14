@@ -1,7 +1,11 @@
 2009-11-13  Pete Vander Giessen  <petevg@raven>
 
+	* templates/includes/mushroom_admin.html: Removed old mailing
+	label report.
+
 	* reports/views.py (membership_report): Added revised membership
 	report.
+	(membership_report): Fixed bug in Corresponding memberships report.
 
 2009-11-12  Pete Vander Giessen  <petevg@raven>
 

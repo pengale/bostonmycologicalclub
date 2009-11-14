@@ -107,19 +107,19 @@ def membership_report(request, filter_by='active', page=1, format='html',
         memberships = memberships.exclude(
             due__paid_thru__gte=due_by,
             ).exclude(
-                membership_type="honorary",
+                membership_type='Honorary',
                 ).exclude(
-                    membership_type__startswith='corresponding'
+                    membership_type='Corresponding'
                     )
 
     if 'corresponding' in filter_list:
         memberships = memberships.filter(
-            membership_type__startswith='corresponding',
+            membership_type='Corresponding',
             )
 
     if 'honorary' in filter_list:
         memberships = memberships.filter(
-            membership_type='honorary',
+            membership_type='Honorary',
             )
 
     if 'noemail' in filter_list:

@@ -91,7 +91,7 @@
     <h3>Dues</h3>
     <p><strong>Last Paid:</strong>  {{ dues.0.payment_date|date }}</p>
     <p><strong>Amount: </strong>${{ dues.0.payment_amount }}</p>
-    <p><strong>Pays Through: </strong>{{ dues.0.paid_thru|date }}</p>
+    <p><strong>Paid Through: </strong>{{ dues.0.paid_thru|date }}</p>
     <p><strong>Notes:</strong> {{ dues.0.notes }}</p>
     <form action="/memberships/{{ membership.id}}/edit_due/" method="POST" id="edit_due">
         <fieldset>

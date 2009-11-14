@@ -18,13 +18,11 @@
 	        <li><a href="{% url reports_membership filter_by='active' page=1 order_by='-join_date' %}">Active Memberships</a> (<a href="{% url reports_membership_csv filter_by='active' format='csv' %}">csv</a>)</li>
 	        <li><a href="{% url reports_membership filter_by='inactive' page=1 order_by='-join_date' %}">Suspended Memberships</a> (<a href="{% url reports_membership_csv filter_by='inactive' format='csv' %}">csv</a>)</li>
 	        <li><a href="{% url reports_membership filter_by='noemail' page=1 order_by='-join_date' %}">Memberships Without an Email Address</a> (<a href="{% url reports_membership_csv filter_by='noemail' format='csv' %}">csv</a>)</li>
-	        <li><a href="{% url reports_membership filter_by='corresponding' page=1 order_by='-join_date' %}">Corresponding Memberships</a> (<a href="{% url reports_membership_csv filter_by='corresponding' format='csv' %}">csv</a>)</li>
             </ul>
         </li>
         <li>Mail/Email
             <ul>
 		<li><a href="/email/list/">List Email Addresses</a></li>
-		<li><a href="/mushroom_admin/mailing_labels.csv">Generate Mailing Labels</a></li>
             </ul>
     </ul>
     <ul id="membership_search">
