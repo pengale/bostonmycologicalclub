@@ -855,24 +855,14 @@ def edit_user(request, membership, user=None):
     login_url = '/halt/')
 def membership_status(request, membership, action):
     """ Suspend a membership, or restore a suspended account. """
-    membership = int(membership)
-    # Fetch membership
     try: 
-        membership = Membership.objects.get(id=membership)
+        membership = Membership.objects.get(id=int(membership))
         
-    except ObjectDoesNotExist:
+    except Membership.DoesNotExist:
         error = "That Membership does not appear to exist."
         return error_404(request, error)
 
-    # Fetch users
-    try:
-        profiles = UserProfile.objects.filter(membership=membership)
-    except ObjectDoesNotExist:
-        profiles = []
-        error = """ This Membership does not seem to have any users
-        attached to it."""
-        return error_404(request, error)
-        
+    profiles = UserProfile.objects.filter(membership=membership)
 
     if request.method == 'POST':
         for profile in profiles:

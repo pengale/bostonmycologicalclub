@@ -90,9 +90,10 @@ class DueForm(ModelForm):
         exclude = ('membership')
 
 class MembershipStatus(ModelForm):
+
     class Meta:
         model = User
-        fields = ('is_active')
+        fields = ('is_active',)
 
 class NewsbitForm(ModelForm):
     class Meta:

@@ -1,3 +1,11 @@
+2009-11-17  Pete Vander Giessen  <petevg@raven>
+
+	* main/views.py (membership_status): Cleaned up some ugliness.
+
+	* main/forms.py (MembershipStatus.Meta): fields now actually a tuple.
+
+	* templates/membership_s.html: Fixed membership form.
+
 2009-11-13  Pete Vander Giessen  <petevg@raven>
 
 	* templates/includes/mushroom_admin.html: Removed old mailing

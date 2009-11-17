@@ -7,8 +7,8 @@
 <p>This won't delete any information from the database, but it will prevent users from logging in.</p>
 <form method="post" action="." id="membership_status">
     <fieldset>
-        <input type="hidden" value="{{ suspend }}" />
-        <input type="submit" value="Suspend" />
+        <input type="checkbox" name="is_active" value="{{ status }}" />
+        <input name="submit" type="submit" value="Suspend" />
     </fieldset>
 </form>
 {% else %}
@@ -16,8 +16,8 @@
 <p>Clicking the restore button below will restore this account by activating all users attached to the membership.</p>
 <form method="post" action="." id="membership_status">
     <fieldset>
-        <input type="hidden" value="{{ suspend }}" />
-        <input type="submit" value="Restore" />
+        <input type="checkbox" name="is_active" value="{{ status }}" />
+        <input name="submit" type="submit" value="Restore" />
     </fieldset>
 </form>
 {% endif %}
