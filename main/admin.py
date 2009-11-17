@@ -76,6 +76,23 @@ class MembershipAdmin(admin.ModelAdmin):
         'userprofile__user__first_name',
         'userprofile__user__last_name',
         ]
+    actions = ['toggle_suspend']
+    
+    def toggle_suspend(self, request, queryset):
+        for entry in queryset:
+            profiles = UserProfile.objects.filter(membership=entry.id)
+            if entry.is_active:
+                for profile in profiles:
+                    profile.user.is_active = False
+                    profile.user.save()
+            else:
+                for profile in profiles:
+                    profile.user.is_active = True
+                    profiles.user.save()
+                
+            
+
+
 admin.site.register(Membership, MembershipAdmin)
 
 class DueAdmin(admin.ModelAdmin):

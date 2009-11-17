@@ -1,5 +1,8 @@
 2009-11-17  Pete Vander Giessen  <petevg@raven>
 
+	* main/admin.py (MembershipAdmin.toggle_suspend): Added "toggle
+	suspend" action.
+
 	* main/views.py (membership_status): Cleaned up some ugliness.
 
 	* main/forms.py (MembershipStatus.Meta): fields now actually a tuple.
