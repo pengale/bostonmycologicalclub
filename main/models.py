@@ -147,7 +147,13 @@ class UserProfile(models.Model):
     notes = models.TextField(blank=True)
 
     def __unicode__(self):
-        return  '%s %s' % (self.user.first_name, self.user.last_name)
+        try:
+            first_name = self.user.first_name
+            last_name = self.user.last_name
+        except User.DoesNotExist:
+            first_name = "blank"
+            last_name = "profile"
+        return  '%s %s' % (first_name, last_name)
 
 
 class Walk(models.Model):

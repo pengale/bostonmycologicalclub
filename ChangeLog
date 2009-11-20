@@ -1,3 +1,8 @@
+2009-11-20  Pete Vander Giessen  <petevg@raven>
+
+	* main/models.py (UserProfile.__unicode__): Profile no longer
+	fails if blank user.
+
 2009-11-17  Pete Vander Giessen  <petevg@raven>
 
 	* main/admin.py (MembershipAdmin.toggle_suspend): Added "toggle
