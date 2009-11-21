@@ -60,7 +60,6 @@ class MemberAdmin(UserAdmin):
 
 admin.site.register(User, MemberAdmin)
 
-
 class MembershipAdmin(admin.ModelAdmin):
 
     inlines = [

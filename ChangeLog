@@ -1,5 +1,11 @@
 2009-11-20  Pete Vander Giessen  <petevg@raven>
 
+	* templates/registration/password_reset_email.html: password reset
+	email now includes name.
+
+	* main/backends.py (EmailOrUsernameModelBackend.authenticate):
+	Fixed issue with multiple usernames breaking site.
+
 	* main/models.py (UserProfile.__unicode__): Profile no longer
 	fails if blank user.
 
