@@ -1,3 +1,7 @@
+2009-12-11  Pete Vander Giessen  <petevg@raven>
+
+	* main/views.py (mushroom_admin): fixed typo.
+
 2009-11-20  Pete Vander Giessen  <petevg@raven>
 
 	* templates/registration/password_reset_email.html: password reset

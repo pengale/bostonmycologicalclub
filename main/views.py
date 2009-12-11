@@ -1126,7 +1126,7 @@ def mushroom_admin(request):
 
     if next_month > 12:  
         next_month = 1
-        mm_year += 1
+        nm_year += 1
 
     may_year = today.year
     if today.month > 5:
