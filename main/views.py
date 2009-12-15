@@ -103,6 +103,15 @@ def application(request):
         }
     return render_to_response(template, ctxt)
 
+def contact(request):
+    template = 'contact.html'
+    ctxt = {
+        'request' : request,
+        'page_name' : 'Contact',
+        'media_url' : MEDIA_URL,
+        }
+    return render_to_response(template, ctxt)
+
 def schedule(request):
     """ Displays the clubs schedule of activities. """
     template = 'schedule.html'

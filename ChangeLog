@@ -1,3 +1,13 @@
+2009-12-14  Pete Vander Giessen  <petevg@raven>
+
+	* main/views.py (contact): Added contact us view.
+
+	* templates/contact.html: Added contact us page.
+
+	* templates/base.html: Added email address to footer.
+
+	* templates/bmc.css: Gave content a min height.
+
 2009-12-11  Pete Vander Giessen  <petevg@raven>
 
 	* main/views.py (mushroom_admin): fixed typo.

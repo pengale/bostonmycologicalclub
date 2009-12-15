@@ -159,6 +159,7 @@ h1 span { position: absolute; left: -9999px; }
         padding: 2em 14em 5em 3em; 
 	position: relative;  
 	font-size: 0.8em; 
+	min-height: 16em;
 }
 
 /* Sidebar */
