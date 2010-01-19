@@ -67,6 +67,35 @@ class Membership(models.Model):
 
         return name_list
 
+    def get_anded_name_list(self):
+        """ Get name list in a friendly format for the report 
+
+        @@@Should be intelligently combined with get_name_list
+        """
+
+        profiles = self.get_profiles()
+        try:
+            name_list = ' and '.join(
+                ('%s %s' % (profile.user.first_name, profile.user.last_name)
+                 ) for profile in profiles)
+        except:    #@@@ Evil generic exception
+            name_list = 'blank'            
+
+        return name_list
+        
+
+    def get_email_list(self):
+        profiles = self.get_profiles()
+        try:
+            email_list = ', '.join(
+                (profile.get_email()
+                 ) for profile in profiles)
+        except:    #@@@ Evil generic exception
+            email_list = 'blank'            
+
+        return email_list
+
+
     def is_active(self):
         profiles = self.get_profiles()
         for profile in profiles:
@@ -145,6 +174,17 @@ class UserProfile(models.Model):
 
     # Notes
     notes = models.TextField(blank=True)
+
+    def get_email(self):
+        """ Return email address.
+
+        Return None if the email address is the filler email from the
+        import.
+        """ 
+        email = self.user.email
+        if email == "NoEmail@BostonMycologicalClub.Org": 
+            return None
+        return email
 
     def __unicode__(self):
         try:

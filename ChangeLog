@@ -1,3 +1,12 @@
+2010-01-18  Pete Vander Giessen  <petevg@fox>
+
+	* templates/reports_memberships.csv: Added email address to list.
+
+	* main/models.py: (Membership): Added methods to get list of
+	emails, and list of names in the format that we want.
+	(UserProfile): Added a method to get the email, or return None if
+	it's that silly "noemail" address.
+
 2009-12-14  Pete Vander Giessen  <petevg@raven>
 
 	* main/views.py (contact): Added contact us view.
