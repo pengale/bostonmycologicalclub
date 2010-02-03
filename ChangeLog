@@ -1,3 +1,7 @@
+2010-02-02  Pete Vander Giessen  <petevg@raven>
+
+	* Misc updates and cleanups.
+
 2010-01-18  Pete Vander Giessen  <petevg@fox>
 
 	* templates/reports_memberships.csv: Added email address to list.
