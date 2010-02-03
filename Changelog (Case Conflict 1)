@@ -1,4 +1,0 @@
-2009-08-14  Pete Vander Giessen  <petevg@raven>
-
-	* settings.py: Added backend to authenticated using email address.  
-
